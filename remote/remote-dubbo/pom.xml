@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>remote</artifactId>
+        <groupId>com.bitprogress</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>remote-dubbo</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>dubbo-common</module>
+        <module>dubbo-gateway-cms</module>
+        <module>dubbo-gateway-web</module>
+        <module>dubbo-base-web</module>
+        <module>dubbo-scheduler</module>
+        <module>dubbo-base-cms</module>
+    </modules>
+
+</project>

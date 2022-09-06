@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: base-web
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        username: nacos-public
+        password: fsyH458lPks25Sei
+        server-addr: 127.0.0.1:8849
+        metadata:
+          version: default
+          default: true
+          server-name: ${spring.application.name}
+      config:
+        username: nacos-public
+        password: fsyH458lPks25Sei
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yml
+        group: YML_GROUP
+        shared-configs:
+          - dataId: share-config-db-master.${spring.cloud.nacos.config.file-extension}
+            group: SHARE_YML_GROUP
+            refresh: true
+          - dataId: share-config-redis-2.${spring.cloud.nacos.config.file-extension}
+            group: SHARE_YML_GROUP
+            refresh: true
+          - dataId: share-config-server.${spring.cloud.nacos.config.file-extension}
+            group: SHARE_YML_GROUP
+            refresh: true
+          - dataId: share-config-jackson.${spring.cloud.nacos.config.file-extension}
+            group: SHARE_YML_GROUP
+            refresh: true
+          - dataId: share-config-servlet.${spring.cloud.nacos.config.file-extension}
+            group: SHARE_YML_GROUP
+            refresh: true
+          - dataId: share-config-sentinel.${spring.cloud.nacos.config.file-extension}
+            group: SHARE_YML_GROUP
+            refresh: true
+          - dataId: share-config-dubbo.${spring.cloud.nacos.config.file-extension}
+            group: SHARE_YML_GROUP
+            refresh: true
+          - dataId: share-config-feign.${spring.cloud.nacos.config.file-extension}
+            group: SHARE_YML_GROUP
+            refresh: true
+          - dataId: share-config-log-level.${spring.cloud.nacos.config.file-extension}
+            group: SHARE_YML_GROUP
+            refresh: true
+          - dataId: share-config-application.${spring.cloud.nacos.config.file-extension}
+            group: SHARE_YML_GROUP
+            refresh: true
+          - dataId: share-config-swagger-web.${spring.cloud.nacos.config.file-extension}
+            group: SHARE_YML_GROUP
+            refresh: true

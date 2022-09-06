@@ -1,0 +1,22 @@
+server:
+  port: 9026
+spring:
+  application:
+    name: eureka-test
+  cloud:
+    server-token:
+      eureka-pro: eureka-pro
+feign:
+  circuitbreaker:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 1000
+        readTimeout: 4000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+hystrix:
+  command.default.execution.isolation.thread.timeoutInMilliseconds: 3000

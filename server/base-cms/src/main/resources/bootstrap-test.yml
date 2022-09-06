@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        username: nacos-test
+        password: g48UjhL95Ojsu24r
+        namespace: 9164dd13-aee6-41d8-8a64-799c33b8205a
+      config:
+        username: nacos-test
+        password: g48UjhL95Ojsu24r
+        namespace: 9164dd13-aee6-41d8-8a64-799c33b8205a

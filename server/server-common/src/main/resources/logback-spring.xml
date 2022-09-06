@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration scan="true" scanPeriod="600 seconds" debug="false">
+    <property name="LOG_PATH_DEV" value="logs/dev/"/>
+    <property name="LOG_PATH_TEST" value="logs/test/"/>
+    <property name="LOG_PATH_PROD" value="logs/prod/"/>
+    <springProperty scope="context" name="LOG_NAME" source="spring.application.name" defaultValue="info"/>
+
+    <property name="LOG_LAYOUT" value="%d{yyyy-MM-dd HH:mm:ss.SSS} -%5p ${PID:-} [%15.15t] %-40.40logger{39} : %m%n"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <springProfile name="dev">
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH_DEV}/${LOG_NAME}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH_DEV}/${LOG_NAME}.log-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+                <MaxHistory>3</MaxHistory>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>30mb</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${LOG_LAYOUT}</pattern>
+            </layout>
+        </appender>
+
+        <appender name="fileErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>Error</level>
+            </filter>
+            <file>${LOG_PATH_DEV}/error/${LOG_NAME}-error.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH_DEV}/error/${LOG_NAME}-error.log-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+                <MaxHistory>3</MaxHistory>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>30mb</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${LOG_LAYOUT}</pattern>
+            </layout>
+        </appender>
+
+        <appender name="fileAsyncLog" class="ch.qos.logback.classic.AsyncAppender">
+            <discardingThreshold>0</discardingThreshold>
+            <queueSize>1024</queueSize>
+            <neverBlock>true</neverBlock>
+            <appender-ref ref="FILE"/>
+        </appender>
+
+        <appender name="fileErrorAsyncLog" class="ch.qos.logback.classic.AsyncAppender">
+            <discardingThreshold>0</discardingThreshold>
+            <queueSize>512</queueSize>
+            <neverBlock>true</neverBlock>
+            <appender-ref ref="fileErrorLog"/>
+        </appender>
+    </springProfile>
+
+    <springProfile name="test">
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH_TEST}/${LOG_NAME}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH_TEST}/${LOG_NAME}.log-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+                <MaxHistory>3</MaxHistory>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>30mb</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${LOG_LAYOUT}</pattern>
+            </layout>
+        </appender>
+
+        <appender name="fileErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>Error</level>
+            </filter>
+            <file>${LOG_PATH_TEST}/error/${LOG_NAME}-error.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH_TEST}/error/${LOG_NAME}-error.log-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+                <MaxHistory>3</MaxHistory>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>30mb</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${LOG_LAYOUT}</pattern>
+            </layout>
+        </appender>
+
+        <appender name="fileAsyncLog" class="ch.qos.logback.classic.AsyncAppender">
+            <discardingThreshold>0</discardingThreshold>
+            <queueSize>1024</queueSize>
+            <neverBlock>true</neverBlock>
+            <appender-ref ref="FILE"/>
+        </appender>
+
+        <appender name="fileErrorAsyncLog" class="ch.qos.logback.classic.AsyncAppender">
+            <discardingThreshold>0</discardingThreshold>
+            <queueSize>512</queueSize>
+            <neverBlock>true</neverBlock>
+            <appender-ref ref="fileErrorLog"/>
+        </appender>
+    </springProfile>
+
+    <springProfile name="prod">
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH_PROD}/${LOG_NAME}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH_PROD}/${LOG_NAME}.log-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+                <MaxHistory>5</MaxHistory>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>500mb</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${LOG_LAYOUT}</pattern>
+            </layout>
+        </appender>
+
+        <appender name="fileErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>Error</level>
+            </filter>
+            <file>${LOG_PATH_PROD}/error/${LOG_NAME}-error.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH_PROD}/error/${LOG_NAME}-error.log-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+                <MaxHistory>5</MaxHistory>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>500mb</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${LOG_LAYOUT}</pattern>
+            </layout>
+        </appender>
+    </springProfile>
+
+    <logger name="com.wpx" level="DEBUG"/>
+    <!-- 开发 控制台标准输出 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <!-- dev profile 输出 -->
+    <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="fileAsyncLog"/>
+            <appender-ref ref="fileErrorAsyncLog"/>
+        </root>
+    </springProfile>
+
+    <!-- test profile 输出 -->
+    <springProfile name="test">
+        <root level="INFO">
+            <appender-ref ref="fileAsyncLog"/>
+            <appender-ref ref="fileErrorAsyncLog"/>
+        </root>
+    </springProfile>
+
+    <!-- prod profile 输出 -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="fileErrorLog"/>
+        </root>
+    </springProfile>
+
+</configuration>
