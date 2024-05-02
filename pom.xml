@@ -14,18 +14,16 @@
     <version>1.0-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
     <modules>
-        <module>gateway</module>
         <module>common</module>
-        <module>dao</module>
-        <module>remote</module>
         <module>login</module>
-        <module>manager</module>
         <module>server</module>
     </modules>
 
     <properties>
         <!-- Jdk Version -->
         <java.version>1.8</java.version>
+        <!-- Spring Boot Version -->
+        <spring-boot.version>2.4.1</spring-boot.version>
         <!-- 编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>

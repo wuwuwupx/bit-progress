@@ -16,7 +16,6 @@ import static com.bitprogress.constant.ResultConstants.SUCCESS_MESSAGE;
  */
 @EqualsAndHashCode(callSuper = false)
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class ResultResponse<T> extends RequestResponse {
 

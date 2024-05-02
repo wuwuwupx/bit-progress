@@ -1,7 +1,6 @@
 package com.bitprogress.util;
 
 import com.bitprogress.constant.StringConstants;
-import com.bitprogress.exception.ExceptionMessage;
 
 import java.util.Map;
 
@@ -18,7 +17,6 @@ public class UrlUtils {
      * @param params
      */
     public static String urlJoinParam(String url, Map<String, String> params) {
-        Assert.isNotEmpty(url, ExceptionMessage.URL_EMPTY_EXCEPTION);
         if (CollectionUtils.isNotEmpty(params)) {
             StringBuilder urlBuilder = new StringBuilder(url);
             params.forEach((key, value) -> {
