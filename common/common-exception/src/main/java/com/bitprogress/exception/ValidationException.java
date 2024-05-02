@@ -1,24 +1,21 @@
 package com.bitprogress.exception;
 
 /**
- * @author wuwuwupx
- * 正常业务层面验证数据或服务时，抛出的的ValidationException会被转换成Result返回
+ * Valid data exception
  */
 public class ValidationException extends RuntimeException {
 
-    private String code;
-    private String msg;
+    private final String code;
+    private String message;
     private Object[] args;
 
     public ValidationException(String code) {
-        super(code);
         this.code = code;
     }
 
-    public ValidationException(String code, String msg) {
-        super(code);
+    public ValidationException(String code, String message) {
         this.code = code;
-        this.msg = msg;
+        this.message = message;
     }
 
 
@@ -30,8 +27,8 @@ public class ValidationException extends RuntimeException {
         return args;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
 }

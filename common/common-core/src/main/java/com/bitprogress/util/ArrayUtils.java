@@ -16,7 +16,7 @@ public class ArrayUtils {
     /**
      * 数组为空
      *
-     * @param array
+     * @param array 传入数组
      */
     public static boolean isEmpty(Object[] array) {
         return array == null || array.length == 0;
@@ -25,7 +25,7 @@ public class ArrayUtils {
     /**
      * 数组为空
      *
-     * @param array
+     * @param array 传入数组
      */
     public static boolean isEmpty(byte[] array) {
         return array == null || array.length == 0;
@@ -34,8 +34,8 @@ public class ArrayUtils {
     /**
      * 数组为空
      *
-     * @param array
-     */
+     * @param array 传入数组
+*/
     public static boolean isEmpty(char[] array) {
         return array == null || array.length == 0;
     }
@@ -43,8 +43,8 @@ public class ArrayUtils {
     /**
      * 数组不为空
      *
-     * @param array
-     */
+     * @param array 传入数组
+*/
     public static boolean isNotEmpty(Object[] array) {
         return !isEmpty(array);
     }
@@ -52,8 +52,8 @@ public class ArrayUtils {
     /**
      * 数组不为空
      *
-     * @param array
-     */
+     * @param array 传入数组
+*/
     public static boolean isNotEmpty(byte[] array) {
         return !isEmpty(array);
     }
