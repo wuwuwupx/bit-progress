@@ -206,7 +206,7 @@ public class CollectionUtils {
         boolean has = Objects.nonNull(ts);
         int size = size(collection) + (has ? ts.length : 0);
         List<T> newList = emptyList(size);
-        if (nonEmpty(collection)) {
+        if (isNotEmpty(collection)) {
             newList.addAll(collection);
         }
         if (has) {
@@ -225,13 +225,13 @@ public class CollectionUtils {
     public static <T> List<T> newList(Collection<T>... collections) {
         int size = 0;
         for (Collection<T> collection : collections) {
-            if (nonEmpty(collection)) {
+            if (isNotEmpty(collection)) {
                 size += collection.size();
             }
         }
         List<T> newList = emptyList(size);
         for (Collection<T> collection : collections) {
-            if (nonEmpty(collection)) {
+            if (isNotEmpty(collection)) {
                 newList.addAll(collection);
             }
         }
@@ -276,7 +276,7 @@ public class CollectionUtils {
         boolean has = Objects.nonNull(ts);
         int size = size(collection) + (has ? ts.length : 0);
         Set<T> newSet = emptySet(size);
-        if (nonEmpty(collection)) {
+        if (isNotEmpty(collection)) {
             newSet.addAll(collection);
         }
         if (has) {
@@ -295,13 +295,13 @@ public class CollectionUtils {
     public static <T> Set<T> newSet(Collection<T>... collections) {
         int size = 0;
         for (Collection<T> collection : collections) {
-            if (nonEmpty(collection)) {
+            if (isNotEmpty(collection)) {
                 size += collection.size();
             }
         }
         Set<T> newSet = emptySet(size);
         for (Collection<T> collection : collections) {
-            if (nonEmpty(collection)) {
+            if (isNotEmpty(collection)) {
                 newSet.addAll(collection);
             }
         }
@@ -334,7 +334,7 @@ public class CollectionUtils {
      * @param collection 检查的集合
      * @return boolean true：不为空，false：为空
      */
-    public static boolean nonEmpty(Collection<?> collection) {
+    public static boolean isNotEmpty(Collection<?> collection) {
         return !isEmpty(collection);
     }
 
@@ -344,7 +344,7 @@ public class CollectionUtils {
      * @param map 检查的集合
      * @return boolean true：不为空，false：为空
      */
-    public static boolean nonEmpty(Map<?, ?> map) {
+    public static boolean isNotEmpty(Map<?, ?> map) {
         return !isEmpty(map);
     }
 
@@ -366,7 +366,7 @@ public class CollectionUtils {
      * @return true：集合包含目标元素，false：集合不包含目标元素
      */
     public static boolean contains(Collection<?> collection, Object obj) {
-        return nonEmpty(collection) && collection.contains(obj);
+        return isNotEmpty(collection) && collection.contains(obj);
     }
 
     /**
@@ -2009,7 +2009,7 @@ public class CollectionUtils {
      */
     public static <T> BigDecimal sumBigDecimal(Collection<T> collection, Function<T, BigDecimal> function) {
         BigDecimal sum = BigDecimal.ZERO;
-        if (nonEmpty(collection)) {
+        if (isNotEmpty(collection)) {
             for (T t : collection) {
                 if (Objects.isNull(t)) {
                     continue;
@@ -2044,7 +2044,7 @@ public class CollectionUtils {
      */
     public static <T, R extends Number> Long sumLong(Collection<T> collection, Function<T, R> function) {
         long sum = 0;
-        if (nonEmpty(collection)) {
+        if (isNotEmpty(collection)) {
             for (T t : collection) {
                 if (Objects.isNull(t)) {
                     continue;
@@ -2079,7 +2079,7 @@ public class CollectionUtils {
      */
     public static <T, R extends Number> Double sumDouble(Collection<T> collection, Function<T, R> function) {
         BigDecimal sum = new BigDecimal("0");
-        if (nonEmpty(collection)) {
+        if (isNotEmpty(collection)) {
             for (T t : collection) {
                 if (Objects.isNull(t)) {
                     continue;
@@ -2115,7 +2115,7 @@ public class CollectionUtils {
      */
     public static <T, R extends Number> Integer sumInteger(Collection<T> collection, Function<T, R> function) {
         int sum = 0;
-        if (nonEmpty(collection)) {
+        if (isNotEmpty(collection)) {
             for (T t : collection) {
                 if (Objects.isNull(t)) {
                     continue;

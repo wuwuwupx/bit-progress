@@ -26,7 +26,7 @@ public class DubboConfig implements BeanFactoryAware {
         // 添加多个注册配置
         DefaultListableBeanFactory listableBeanFactory = (DefaultListableBeanFactory) beanFactory;
         Map<String, ServiceProperties> multiple = dubboServiceProperties.getMultiple();
-        if (CollectionUtils.nonEmpty(multiple)) {
+        if (CollectionUtils.isNotEmpty(multiple)) {
             multiple.forEach((id, config) -> {
                 ServiceConfig serviceConfig = new ServiceConfig();
                 serviceConfig.setInterface(config.getInterfaceName());

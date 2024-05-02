@@ -84,7 +84,7 @@ public class RedisBaseService {
      */
     private <T> Map<String, T> conversionMap(Map<String, String> map, Class<T> target) {
         Map<String, T> resultMap = new HashMap<>();
-        if (CollectionUtils.nonEmpty(map)) {
+        if (CollectionUtils.isNotEmpty(map)) {
             map.forEach((key, value) -> resultMap.put(key, strToObject(value, target)));
         }
         return resultMap;

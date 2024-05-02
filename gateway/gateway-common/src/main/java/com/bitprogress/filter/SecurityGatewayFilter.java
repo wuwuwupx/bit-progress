@@ -92,7 +92,7 @@ public class SecurityGatewayFilter implements GlobalFilter {
         Map<String, String> params = authMsg.getParams();
         ServerHttpRequest.Builder mutate = request.mutate();
         mutate.header(VerifyConstant.USER_ID, userId).header(VerifyConstant.ROUTE_API_TOKEN, routeApiToken);
-        if (CollectionUtils.nonEmpty(params)) {
+        if (CollectionUtils.isNotEmpty(params)) {
             params.forEach(mutate::header);
         }
         ServerHttpRequest httpRequest = mutate.build();

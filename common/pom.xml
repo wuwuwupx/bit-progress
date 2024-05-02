@@ -20,6 +20,7 @@
         <module>common-response</module>
         <module>common-swagger</module>
         <module>common-dao</module>
+        <module>common-mybatis-plus</module>
     </modules>
 
 </project>

@@ -62,7 +62,7 @@ public class RabbitMQRegister implements BeanFactoryAware, InstantiationAwareBea
      * @param beanFactory
      */
     public void registerConnection(Map<String, ConnectionMessage> messages, DefaultListableBeanFactory beanFactory) {
-        if (CollectionUtils.nonEmpty(messages)) {
+        if (CollectionUtils.isNotEmpty(messages)) {
             messages.forEach((name, connectionMessage) -> {
                 // CachingConnectionFactory
                 String connectionBeanName = name + CONNECTION_BEAN_NAME;
@@ -107,7 +107,7 @@ public class RabbitMQRegister implements BeanFactoryAware, InstantiationAwareBea
      * @param messages
      */
     private void registerExchange(Map<String, ExchangeMessage> messages, DefaultListableBeanFactory beanFactory) {
-        if (CollectionUtils.nonEmpty(messages)) {
+        if (CollectionUtils.isNotEmpty(messages)) {
             messages.forEach((name, exchangeMessage) -> {
                 String exchangeBeanName = name + EXCHANGE_BEAN_NAME;
                 String exchangeName = exchangeMessage.getExchangeName();
@@ -146,13 +146,13 @@ public class RabbitMQRegister implements BeanFactoryAware, InstantiationAwareBea
      * @param beanFactory
      */
     private void registerQueue(Map<String, QueueMessage> queueMessages, DefaultListableBeanFactory beanFactory) {
-        if (CollectionUtils.nonEmpty(queueMessages)) {
+        if (CollectionUtils.isNotEmpty(queueMessages)) {
             queueMessages.forEach((name, queueMessage) -> {
                 String queueBeanName = name + QUEUE_BEAN_NAME;
                 String queueName = queueMessage.getQueueName();
                 Map<String, Object> argument = queueMessage.getArgument();
                 QueueBuilder builder = QueueBuilder.durable(queueName);
-                if (CollectionUtils.nonEmpty(argument)) {
+                if (CollectionUtils.isNotEmpty(argument)) {
                     builder.withArguments(argument);
                 }
                 Queue queue = builder.build();
@@ -168,7 +168,7 @@ public class RabbitMQRegister implements BeanFactoryAware, InstantiationAwareBea
      * @param beanFactory
      */
     private void registerBinding(Map<String, BindingMessage> bindingMessages, DefaultListableBeanFactory beanFactory) {
-        if (CollectionUtils.nonEmpty(bindingMessages)) {
+        if (CollectionUtils.isNotEmpty(bindingMessages)) {
             bindingMessages.forEach((name, bindingMessage) -> {
                 String bindingBeanName = name + BINDING_BEAN_NAME;
                 String destinationName = bindingMessage.getDestinationName();

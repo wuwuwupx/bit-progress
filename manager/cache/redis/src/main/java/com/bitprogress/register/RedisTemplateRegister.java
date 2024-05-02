@@ -58,7 +58,7 @@ public class RedisTemplateRegister implements BeanFactoryAware, InstantiationAwa
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
         DefaultListableBeanFactory listableBeanFactory = (DefaultListableBeanFactory) beanFactory;
         Map<String, RedisMessageProperties> redisDataSource = redisDataSourceProperties.getDataSource();
-        if (CollectionUtils.nonEmpty(redisDataSource)) {
+        if (CollectionUtils.isNotEmpty(redisDataSource)) {
             redisDataSource.forEach((name, dataSource) -> {
                 StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
                 RedisConnectionFactory redisConnection = getRedisConnection(dataSource);

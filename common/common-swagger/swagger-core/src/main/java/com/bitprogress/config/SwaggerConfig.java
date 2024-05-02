@@ -59,7 +59,7 @@ public class SwaggerConfig {
     private List<SecurityScheme> securitySchemes() {
         List<SecurityScheme> securitySchemes = new ArrayList<>();
         Map<String, String> securitySchemeMap = swaggerProperties.getSecurityScheme();
-        if (CollectionUtils.nonEmpty(securitySchemeMap)) {
+        if (CollectionUtils.isNotEmpty(securitySchemeMap)) {
             securitySchemeMap.forEach((name, keyName) -> {
                 ApiKey apiKey = new ApiKey(name, keyName, HEADER);
                 securitySchemes.add(apiKey);
@@ -76,7 +76,7 @@ public class SwaggerConfig {
         scopes[0] = scope;
         List<SecurityReference> references = new ArrayList<>();
         Set<String> securityContextSet = swaggerProperties.getSecurityContext();
-        if (CollectionUtils.nonEmpty(securityContextSet)) {
+        if (CollectionUtils.isNotEmpty(securityContextSet)) {
             securityContextSet.forEach(reference -> {
                 SecurityReference securityReference = new SecurityReference(reference, scopes);
                 references.add(securityReference);

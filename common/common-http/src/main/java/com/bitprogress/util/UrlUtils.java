@@ -19,7 +19,7 @@ public class UrlUtils {
      */
     public static String urlJoinParam(String url, Map<String, String> params) {
         Assert.isNotEmpty(url, ExceptionMessage.URL_EMPTY_EXCEPTION);
-        if (CollectionUtils.nonEmpty(params)) {
+        if (CollectionUtils.isNotEmpty(params)) {
             StringBuilder urlBuilder = new StringBuilder(url);
             params.forEach((key, value) -> {
                 boolean hasParam = url.contains(StringConstants.QUESTION_MARK);

@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 
 import static com.bitprogress.util.CollectionUtils.collectionToMap;
-import static com.bitprogress.util.CollectionUtils.nonEmpty;
+import static com.bitprogress.util.CollectionUtils.isNotEmpty;
 
 /**
  * @author wpx
@@ -317,7 +317,7 @@ public class NacosDynamicRouteService implements ApplicationEventPublisherAware 
         }
         List<RouteRouse> routeRouses = JSONArray.parseArray(configInfo, RouteRouse.class);
         Map<String, RouteRouse> roleMap = collectionToMap(routeRouses, this::getRouteRouseKey);
-        if (nonEmpty(roleMap)) {
+        if (isNotEmpty(roleMap)) {
             GatewayRouteMsg.addRouteRouse(roleMap);
         }
     }

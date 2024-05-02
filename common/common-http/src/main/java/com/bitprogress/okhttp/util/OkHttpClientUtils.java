@@ -56,12 +56,12 @@ public class OkHttpClientUtils {
      */
     public static String doPost(String url, RequestBody body, Map<String, String> params,
                                 Map<String, String> headers) throws IOException {
-        if (CollectionUtils.nonEmpty(params)) {
+        if (CollectionUtils.isNotEmpty(params)) {
             url = UrlUtils.urlJoinParam(url, params);
         }
         OkHttpClient client = new OkHttpClient();
         Request.Builder builder = new Request.Builder().url(url).post(body);
-        if (CollectionUtils.nonEmpty(headers)) {
+        if (CollectionUtils.isNotEmpty(headers)) {
             builder.headers(Headers.of(headers));
         }
         Request request = builder.build();
@@ -110,7 +110,7 @@ public class OkHttpClientUtils {
         Request.Builder builder = new Request.Builder()
                 .get()
                 .url(url);
-        if (CollectionUtils.nonEmpty(headers)) {
+        if (CollectionUtils.isNotEmpty(headers)) {
             builder.headers(Headers.of(headers));
         }
         Request request = builder.build();
@@ -131,7 +131,7 @@ public class OkHttpClientUtils {
         Request.Builder builder = new Request.Builder()
                 .get()
                 .url(url);
-        if (CollectionUtils.nonEmpty(headers)) {
+        if (CollectionUtils.isNotEmpty(headers)) {
             builder.headers(Headers.of(headers));
         }
         Request request = builder.build();
