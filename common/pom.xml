@@ -15,6 +15,7 @@
         <module>common-core</module>
         <module>common-http</module>
         <module>common-json</module>
+        <module>common-model</module>
     </modules>
 
 </project>

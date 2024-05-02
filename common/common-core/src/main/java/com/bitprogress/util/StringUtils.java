@@ -29,6 +29,10 @@ public class StringUtils {
         return !isEmpty(str);
     }
 
+    public static boolean isNotEmpty(String str) {
+        return !isEmpty(str);
+    }
+
     public static boolean startWithIgnoreCase(CharSequence str, CharSequence prefix) {
         return startWith(str, prefix, true);
     }
@@ -40,10 +44,10 @@ public class StringUtils {
     /**
      * 检查字符串是否由指定字符开始
      *
-     * @param str
-     * @param prefix
-     * @param ignoreCase
-     * @param ignoreEquals
+     * @param str          检查字符串
+     * @param prefix       需要检查前缀
+     * @param ignoreCase   是否忽略大小写
+     * @param ignoreEquals 是否忽略相等情况
      */
     public static boolean startWith(CharSequence str, CharSequence prefix, boolean ignoreCase, boolean ignoreEquals) {
         if (null != str && null != prefix) {
@@ -115,7 +119,7 @@ public class StringUtils {
      * 驼峰转换
      * camelCase -> camel_case
      *
-     * @param str
+     * @param str 需要转换的字符串
      */
     public static String camelCase(String str) {
         if (isEmpty(str)) {
@@ -138,7 +142,7 @@ public class StringUtils {
     /**
      * 生成随机字符串
      *
-     * @param len
+     * @param len 字符串长度
      */
     public static String randomString(int len) {
         StringBuilder builder = new StringBuilder(len);
