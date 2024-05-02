@@ -3,7 +3,7 @@ package com.bitprogress.exception;
 /**
  * @author wuwuwupx
  */
-public class MessageCodes {
+public class ExceptionMessage {
 
     public static final String REQUEST_ARGUMENT_MESSAGE = "请求参数错误或者参数为空";
     public static final String AUTH_ACCOUNT_PASSWORD_WRONG_MESSAGE = "账号或密码错误";
@@ -23,5 +23,12 @@ public class MessageCodes {
 
     public static final String ACQUIRE_LOCK_EXCEPTION_MESSAGE = "获取锁失败";
     public static final String SMS_CAPTCHA_WRONG_EXCEPTION_MESSAGE = "短信验证码错误";
+    public static final String LOGIN_MISS_WRONG_EXCEPTION_MESSAGE = "登录信息丢失";
+    public static final String USER_ID_MISS_WRONG_EXCEPTION_MESSAGE = "用户ID丢失";
+    public static final String REQUEST_WRONG_EXCEPTION_MESSAGE = "请求失败";
+    public static final String RESPONSE_MISS_WRONG_EXCEPTION_MESSAGE = "请求响应丢失";
+    public static final String RESPONSE_CODE_MISS_WRONG_EXCEPTION_MESSAGE = "请求响应状态码丢失";
+    public static final String USER_NOT_LOGIN_EXCEPTION_MESSAGE = "用户未登录";
+    public static final String AUTH_MSG_EXCEPTION_MESSAGE = "用户未登录";
 
 }
