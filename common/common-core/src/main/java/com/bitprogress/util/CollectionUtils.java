@@ -505,6 +505,21 @@ public class CollectionUtils {
     }
 
     /**
+     * 转换集合为数组
+     *
+     * @param collection 需要转换的集合
+     * @return 转换后的数组
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T[] toArray(Collection<T> collection) {
+        if (isEmpty(collection)) {
+            return (T[]) new Object[0];
+        }
+        T[] target = (T[]) new Object[size(collection)];
+        return collection.toArray(target);
+    }
+
+    /**
      * 将 #{ts} 的元素添加到 #{targetList}
      *
      * @param targetList 被操作集合

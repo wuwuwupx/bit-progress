@@ -63,6 +63,8 @@
         <ali.sms.version>4.1.0</ali.sms.version>
         <!-- MapStruct -->
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <!-- MapStruct -->
+        <org.redisson.version>2.15.2</org.redisson.version>
     </properties>
 
     <packaging>pom</packaging>
@@ -221,6 +223,13 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-processor</artifactId>
                 <version>${org.mapstruct.version}</version>
+            </dependency>
+
+            <!-- Redisson -->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${org.redisson.version}</version>
             </dependency>
 
         </dependencies>
