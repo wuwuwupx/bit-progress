@@ -30,6 +30,7 @@
         <module>common-sentinel</module>
         <module>common-server</module>
         <module>common-gateway</module>
+        <module>common-orm-context</module>
     </modules>
 
 </project>
