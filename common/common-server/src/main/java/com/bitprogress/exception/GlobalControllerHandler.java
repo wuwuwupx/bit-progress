@@ -1,6 +1,7 @@
 package com.bitprogress.exception;
 
 import com.bitprogress.model.ResultResponse;
+import com.bitprogress.util.ErrorUtils;
 import com.bitprogress.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * @author wuwuwupx
@@ -43,36 +43,22 @@ public class GlobalControllerHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public ResultResponse<Void> handleBaseException(IllegalArgumentException e) {
-        String message = e.getMessage();
-        final String nullTarget = "Target must not be null";
-        if (StringUtils.isEmpty(message) || Objects.equals(nullTarget, message)) {
-            message = "请求参数错误";
-        }
-        String desc = applicationContext.getMessage(message, null, null, Locale.getDefault());
-        if (desc != null) {
-            message = desc;
-        }
-        return ResultResponse.fail(message);
+        String lowestMessage = ErrorUtils.getLowestMessage(e);
+        return ResultResponse.fail(StringUtils.isEmpty(lowestMessage) ? "请求参数错误" : lowestMessage);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Throwable.class)
     public ResultResponse<Void> handleBaseException(Throwable e) {
-        String message = e.getMessage();
-        if (StringUtils.isEmpty(message)) {
-            message = "服务器内部错误";
-        }
-        return ResultResponse.fail(message);
+        String lowestMessage = ErrorUtils.getLowestMessage(e);
+        return ResultResponse.fail(StringUtils.isEmpty(lowestMessage) ? "服务器内部错误" : lowestMessage);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResultResponse<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        String message = e.getBindingResult().getFieldError().getDefaultMessage();
-        if (StringUtils.isEmpty(message)) {
-            message = "请求数据格式错误";
-        }
-        return ResultResponse.fail(message);
+        String lowestMessage = ErrorUtils.getLowestMessage(e);
+        return ResultResponse.fail(StringUtils.isEmpty(lowestMessage) ? "请求数据格式错误" : lowestMessage);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -84,8 +70,8 @@ public class GlobalControllerHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResultResponse<Void> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
-        String eMessage = e.getMessage();
-        return ResultResponse.fail(StringUtils.isEmpty(eMessage) ? "请求参数缺失" : eMessage);
+        String lowestMessage = ErrorUtils.getLowestMessage(e);
+        return ResultResponse.fail(StringUtils.isEmpty(lowestMessage) ? "请求参数缺失" : lowestMessage);
     }
 
 }

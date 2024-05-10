@@ -3,7 +3,7 @@ package com.bitprogress.interceptor;
 import com.bitprogress.property.ServerTokenProperties;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 
 import static com.bitprogress.constant.VerifyConstant.FEIGN_COMMON_TOKEN;
 import static com.bitprogress.constant.VerifyConstant.ROUTE_REST_TOKEN;
@@ -13,10 +13,10 @@ import static com.bitprogress.feignclient.FeignClientService.FEIGN_NAME;
  * @author wuwuwupx
  * feign服务调用都需要加上对应服务的token
  */
+@AllArgsConstructor
 public class FeignRequestInterceptor implements RequestInterceptor {
 
-    @Autowired
-    private ServerTokenProperties serverTokenProperties;
+    private final ServerTokenProperties serverTokenProperties;
 
     /**
      * 为所有rest请求加上调用服务对应的token

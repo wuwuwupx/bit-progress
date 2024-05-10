@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
-@ApiModel("id信息")
+@ApiModel("id操作指令信息")
 @EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor

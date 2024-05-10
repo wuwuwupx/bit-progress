@@ -12,14 +12,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
-@ApiModel("id列表信息")
+@ApiModel("id列表操作指令信息")
 @EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class IdsCommand extends Command {
 
-    @ApiModelProperty(value = "ids")
+    @ApiModelProperty(value = "id列表")
     @NotNull(message = "id列表不能为空")
     @NotEmpty(message = "id列表不能为空")
     private Set<Long> ids;

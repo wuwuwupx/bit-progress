@@ -7,7 +7,6 @@ import com.bitprogress.response.RequestResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import static com.bitprogress.constant.ResultConstants.SUCCESS_MESSAGE;
 

@@ -12,12 +12,18 @@ public class DispatcherContext {
 
     private static final ThreadLocal<DispatcherType> DISPATCHER_TYPE = new ThreadLocal<>();
 
+    /**
+     * 标记用户请求
+     */
     public static void markUserRequest() {
         DISPATCHER_TYPE.set(DispatcherType.USER_REQUEST);
     }
 
+    /**
+     * 标记系统调度
+     */
     public static void markSystemSchedule() {
-        DISPATCHER_TYPE.set(DispatcherType.SYSTEM_SCHEDULe);
+        DISPATCHER_TYPE.set(DispatcherType.SYSTEM_SCHEDULE);
     }
 
     /**
@@ -25,7 +31,16 @@ public class DispatcherContext {
      */
     public static DispatcherType getDispatcherType() {
         DispatcherType dispatcherType = DISPATCHER_TYPE.get();
-        return Objects.isNull(dispatcherType) ? DispatcherType.SYSTEM_SCHEDULe : dispatcherType;
+        return Objects.isNull(dispatcherType) ? DispatcherType.SYSTEM_SCHEDULE : dispatcherType;
+    }
+
+    /**
+     * 检查是否系统调度
+     *
+     * @return true：系统调度，false：非系统调度
+     */
+    public static boolean isSystemSchedule() {
+        return DispatcherType.SYSTEM_SCHEDULE == getDispatcherType();
     }
 
 }

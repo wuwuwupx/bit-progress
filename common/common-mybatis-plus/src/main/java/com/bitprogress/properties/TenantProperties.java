@@ -2,7 +2,6 @@ package com.bitprogress.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,12 +17,20 @@ public class TenantProperties {
 
     /**
      * 启用租户插件
+     * 默认不启用
      */
-    private Boolean enabled;
+    private Boolean enabled = false;
 
     /**
-     * 忽略白名单
+     * 白名单
      */
     private List<String> ignoreTables = new ArrayList<>();
+
+    /**
+     * 启用名单
+     * 为空表示所有的表都启用，不为空则启动配置的表
+     * 当启用名单不为空时，优先级高于 白名单
+     */
+    private List<String> enableTables = new ArrayList<>();
 
 }

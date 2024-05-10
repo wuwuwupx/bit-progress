@@ -15,11 +15,9 @@
         <module>common-core</module>
         <module>common-http</module>
         <module>common-json</module>
-        <module>common-model</module>
         <module>common-exception</module>
         <module>common-response</module>
         <module>common-swagger</module>
-        <module>common-dao</module>
         <module>common-mybatis-plus</module>
         <module>common-redis</module>
         <module>common-dubbo</module>
@@ -31,6 +29,7 @@
         <module>common-server</module>
         <module>common-gateway</module>
         <module>common-orm-context</module>
+        <module>common-model</module>
     </modules>
 
 </project>

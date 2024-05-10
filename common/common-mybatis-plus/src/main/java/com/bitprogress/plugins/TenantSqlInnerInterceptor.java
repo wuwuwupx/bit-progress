@@ -2,6 +2,7 @@ package com.bitprogress.plugins;
 
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.bitprogress.annotation.SqlType;
+import com.bitprogress.context.DispatcherContext;
 import com.bitprogress.context.SqlParserContext;
 import com.bitprogress.handler.TenantSqlHandler;
 import net.sf.jsqlparser.statement.delete.Delete;
@@ -52,7 +53,18 @@ public class TenantSqlInnerInterceptor extends TenantLineInnerInterceptor {
         process(SqlType.DELETE, index, t -> super.processDelete(delete, t, sql, obj));
     }
 
+    /**
+     * sql 语句处理
+     *
+     * @param sqlType  sql类型
+     * @param index    索引
+     * @param consumer sql方法
+     */
     private void process(SqlType sqlType, Integer index, Consumer<Integer> consumer) {
+        // 检查是否系统调度，系统调度线程没有上下文信息，不进行sql处理
+        if (DispatcherContext.isSystemSchedule()) {
+            return;
+        }
         // 检查是否使用 sql 解析模式
         if (SqlParserContext.onSqlParser(sqlType)) {
             if (SqlParserContext.ignoreProcess()) {

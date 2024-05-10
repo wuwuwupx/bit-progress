@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import java.util.Objects;
 
 @EnableAutoConfiguration
-@MapperScan("com.kyedu.*.mapper")
+@MapperScan("com.bitprogress.*.mapper")
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true)
 public class MybatisPlusConfig {
@@ -52,14 +52,6 @@ public class MybatisPlusConfig {
     @Bean
     public ISqlInjector sqlInjector() {
         return new DefaultSqlInjector();
-    }
-
-    /**
-     * 乐观锁插件
-     */
-    @Bean
-    public OptimisticLockerInnerInterceptor optimisticLockerInterceptor() {
-        return new OptimisticLockerInnerInterceptor();
     }
 
 }

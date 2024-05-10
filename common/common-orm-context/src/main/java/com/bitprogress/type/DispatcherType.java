@@ -13,6 +13,6 @@ public enum DispatcherType {
     /**
      * 系统调度
      */
-    SYSTEM_SCHEDULe,
+    SYSTEM_SCHEDULE,
 
 }
