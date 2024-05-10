@@ -30,6 +30,7 @@
         <module>common-gateway</module>
         <module>common-orm-context</module>
         <module>common-model</module>
+        <module>common-easyexcel</module>
     </modules>
 
 </project>
