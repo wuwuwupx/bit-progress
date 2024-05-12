@@ -3,15 +3,16 @@ package com.bitprogress.cell;
 import com.bitprogress.coordinate.Abscissa;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * 列坐标 -- 横坐标
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
-public class ColumnCoordinate extends Abscissa<Integer> implements ExcelColumnIndex {
+@ToString
+public class ExcelColumn extends Abscissa<Integer> implements ExcelColumnIndex {
 
-    public ColumnCoordinate(Integer columnIndex) {
+    public ExcelColumn(Integer columnIndex) {
         super(columnIndex);
     }
 

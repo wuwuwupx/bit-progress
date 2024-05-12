@@ -1,15 +1,15 @@
 package com.bitprogress.cell;
 
 import com.bitprogress.coordinate.Point;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * 单元格坐标 -- 点
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
-public class CellCoordinate extends Point<Integer, Integer> implements ExcelCellIndex {
+@ToString
+public class ExcelCell extends Point<Integer, Integer> implements ExcelCellIndex {
 
     /**
      * 强制输入坐标
@@ -17,7 +17,7 @@ public class CellCoordinate extends Point<Integer, Integer> implements ExcelCell
      * @param rowIndex    行索引
      * @param columnIndex 列索引
      */
-    public CellCoordinate(Integer rowIndex, Integer columnIndex) {
+    public ExcelCell(Integer rowIndex, Integer columnIndex) {
         super(columnIndex, rowIndex);
     }
 

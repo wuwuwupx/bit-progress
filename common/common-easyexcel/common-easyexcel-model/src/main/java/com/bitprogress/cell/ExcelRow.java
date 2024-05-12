@@ -1,17 +1,17 @@
 package com.bitprogress.cell;
 
 import com.bitprogress.coordinate.Ordinate;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * 行坐标 -- 纵坐标
  */
 @EqualsAndHashCode(callSuper = true)
-@Data
-public class RowCoordinate extends Ordinate<Integer> implements ExcelRowIndex {
+@ToString
+public class ExcelRow extends Ordinate<Integer> implements ExcelRowIndex {
 
-    public RowCoordinate(Integer rowIndex) {
+    public ExcelRow(Integer rowIndex) {
         super(rowIndex);
     }
 

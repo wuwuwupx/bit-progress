@@ -1,5 +1,7 @@
-package com.bitprogress.cell;
+package com.bitprogress.style;
 
+import com.bitprogress.ExcelStyle;
+import com.bitprogress.cell.ExcelColumn;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +14,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class ColumnWidthStyle extends ColumnCoordinate {
+public class ColumnWidthStyle extends ExcelColumn implements ExcelStyle {
 
     /**
      * 列宽

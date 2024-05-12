@@ -1,5 +1,7 @@
-package com.bitprogress.cell;
+package com.bitprogress.style;
 
+import com.bitprogress.ExcelStyle;
+import com.bitprogress.cell.ExcelRow;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +14,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class RowHeightStyle extends RowCoordinate {
+public class RowHeightStyle extends ExcelRow implements ExcelStyle {
 
     /**
      * 行高
