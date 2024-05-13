@@ -11,5 +11,12 @@
 
     <artifactId>common-orm-context</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.bitprogress</groupId>
+            <artifactId>common-exception</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

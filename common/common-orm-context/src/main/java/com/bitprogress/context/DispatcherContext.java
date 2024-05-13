@@ -1,6 +1,6 @@
 package com.bitprogress.context;
 
-import com.bitprogress.type.DispatcherType;
+import com.bitprogress.enums.DispatcherType;
 
 import java.util.Objects;
 

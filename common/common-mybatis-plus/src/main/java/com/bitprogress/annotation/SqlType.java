@@ -1,18 +1,27 @@
 package com.bitprogress.annotation;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * sql 类型
  */
+@Getter
+@AllArgsConstructor
 public enum SqlType {
 
-    NONE,
+    NONE(0),
 
-    SELECT,
+    SELECT(1),
 
-    INSERT,
+    INSERT(2),
 
-    UPDATE,
+    UPDATE(3),
 
-    DELETE,
+    DELETE(4),
+
+    ;
+
+    private final int value;
 
 }

@@ -2,7 +2,6 @@ package com.bitprogress.aspect;
 
 import com.bitprogress.annotation.*;
 import com.bitprogress.context.SqlParserContext;
-import com.bitprogress.entity.SqlParserMsg;
 import lombok.SneakyThrows;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
