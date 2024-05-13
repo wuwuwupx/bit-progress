@@ -2,6 +2,7 @@ package com.bitprogress.aspect;
 
 import com.bitprogress.annotation.*;
 import com.bitprogress.context.SqlParserContext;
+import com.bitprogress.entity.SqlParserMsg;
 import lombok.SneakyThrows;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -18,18 +19,12 @@ public class SqlParserAspect {
     @SneakyThrows
     public Object around(ProceedingJoinPoint point, SqlParserMode sqlParserMode) {
         // 已存在的 sql解析模式信息
-        final Boolean originalEnable = SqlParserContext.getEnable();
-        final ParserType originalParserType = SqlParserContext.getParserType();
-        final SqlType[] originalSqlType = SqlParserContext.getSqlType();
-        final TenantType originalTenantType = SqlParserContext.getTenantType();
+        final SqlParserMsg preSqlParserMsg = SqlParserContext.getSqlParserMsg();
 
-        boolean hasSqlParser = Objects.nonNull(originalEnable);
+        boolean hasSqlParser = Objects.nonNull(preSqlParserMsg);
 
         // 当前注解标注的 sql解析模式信息
         Propagation propagation = sqlParserMode.propagation();
-        SqlType[] sqlTypes = sqlParserMode.sqlTypes();
-        ParserType parserType = sqlParserMode.parserType();
-        TenantType tenantType = sqlParserMode.tenantType();
 
         /*
          * 设置当前的 sql解析模式和 sql类型
@@ -41,24 +36,18 @@ public class SqlParserAspect {
                 case REQUIRED: {
                     // 没有解析模式则新建
                     if (!hasSqlParser) {
-                        SqlParserContext.setEnable(true);
-                        SqlParserContext.setParserType(parserType);
-                        SqlParserContext.setSqlType(sqlTypes);
-                        SqlParserContext.setTenantType(tenantType);
+                        SqlParserContext.setSqlParserMsg(SqlParserMsg.createBySqlParserMode(sqlParserMode));
                     }
                     break;
                 }
                 // 开启一个新的解析模式
                 case REQUIRES_NEW: {
-                    SqlParserContext.setEnable(true);
-                    SqlParserContext.setParserType(parserType);
-                    SqlParserContext.setSqlType(sqlTypes);
-                    SqlParserContext.setTenantType(tenantType);
+                    SqlParserContext.setSqlParserMsg(SqlParserMsg.createBySqlParserMode(sqlParserMode));
                     break;
                 }
                 // 关闭 sql解析模式
                 case NOT_SUPPORTED: {
-                    SqlParserContext.setEnable(false);
+                    SqlParserContext.setSqlParserMsg(SqlParserMsg.createDisable());
                     break;
                 }
             }
@@ -70,15 +59,12 @@ public class SqlParserAspect {
             /*
              * 清除当前 sql解析模式和 sql类型
              */
-            SqlParserContext.remove();
+            SqlParserContext.removeSqlParserMsg();
             if (hasSqlParser) {
                 /*
                  * 重置 sql解析模式和 sql类型
                  */
-                SqlParserContext.setEnable(originalEnable);
-                SqlParserContext.setParserType(originalParserType);
-                SqlParserContext.setSqlType(originalSqlType);
-                SqlParserContext.setTenantType(originalTenantType);
+                SqlParserContext.setSqlParserMsg(preSqlParserMsg);
             }
         }
     }

@@ -3,6 +3,7 @@ package com.bitprogress.context;
 import com.bitprogress.annotation.ParserType;
 import com.bitprogress.annotation.SqlType;
 import com.bitprogress.annotation.TenantType;
+import com.bitprogress.entity.SqlParserMsg;
 
 import java.util.Objects;
 
@@ -11,91 +12,52 @@ public class SqlParserContext {
     /**
      * 解析模式开启状态
      */
-    private static final ThreadLocal<Boolean> ENABLE = new ThreadLocal<>();
-
-    /**
-     * 解析类型
-     */
-    private static final ThreadLocal<ParserType> PARSER_TYPE = new ThreadLocal<>();
-
-    /**
-     * sql 类型
-     */
-    private static final ThreadLocal<SqlType[]> SQL_TYPE = new ThreadLocal<>();
-
-    /**
-     * 租户类型
-     */
-    private static final ThreadLocal<TenantType> TENANT_TYPE = new ThreadLocal<>();
+    private static final ThreadLocal<SqlParserMsg> SQL_PARSER_MSG = new ThreadLocal<>();
 
     /**
      * 当前执行 sql 的租户类型
      * 作用域为一次 sql执行
+     * 原先开启状态和租户类型的状态分开维护，未避免关闭解析模式的情况下读取到上级方法的状态，所以额外维护一份当前的状态
      */
     private static final ThreadLocal<TenantType> CURRENT_SQL_TENANT_TYPE = new ThreadLocal<>();
 
-    public static Boolean getEnable() {
-        return ENABLE.get();
+    public static SqlParserMsg getSqlParserMsg() {
+        return SQL_PARSER_MSG.get();
     }
 
-    public static void setEnable(Boolean enable) {
-        ENABLE.set(enable);
+    public static void setSqlParserMsg(SqlParserMsg sqlParserMsg) {
+        SQL_PARSER_MSG.set(sqlParserMsg);
     }
 
-    public static ParserType getParserType() {
-        return PARSER_TYPE.get();
-    }
-
-    public static void setParserType(ParserType parserType) {
-        PARSER_TYPE.set(parserType);
-    }
-
-    public static SqlType[] getSqlType() {
-        return SQL_TYPE.get();
-    }
-
-    public static void setSqlType(SqlType[] sqlTypes) {
-        SQL_TYPE.set(sqlTypes);
-    }
-
-    public static TenantType getTenantType() {
-        return TENANT_TYPE.get();
-    }
-
-    public static void setTenantType(TenantType parserType) {
-        TENANT_TYPE.set(parserType);
-    }
-
-    public static void remove() {
-        ENABLE.remove();
-        PARSER_TYPE.remove();
-        SQL_TYPE.remove();
-        TENANT_TYPE.remove();
+    public static void removeSqlParserMsg() {
+        SQL_PARSER_MSG.remove();
     }
 
     /**
      * 进入 sql 解析模式
-     * {@link SqlParserContext#getEnable()} != null and {@link SqlParserContext#getEnable()} == true
-     * {@link SqlParserContext#getSqlType()} match sqlType
-     * 进入 sql解析模式后，才会启用 {@link SqlParserContext#getParserType()} 和 {@link SqlParserContext#getTenantType()}
+     * {@link SqlParserContext#getSqlParserMsg()} != null and {@link SqlParserMsg#getEnable()} == true
+     * {@link SqlParserMsg#getSqlTypes()} match sqlType
+     * 进入 sql解析模式后，才会启用 {@link SqlParserMsg#getParserType()} 和 {@link SqlParserMsg#getTenantType()}
      *
      * @param sqlType sql 类型
      * @return true：开启 sql解析模式，false：未开启sql 解析模式
      */
     public static Boolean onSqlParser(SqlType sqlType) {
-        Boolean enable = SqlParserContext.getEnable();
-        return Objects.nonNull(enable) && enable && matchSqlType(sqlType);
+        SqlParserMsg sqlParserMsg = getSqlParserMsg();
+        return Objects.nonNull(sqlParserMsg)
+                && sqlParserMsg.getEnable()
+                && matchSqlType(sqlParserMsg.getSqlTypes(), sqlType);
     }
 
     /**
      * 检查是否忽略语句处理
      * 需要在 {@link SqlParserContext#onSqlParser(SqlType)} == true 的前提下使用
-     * 当 {@link SqlParserContext#getParserType()} == {@link ParserType#INCLUDE}，return false
+     * 当 {@link SqlParserMsg#getParserType()} == {@link ParserType#INCLUDE}，return false
      *
      * @return true：忽略解析
      */
     public static Boolean ignoreProcess() {
-        return ParserType.INCLUDE != SqlParserContext.getParserType();
+        return ParserType.INCLUDE != SqlParserContext.getSqlParserMsg().getParserType();
     }
 
     /**
@@ -103,7 +65,7 @@ public class SqlParserContext {
      * {@link SqlParserContext#onSqlParser(SqlType)} == true 且 {@link SqlParserContext#ignoreProcess()} == false 时使用
      */
     public static void setCurrentSqlTenantType() {
-        CURRENT_SQL_TENANT_TYPE.set(SqlParserContext.getTenantType());
+        CURRENT_SQL_TENANT_TYPE.set(SqlParserContext.getSqlParserMsg().getTenantType());
     }
 
     /**
@@ -124,11 +86,11 @@ public class SqlParserContext {
      * 匹配是否含有对应的 sql类型
      * 含有 {@link SqlType#NONE} 则表示包含所有的 sql类型
      *
-     * @param sqlType sql类型
+     * @param sqlTypes sql 生效的类型
+     * @param sqlType  当前 sql类型
      * @return true：当前 sql解析模式对当前 sql类型生效，false：不生效
      */
-    private static boolean matchSqlType(SqlType sqlType) {
-        SqlType[] sqlTypes = getSqlType();
+    private static boolean matchSqlType(SqlType[] sqlTypes, SqlType sqlType) {
         if (Objects.isNull(sqlType)) {
             return false;
         }

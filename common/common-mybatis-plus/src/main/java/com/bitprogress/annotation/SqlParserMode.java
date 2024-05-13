@@ -2,6 +2,7 @@ package com.bitprogress.annotation;
 
 import com.bitprogress.context.SqlParserContext;
 import com.bitprogress.context.TenantContext;
+import com.bitprogress.entity.SqlParserMsg;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.annotation.*;
@@ -9,7 +10,7 @@ import java.lang.annotation.*;
 /**
  * sql解析模式
  * 本注解主要是用于规避 sql解析，所以默认的解析模式是忽略解析
- * 解析模式的开启表现为 {@link SqlParserContext#getEnable()} != null && {@link SqlParserContext#getEnable()} == true
+ * 解析模式的开启表现为 {@link SqlParserContext#getSqlParserMsg()} != null && {@link SqlParserMsg#getEnable()} == true
  * 当前方法开启新的解析模式的时候，会将上层方法的解析模式状态擦除，直到当前方法结束。
  * 假设 （1）方法A的解析方式为过滤解析，sql类型为 NONE  （2）方法B解析方式为强制解析，sql类型为 SELECT
  *     当方法A调用方法B的时，方法B中的 UPDATE 语句仍会被插件进行默认解析处理（实际是否进行处理，最终以系统是否开启sql处理插件为准）
