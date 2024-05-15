@@ -11,4 +11,11 @@
 
     <artifactId>common-core</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

@@ -1,6 +1,5 @@
 package com.bitprogress.filter;
 
-import com.alibaba.fastjson.JSON;
 import com.bitprogress.constant.VerifyConstant;
 import com.bitprogress.auth.base.AuthException;
 import com.bitprogress.auth.base.AuthMsg;
@@ -11,6 +10,7 @@ import com.bitprogress.service.AuthService;
 import com.bitprogress.service.MatchService;
 import com.bitprogress.service.PermissionService;
 import com.bitprogress.util.CollectionUtils;
+import com.bitprogress.util.JsonUtils;
 import com.bitprogress.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.DefaultResponse;
@@ -55,7 +55,7 @@ public class SecurityGatewayFilter implements GlobalFilter {
 
         ServerHttpRequest request = exchange.getRequest();
         String url = request.getPath().value();
-        String method = request.getMethodValue();
+        String method = request.getMethod().name();
         HttpHeaders headers = request.getHeaders();
 
         String authentication = authService.getAuthentication(headers);
@@ -106,7 +106,7 @@ public class SecurityGatewayFilter implements GlobalFilter {
     private Mono<Void> unauthorized(ServerWebExchange serverWebExchange, AuthException authException) {
         serverWebExchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         DataBuffer buffer = serverWebExchange.getResponse().bufferFactory()
-                .wrap(JSON.toJSONBytes(Result.error(authException)));
+                .wrap(JsonUtils.serializeObject(Result.error(authException)).getBytes());
         return serverWebExchange.getResponse().writeWith(Flux.just(buffer));
     }
 

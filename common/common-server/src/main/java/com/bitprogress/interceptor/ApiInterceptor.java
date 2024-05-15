@@ -3,12 +3,11 @@ package com.bitprogress.interceptor;
 import com.bitprogress.constant.VerifyConstant;
 import com.bitprogress.property.ApplicationTokenProperties;
 import com.bitprogress.util.StringUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author wuwuwupx

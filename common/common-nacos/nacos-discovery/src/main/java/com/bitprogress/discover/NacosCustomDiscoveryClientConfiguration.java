@@ -34,11 +34,11 @@ public class NacosCustomDiscoveryClientConfiguration {
 		return new NacosDiscoveryClient(nacosServiceDiscovery);
 	}
 
-	@Bean
-	@ConditionalOnMissingBean
-	@ConditionalOnProperty(value = "spring.cloud.nacos.discovery.watch.enabled", matchIfMissing = true)
-	public NacosWatch nacosWatch(NacosDiscoveryProperties nacosDiscoveryProperties, ObjectProvider<TaskScheduler> taskScheduler) {
-		return new NacosWatch(nacosDiscoveryProperties, taskScheduler);
-	}
+//	@Bean
+//	@ConditionalOnMissingBean
+//	@ConditionalOnProperty(value = "spring.cloud.nacos.discovery.watch.enabled", matchIfMissing = true)
+//	public NacosWatch nacosWatch(NacosDiscoveryProperties nacosDiscoveryProperties, ObjectProvider<TaskScheduler> taskScheduler) {
+//		return new NacosWatch(nacosDiscoveryProperties, taskScheduler);
+//	}
 
 }

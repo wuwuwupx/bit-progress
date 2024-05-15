@@ -2,6 +2,7 @@ package com.bitprogress.annotation;
 
 import com.bitprogress.context.SqlParserContext;
 import com.bitprogress.context.TenantContext;
+import com.bitprogress.entity.SqlParserMsg;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.annotation.*;

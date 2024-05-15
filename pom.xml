@@ -3,12 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <parent>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <groupId>org.springframework.boot</groupId>
-        <version>2.4.1</version>
-    </parent>
-
     <groupId>com.bitprogress</groupId>
     <artifactId>bit-progress</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -21,37 +15,26 @@
 
     <properties>
         <!-- Jdk Version -->
-        <java.version>1.8</java.version>
+        <java.version>21</java.version>
         <!-- Spring Boot Version -->
-        <spring-boot.version>2.4.1</spring-boot.version>
+        <spring-boot.version>3.2.5</spring-boot.version>
         <!-- 编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <!-- Spring Cloud Version -->
-        <spring.cloud.version>2020.0.0</spring.cloud.version>
+        <spring.cloud.version>2023.0.1</spring.cloud.version>
         <!-- Spring Cloud Alibaba Version -->
-        <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
+        <spring.cloud.alibaba.version>2023.0.1.0</spring.cloud.alibaba.version>
         <!-- Spring Cloud Alibaba Dubbo Version -->
         <spring.cloud.alibaba.dubbo.version>2021.1</spring.cloud.alibaba.dubbo.version>
-        <!-- Spring Cloud Eureka Version -->
-        <spring.cloud.eureka.version>1.4.7.RELEASE</spring.cloud.eureka.version>
-        <!-- Spring Cloud Hystrix Version -->
-        <spring.cloud.hystrix.version>2.2.9.RELEASE</spring.cloud.hystrix.version>
         <!-- MyBatis-Plus Version -->
-        <mybatisplus.version>3.4.1</mybatisplus.version>
+        <mybatisplus.version>3.5.6</mybatisplus.version>
         <!-- Mysql Connector Version -->
-        <mysql.java.connector.version>8.0.20</mysql.java.connector.version>
+        <mysql.java.connector.version>8.0.28</mysql.java.connector.version>
         <!-- Lombok Version -->
-        <lombok.version>1.16.22</lombok.version>
-        <!-- Fastjson Version -->
-        <fastjson.version>1.2.53</fastjson.version>
-        <!-- Javax Servlet Version -->
-        <javax.servlet.version>3.1.0</javax.servlet.version>
-        <javax.ws.rs.version>2.1.1</javax.ws.rs.version>
+        <lombok.version>1.18.32</lombok.version>
         <!-- Swagger -->
-        <swagger.version>3.0.0</swagger.version>
-        <!-- Swagger-models -->
-        <swagger.models.version>1.5.21</swagger.models.version>
+        <swagger.v3.version>2.2.21</swagger.v3.version>
         <!-- knife4j -->
         <knife4j.version>3.0.3</knife4j.version>
         <!-- Okhttp -->
@@ -62,7 +45,7 @@
         <!--AliSms-->
         <ali.sms.version>4.1.0</ali.sms.version>
         <!-- MapStruct -->
-        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <!-- MapStruct -->
         <org.redisson.version>2.15.2</org.redisson.version>
         <easyexcel.version>3.3.2</easyexcel.version>
@@ -70,23 +53,16 @@
 
     <packaging>pom</packaging>
 
-    <dependencies>
-        <!-- Test -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
-
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
             <!-- Spring Cloud -->
             <dependency>
@@ -102,16 +78,6 @@
                 <version>${spring.cloud.alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-eureka</artifactId>
-                <version>${spring.cloud.eureka.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-                <version>${spring.cloud.hystrix.version}</version>
             </dependency>
 
             <!-- MyBatis Plus -->
@@ -145,45 +111,11 @@
                 <version>${lombok.version}</version>
             </dependency>
 
-            <!-- javax.ws.rs dubbo -->
-            <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>javax.ws.rs-api</artifactId>
-                <version>${javax.ws.rs.version}</version>
-            </dependency>
-
             <!-- Swagger -->
-            <!-- swagger-annotations-1.5.20和swagger-models-1.5.20有bug -->
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <exclusions>
-                    <exclusion>
-                        <groupId>io.swagger</groupId>
-                        <artifactId>swagger-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>io.swagger</groupId>
-                        <artifactId>swagger-models</artifactId>
-                    </exclusion>
-                </exclusions>
-                <version>${swagger.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-annotations</artifactId>
-                <version>${swagger.models.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-models</artifactId>
-                <version>${swagger.models.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger.version}</version>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations-jakarta</artifactId>
+                <version>${swagger.v3.version}</version>
             </dependency>
 
             <!-- Knife4j -->
@@ -198,20 +130,6 @@
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
                 <version>${okhttp.version}</version>
-            </dependency>
-
-            <!-- Quartz -->
-            <dependency>
-                <groupId>org.quartz-scheduler</groupId>
-                <artifactId>quartz</artifactId>
-                <version>${quartz.version}</version>
-            </dependency>
-
-            <!-- AliSms -->
-            <dependency>
-                <groupId>com.aliyun</groupId>
-                <artifactId>aliyun-java-sdk-core</artifactId>
-                <version>${ali.sms.version}</version>
             </dependency>
 
             <!-- MapStruct -->
@@ -242,5 +160,15 @@
 
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

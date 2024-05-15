@@ -3,6 +3,7 @@ package com.bitprogress.context;
 import com.bitprogress.annotation.ParserType;
 import com.bitprogress.annotation.SqlType;
 import com.bitprogress.annotation.TenantType;
+import com.bitprogress.entity.SqlParserMsg;
 
 import java.util.Objects;
 

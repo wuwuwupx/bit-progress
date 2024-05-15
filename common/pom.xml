@@ -20,7 +20,6 @@
         <module>common-swagger</module>
         <module>common-mybatis-plus</module>
         <module>common-redis</module>
-        <module>common-dubbo</module>
         <module>common-elasticsearch</module>
         <module>common-feign</module>
         <module>common-mq</module>

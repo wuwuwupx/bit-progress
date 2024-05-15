@@ -1,17 +1,16 @@
 package com.bitprogress.auth.service;
 
-import com.alibaba.fastjson.JSON;
 import com.bitprogress.auth.base.AuthMsg;
+import com.bitprogress.auth.base.AuthProperties;
+import com.bitprogress.auth.base.AuthResult;
+import com.bitprogress.auth.base.TokenUtils;
 import com.bitprogress.service.AuthTokenService;
 import com.bitprogress.service.StringRedisService;
+import com.bitprogress.util.JsonUtils;
 import com.bitprogress.util.StringUtils;
-import com.bitprogress.auth.base.AuthResult;
-import com.bitprogress.auth.base.AuthProperties;
-import com.bitprogress.auth.base.TokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -75,7 +74,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
             authMsg = (T) new AuthMsg();
         }
         authMsg.setToken(token);
-        String value = JSON.toJSONString(authMsg);
+        String value = JsonUtils.serializeObject(authMsg);
         stringRedisService.setForValueTtl(tokenPrefix + tokenName + userId, value, cacheDays, TimeUnit.DAYS);
         return token;
     }
@@ -130,7 +129,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
             auth.setAuthException(AUTH_TOKEN_WRONG);
             return auth;
         }
-        T authMsg = JSON.parseObject(value, target);
+        T authMsg = JsonUtils.deserializeObject(value, target);
         String redisToken = authMsg.getToken();
         auth.setAuthMsg(authMsg);
         boolean result = StringUtils.nonEmpty(redisToken) && token.equals(redisToken);

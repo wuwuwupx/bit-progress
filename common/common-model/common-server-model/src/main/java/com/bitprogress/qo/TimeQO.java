@@ -1,8 +1,7 @@
 package com.bitprogress.qo;
 
 import com.bitprogress.QO;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,14 +12,14 @@ import java.time.LocalDateTime;
 /**
  * 时间查询
  */
-@ApiModel("时间点查询")
+@Schema(description = "时间点查询")
 @EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TimeQO extends QO {
 
-    @ApiModelProperty(value = "查询时间")
+    @Schema(description = "查询时间")
     private LocalDateTime time;
 
 }

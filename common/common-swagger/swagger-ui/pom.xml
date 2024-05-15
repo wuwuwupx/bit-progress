@@ -12,11 +12,6 @@
     <artifactId>swagger-ui</artifactId>
 
     <dependencies>
-        <!-- swagger-ui -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-        </dependency>
         <!-- knife4j -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
