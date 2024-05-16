@@ -10,8 +10,6 @@ import java.util.stream.*;
 import static java.util.stream.Collectors.*;
 
 /**
- * @author wpx
- * Created on 2020/11/18 16:17
  * 集合工具类
  * 流的操作可能导致性能下降
  */

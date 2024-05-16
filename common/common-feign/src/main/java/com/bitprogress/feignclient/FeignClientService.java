@@ -1,6 +1,6 @@
 package com.bitprogress.feignclient;
 
-import com.bitprogress.model.ResultResponse;
+import com.bitprogress.response.model.ResultResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;

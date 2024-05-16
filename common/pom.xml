@@ -27,9 +27,9 @@
         <module>common-sentinel</module>
         <module>common-server</module>
         <module>common-gateway</module>
-        <module>common-orm-context</module>
         <module>common-model</module>
         <module>common-easyexcel</module>
+        <module>common-context</module>
     </modules>
 
 </project>

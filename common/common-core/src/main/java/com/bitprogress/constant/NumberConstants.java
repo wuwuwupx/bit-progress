@@ -1,9 +1,7 @@
 package com.bitprogress.constant;
 
 /**
- * @author wuwuwupx
- * create on 2021/5/31 22:59
- *  NumberConstants is
+ * 数值常量
  */
 public class NumberConstants {
 

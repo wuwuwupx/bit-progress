@@ -1,9 +1,7 @@
 package com.bitprogress.constant;
 
 /**
- * @author wuwuwupx
- * create on 2021/7/19 0:54
- * StringConstants is
+ * 字符串常量
  */
 public class StringConstants {
 

@@ -1,6 +1,6 @@
 package com.bitprogress.exception;
 
-import com.bitprogress.model.ResultResponse;
+import com.bitprogress.response.model.ResultResponse;
 import com.bitprogress.util.ErrorUtils;
 import com.bitprogress.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

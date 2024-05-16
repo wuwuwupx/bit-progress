@@ -1,6 +1,6 @@
 package com.bitprogress.feignclient;
 
-import com.bitprogress.model.ResultResponse;
+import com.bitprogress.response.model.ResultResponse;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 

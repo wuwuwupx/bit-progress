@@ -1,8 +1,6 @@
 package com.bitprogress.constant;
 
 /**
- * @author wuwuwupx
- * create on 2021/6/13 17:30
  * 请求的返回信息
  */
 public class ResultConstants {

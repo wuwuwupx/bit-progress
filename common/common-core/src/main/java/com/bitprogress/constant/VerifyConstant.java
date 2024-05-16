@@ -1,8 +1,6 @@
 package com.bitprogress.constant;
 
 /**
- * @author wuwuwupx
- * create on 2021/6/21 1:52
  * 验证信息常量
  */
 public class VerifyConstant {

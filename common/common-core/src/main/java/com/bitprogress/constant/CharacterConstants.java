@@ -1,8 +1,6 @@
 package com.bitprogress.constant;
 
 /**
- * @author wuwuwupx
- * create on 2021/7/20 21:54
  *  字符常量
  */
 public class CharacterConstants {
