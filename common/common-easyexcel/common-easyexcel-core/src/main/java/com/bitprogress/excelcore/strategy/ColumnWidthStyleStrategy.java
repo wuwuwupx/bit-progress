@@ -1,11 +1,11 @@
-package com.bitprogress.excel.strategy;
+package com.bitprogress.excelcore.strategy;
 
 import com.alibaba.excel.metadata.Head;
 import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.style.column.AbstractColumnWidthStyleStrategy;
 import com.bitprogress.excelmodel.CellStyleStrategy;
-import com.bitprogress.excel.style.ColumnWidthStyle;
+import com.bitprogress.excelcore.style.ColumnWidthStyle;
 import com.bitprogress.util.CollectionUtils;
 import lombok.Getter;
 import lombok.Setter;

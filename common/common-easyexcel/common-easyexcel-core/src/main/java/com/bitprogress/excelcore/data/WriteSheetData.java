@@ -1,4 +1,4 @@
-package com.bitprogress.excel.data;
+package com.bitprogress.excelcore.data;
 
 import com.alibaba.excel.write.metadata.WriteSheet;
 import lombok.AllArgsConstructor;

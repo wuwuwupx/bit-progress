@@ -1,8 +1,8 @@
-package com.bitprogress.excel.strategy;
+package com.bitprogress.excelcore.strategy;
 
 import com.alibaba.excel.write.style.row.AbstractRowHeightStyleStrategy;
 import com.bitprogress.excelmodel.CellStyleStrategy;
-import com.bitprogress.excel.style.RowHeightStyle;
+import com.bitprogress.excelcore.style.RowHeightStyle;
 import com.bitprogress.util.CollectionUtils;
 import org.apache.poi.ss.usermodel.Row;
 

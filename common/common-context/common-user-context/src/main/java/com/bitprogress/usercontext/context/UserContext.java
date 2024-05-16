@@ -3,6 +3,7 @@ package com.bitprogress.usercontext.context;
 import com.bitprogress.exception.CommonException;
 import com.bitprogress.exception.IException;
 import com.bitprogress.usercontext.entity.UserInfo;
+import com.bitprogress.usercontext.enums.UserType;
 import com.bitprogress.util.CollectionUtils;
 
 import java.util.Map;
@@ -36,9 +37,26 @@ public class UserContext {
     }
 
     /**
+     * 设置用户信息
+     *
+     * @param userId        用户ID
+     * @param userType      用户类型
+     * @param roleId        角色ID
+     * @param attendMessage 附加信息
+     */
+    public static void setUserInfo(Long userId, UserType userType, Long roleId, Map<String, String> attendMessage) {
+        setField(userInfo -> {
+            userInfo.setUserId(userId);
+            userInfo.setUserType(userType);
+            userInfo.setRoleId(roleId);
+            userInfo.setAttendMessage(attendMessage);
+        });
+    }
+
+    /**
      * 清除用户信息
      */
-    public static void removeUserInfo() {
+    public static void clearUserInfo() {
         USER_INFO.remove();
     }
 
@@ -160,6 +178,64 @@ public class UserContext {
     }
 
     /**
+     * 获取用户类型
+     */
+    public static UserType getUserType() {
+        return getFieldOrDefault(UserInfo::getUserType, null);
+    }
+
+    /**
+     * 设置用户类型
+     *
+     * @param userType 用户类型
+     */
+    public static void setUserType(UserType userType) {
+        setField(userInfo -> userInfo.setUserType(userType));
+    }
+
+    /**
+     * 清除用户类型
+     */
+    public static void removeUserType() {
+        removeField(userInfo -> userInfo.setUserType(null));
+    }
+
+    /**
+     * 获取用户类型
+     */
+    public static UserType getUserTypeOrDefault() {
+        return getFieldOrDefault(UserInfo::getUserType, UserType.NONE);
+    }
+
+    /**
+     * 获取用户类型
+     */
+    public static UserType getUserTypeOrThrow() {
+        return getUserTypeOrThrow("未读取到用户类型");
+    }
+
+    /**
+     * 获取用户类型
+     */
+    public static UserType getUserTypeOrThrow(String message) {
+        return getFieldOrThrow(UserInfo::getUserType, () -> CommonException.error(message));
+    }
+
+    /**
+     * 获取用户类型
+     */
+    public static UserType getUserTypeOrThrow(IException exception) {
+        return getFieldOrThrow(UserInfo::getUserType, () -> CommonException.error(exception));
+    }
+
+    /**
+     * 获取用户类型
+     */
+    public static UserType getUserTypeOrThrow(CommonException exception) {
+        return getFieldOrThrow(UserInfo::getUserType, () -> exception);
+    }
+
+    /**
      * 获取角色ID
      */
     public static Long getRoleId() {
@@ -274,7 +350,7 @@ public class UserContext {
      * @param key 需要清除的附加信息的key
      */
     public static void removeAttendMessageByKey(String key) {
-        removeField(userInfo ->{
+        removeField(userInfo -> {
             Map<String, String> attendMessage = userInfo.getAttendMessage();
             if (CollectionUtils.isEmpty(attendMessage)) {
                 return;

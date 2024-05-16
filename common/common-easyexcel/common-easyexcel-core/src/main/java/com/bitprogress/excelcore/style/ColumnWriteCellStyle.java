@@ -1,29 +1,29 @@
-package com.bitprogress.excel.style;
+package com.bitprogress.excelcore.style;
 
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.bitprogress.excelmodel.ExcelStyle;
-import com.bitprogress.excelmodel.cell.ExcelRow;
+import com.bitprogress.excelmodel.cell.ExcelColumn;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 复杂表头样式信息，包含需要自定义的表头坐标及样式
+ * 列样式
  */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class RowWriteCellStyle extends ExcelRow implements ExcelStyle {
+public class ColumnWriteCellStyle extends ExcelColumn implements ExcelStyle {
 
     private WriteCellStyle writeCellStyle;
 
-    public RowWriteCellStyle(Integer rowIndex) {
+    public ColumnWriteCellStyle(Integer rowIndex) {
         super(rowIndex);
     }
 
-    public RowWriteCellStyle(Integer rowIndex, WriteCellStyle writeCellStyle) {
+    public ColumnWriteCellStyle(Integer rowIndex, WriteCellStyle writeCellStyle) {
         super(rowIndex);
         this.writeCellStyle = writeCellStyle;
     }

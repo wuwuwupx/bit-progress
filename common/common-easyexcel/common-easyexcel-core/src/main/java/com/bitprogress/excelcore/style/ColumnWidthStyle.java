@@ -1,4 +1,4 @@
-package com.bitprogress.excel.style;
+package com.bitprogress.excelcore.style;
 
 import com.bitprogress.excelmodel.ExcelStyle;
 import com.bitprogress.excelmodel.cell.ExcelColumn;

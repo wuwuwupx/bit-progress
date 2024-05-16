@@ -1,11 +1,11 @@
-package com.bitprogress.excel.strategy;
+package com.bitprogress.excelcore.strategy;
 
 import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.write.handler.context.CellWriteHandlerContext;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.bitprogress.excelmodel.CellStyleStrategy;
-import com.bitprogress.excel.style.CellWriteCellStyle;
+import com.bitprogress.excelcore.style.CellWriteCellStyle;
 import com.bitprogress.util.CollectionUtils;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.bitprogress.excel.utils;
+package com.bitprogress.excelcore.utils;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
@@ -6,7 +6,7 @@ import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.alibaba.excel.write.handler.WriteHandler;
 import com.alibaba.excel.write.metadata.WriteSheet;
-import com.bitprogress.excel.data.WriteSheetData;
+import com.bitprogress.excelcore.data.WriteSheetData;
 import com.bitprogress.util.CollectionUtils;
 
 import java.io.ByteArrayOutputStream;

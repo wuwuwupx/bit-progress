@@ -1,30 +1,43 @@
 package com.bitprogress.basecontext.enums;
 
+import com.bitprogress.basemodel.enums.ValueEnum;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * 调度类型
  */
-public enum DispatcherType {
+@Getter
+@AllArgsConstructor
+public enum DispatcherType implements ValueEnum {
 
     /**
      * 系统调度
      */
-    SYSTEM_SCHEDULE(0),
+    SYSTEM_DISPATCH(0),
+
+    /**
+     * 定时任务调度
+     */
+    SCHEDULE_DISPATCH(1),
+
+    /**
+     * 公共接口请求
+     */
+    PUBLIC_REQUEST(2),
 
     /**
      * 用户请求
      */
-    USER_REQUEST(1),
+    USER_REQUEST(3),
+
+    /**
+     * 内部请求
+     */
+    INNER_REQUEST(4),
 
     ;
 
-    private final int value;
-
-    public int getValue() {
-        return value;
-    }
-
-    DispatcherType(int value) {
-        this.value = value;
-    }
+    private final Integer value;
 
 }

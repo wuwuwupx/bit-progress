@@ -1,9 +1,9 @@
-package com.bitprogress.excel.handler;
+package com.bitprogress.excelcore.handler;
 
 import com.alibaba.excel.write.handler.SheetWriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
-import com.bitprogress.excel.data.FreezePaneData;
+import com.bitprogress.excelcore.data.FreezePaneData;
 import org.apache.poi.ss.usermodel.Sheet;
 
 public class FreezePaneHandler implements SheetWriteHandler {

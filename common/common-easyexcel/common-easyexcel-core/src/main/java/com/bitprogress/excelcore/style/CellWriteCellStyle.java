@@ -1,4 +1,4 @@
-package com.bitprogress.excel.style;
+package com.bitprogress.excelcore.style;
 
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.bitprogress.excelmodel.ExcelStyle;

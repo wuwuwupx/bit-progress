@@ -1,5 +1,6 @@
 package com.bitprogress.usercontext.entity;
 
+import com.bitprogress.usercontext.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,11 @@ public class UserInfo {
      * 用户ID
      */
     private Long userId;
+
+    /**
+     * 用户类型
+     */
+    private UserType userType;
 
     /**
      * 角色ID
