@@ -20,8 +20,6 @@ public class FeignRequestInterceptor implements RequestInterceptor {
 
     /**
      * 为所有rest请求加上调用服务对应的token
-     *
-     * @param template
      */
     @Override
     public void apply(RequestTemplate template) {

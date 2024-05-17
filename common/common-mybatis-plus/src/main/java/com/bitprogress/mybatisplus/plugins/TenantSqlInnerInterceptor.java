@@ -61,8 +61,8 @@ public class TenantSqlInnerInterceptor extends TenantLineInnerInterceptor {
      * @param consumer sql方法
      */
     private void process(SqlType sqlType, Integer index, Consumer<Integer> consumer) {
-        // 检查是否系统调度，系统调度线程没有上下文信息，不进行sql处理
-        if (DispatcherContext.isSystemSchedule()) {
+        // 检查是否无状态调度，无状态调度线程没有上下文信息，不进行sql处理
+        if (DispatcherContext.isNoneStatusDispatch()) {
             return;
         }
         // 检查是否使用 sql 解析模式

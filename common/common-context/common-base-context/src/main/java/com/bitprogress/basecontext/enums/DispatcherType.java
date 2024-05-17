@@ -31,11 +31,6 @@ public enum DispatcherType implements ValueEnum {
      */
     USER_REQUEST(3),
 
-    /**
-     * 内部请求
-     */
-    INNER_REQUEST(4),
-
     ;
 
     private final Integer value;

@@ -17,7 +17,7 @@ public class DispatcherContext {
      */
     public static DispatcherType getDispatcherType() {
         DispatcherType dispatcherType = DISPATCHER_TYPE.get();
-        return Objects.isNull(dispatcherType) ? DispatcherType.SCHEDULE_DISPATCH : dispatcherType;
+        return Objects.isNull(dispatcherType) ? DispatcherType.SYSTEM_DISPATCH : dispatcherType;
     }
 
     public static void setDispatcherType(DispatcherType dispatcherType) {
@@ -25,10 +25,17 @@ public class DispatcherContext {
     }
 
     /**
+     * 清除线程调度信息
+     */
+    public static void clearDispatcherType() {
+        DISPATCHER_TYPE.remove();
+    }
+
+    /**
      * 标记系统调度
      */
     public static void markSystemDispatch() {
-        setDispatcherType(DispatcherType.SCHEDULE_DISPATCH);
+        setDispatcherType(DispatcherType.SYSTEM_DISPATCH);
     }
 
     /**
@@ -39,12 +46,12 @@ public class DispatcherContext {
     }
 
     /**
-     * 检查是否系统调度
+     * 检查是否无状态调度，即是否非用户登录状态
      *
-     * @return true：系统调度，false：非系统调度
+     * @return true：无状态调度，false：有状态调度
      */
-    public static boolean isSystemSchedule() {
-        return DispatcherType.SCHEDULE_DISPATCH == getDispatcherType();
+    public static boolean isNoneStatusDispatch() {
+        return DispatcherType.USER_REQUEST != getDispatcherType();
     }
 
 }
