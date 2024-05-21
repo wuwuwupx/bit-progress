@@ -1,16 +1,16 @@
 package com.bitprogress.mybatisplus.aspect;
 
-import com.bitprogress.mybatisplus.context.SqlParserContext;
-import com.bitprogress.mybatisplus.entity.SqlParserMsg;
 import com.bitprogress.mybatisplus.annotation.Propagation;
 import com.bitprogress.mybatisplus.annotation.SqlParserMode;
+import com.bitprogress.mybatisplus.context.SqlParserContext;
+import com.bitprogress.mybatisplus.entity.SqlParserMsg;
 import lombok.SneakyThrows;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+import java.util.Optional;
 
 @Aspect
 @Component
@@ -20,9 +20,8 @@ public class SqlParserAspect {
     @SneakyThrows
     public Object around(ProceedingJoinPoint point, SqlParserMode sqlParserMode) {
         // 已存在的 sql解析模式信息
-        final SqlParserMsg preSqlParserMsg = SqlParserContext.getSqlParserMsg();
 
-        boolean hasSqlParser = Objects.nonNull(preSqlParserMsg);
+        final Optional<SqlParserMsg> preSqlParserMsg = Optional.ofNullable(SqlParserContext.getSqlParserMsg());
 
         // 当前注解标注的 sql解析模式信息
         Propagation propagation = sqlParserMode.propagation();
@@ -36,7 +35,7 @@ public class SqlParserAspect {
                 // 默认传播方式
                 case REQUIRED: {
                     // 没有解析模式则新建
-                    if (!hasSqlParser) {
+                    if (preSqlParserMsg.isEmpty()) {
                         SqlParserContext.setSqlParserMsg(SqlParserMsg.createBySqlParserMode(sqlParserMode));
                     }
                     break;
@@ -61,12 +60,10 @@ public class SqlParserAspect {
              * 清除当前 sql解析模式和 sql类型
              */
             SqlParserContext.removeSqlParserMsg();
-            if (hasSqlParser) {
-                /*
-                 * 重置 sql解析模式和 sql类型
-                 */
-                SqlParserContext.setSqlParserMsg(preSqlParserMsg);
-            }
+            /*
+             * 重置 sql解析模式和 sql类型
+             */
+            preSqlParserMsg.ifPresent(SqlParserContext::setSqlParserMsg);
         }
     }
 
