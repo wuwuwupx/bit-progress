@@ -11,6 +11,7 @@
         <module>common</module>
         <module>login</module>
         <module>server</module>
+        <module>common/common-request</module>
     </modules>
 
     <properties>

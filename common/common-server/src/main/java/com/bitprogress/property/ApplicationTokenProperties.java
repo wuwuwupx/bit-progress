@@ -1,13 +1,10 @@
 package com.bitprogress.property;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @author wuwuwupx
- * create on 2021/6/21 3:31
- * ServerProperties is
- */
+@Data
 @Configuration
 @ConfigurationProperties(prefix = ApplicationTokenProperties.PREFIX)
 public class ApplicationTokenProperties {
@@ -23,21 +20,5 @@ public class ApplicationTokenProperties {
      * 内部服务接口token
      */
     private String rest;
-
-    public String getApi() {
-        return api;
-    }
-
-    public void setApi(String api) {
-        this.api = api;
-    }
-
-    public String getRest() {
-        return rest;
-    }
-
-    public void setRest(String rest) {
-        this.rest = rest;
-    }
 
 }

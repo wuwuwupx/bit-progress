@@ -116,6 +116,22 @@ public class JsonUtils {
      * @param <T>  目标类型
      * @return 反序列化后的map
      */
+    public static <T, R> Map<T, R> deserializeMap(String json, TypeReference<Map<T, R>> typeReference) {
+        try {
+            return mapper.readValue(json, typeReference);
+        } catch (JsonProcessingException e) {
+            logger.error("deserializeSet {} errorMessage {} ", json, e.getMessage(), e);
+            throw new RuntimeException("反序列化异常" + e.getMessage());
+        }
+    }
+
+    /**
+     * 反序列化json字符串为map
+     *
+     * @param json json字符串
+     * @param <T>  目标类型
+     * @return 反序列化后的map
+     */
     public static <T> Map<T, T> deserializeMap(String json, Class<T> target) {
         return deserializeMap(json, target, target);
     }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 用户信息
@@ -28,7 +29,7 @@ public class UserInfo {
     /**
      * 角色ID
      */
-    private Long roleId;
+    private Set<Long> roleIds;
 
     /**
      * 附带信息

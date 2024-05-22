@@ -8,6 +8,7 @@ import com.bitprogress.util.CollectionUtils;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -41,14 +42,14 @@ public class UserContext {
      *
      * @param userId        用户ID
      * @param userType      用户类型
-     * @param roleId        角色ID
+     * @param roleIds       角色ID
      * @param attendMessage 附加信息
      */
-    public static void setUserInfo(Long userId, UserType userType, Long roleId, Map<String, String> attendMessage) {
+    public static void setUserInfo(Long userId, UserType userType, Set<Long> roleIds, Map<String, String> attendMessage) {
         setField(userInfo -> {
             userInfo.setUserId(userId);
             userInfo.setUserType(userType);
-            userInfo.setRoleId(roleId);
+            userInfo.setRoleIds(roleIds);
             userInfo.setAttendMessage(attendMessage);
         });
     }
@@ -238,66 +239,66 @@ public class UserContext {
     /**
      * 获取角色ID
      */
-    public static Long getRoleId() {
-        return getRoleIdOrDefault(null);
+    public static Set<Long> getRoleId() {
+        return getRoleIdsOrDefault(null);
     }
 
     /**
      * 设置角色ID
      *
-     * @param roleId 角色ID
+     * @param roleIds 角色ID
      */
-    public static void setRoleId(Long roleId) {
-        setField(userInfo -> userInfo.setRoleId(roleId));
+    public static void setRoleIds(Set<Long> roleIds) {
+        setField(userInfo -> userInfo.setRoleIds(roleIds));
     }
 
     /**
      * 清除角色ID
      */
-    public static void removeRoleId() {
-        removeField(userInfo -> userInfo.setRoleId(null));
+    public static void removeRoleIds() {
+        removeField(userInfo -> userInfo.setRoleIds(null));
     }
 
     /**
      * 获取角色ID
      */
-    public static Long getRoleIdOrDefault() {
-        return getRoleIdOrDefault(0L);
+    public static Set<Long> getRoleIdsOrDefault() {
+        return getRoleIdsOrDefault(CollectionUtils.emptySet());
     }
 
     /**
      * 获取角色ID
      */
-    public static Long getRoleIdOrDefault(Long defaultUserId) {
-        return getFieldOrDefault(UserInfo::getRoleId, defaultUserId);
+    public static Set<Long> getRoleIdsOrDefault(Set<Long> defaultRoleIds) {
+        return getFieldOrDefault(UserInfo::getRoleIds, defaultRoleIds);
     }
 
     /**
      * 获取角色ID
      */
-    public static Long getRoleIdOrThrow() {
-        return getRoleIdOrThrow("未读取到角色ID");
+    public static Set<Long> getRoleIdsOrThrow() {
+        return getRoleIdsOrThrow("未读取到角色ID");
     }
 
     /**
      * 获取角色ID
      */
-    public static Long getRoleIdOrThrow(String message) {
-        return getFieldOrThrow(UserInfo::getRoleId, () -> CommonException.error(message));
+    public static Set<Long> getRoleIdsOrThrow(String message) {
+        return getFieldOrThrow(UserInfo::getRoleIds, () -> CommonException.error(message));
     }
 
     /**
      * 获取角色ID
      */
-    public static Long getRoleIdOrThrow(IException exception) {
-        return getFieldOrThrow(UserInfo::getRoleId, () -> CommonException.error(exception));
+    public static Set<Long> getRoleIdsOrThrow(IException exception) {
+        return getFieldOrThrow(UserInfo::getRoleIds, () -> CommonException.error(exception));
     }
 
     /**
      * 获取角色ID
      */
-    public static Long getRoleIdOrThrow(CommonException exception) {
-        return getFieldOrThrow(UserInfo::getRoleId, () -> exception);
+    public static Set<Long> getRoleIdsOrThrow(CommonException exception) {
+        return getFieldOrThrow(UserInfo::getRoleIds, () -> exception);
     }
 
     /**

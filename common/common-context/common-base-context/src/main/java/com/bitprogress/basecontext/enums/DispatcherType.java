@@ -6,6 +6,7 @@ import lombok.Getter;
 
 /**
  * 调度类型
+ * 不同于 servlet 的 DispatcherType
  */
 @Getter
 @AllArgsConstructor
@@ -22,9 +23,9 @@ public enum DispatcherType implements ValueEnum {
     SCHEDULE_DISPATCH(1),
 
     /**
-     * 公共接口请求
+     * 匿名请求
      */
-    PUBLIC_REQUEST(2),
+    ANONYMOUS_REQUEST(2),
 
     /**
      * 用户请求

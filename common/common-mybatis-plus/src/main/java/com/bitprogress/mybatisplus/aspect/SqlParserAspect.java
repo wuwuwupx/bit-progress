@@ -33,22 +33,19 @@ public class SqlParserAspect {
             // 根据传播方式设置 sql解析模式
             switch (propagation) {
                 // 默认传播方式
-                case REQUIRED: {
+                case REQUIRED -> {
                     // 没有解析模式则新建
                     if (preSqlParserMsg.isEmpty()) {
                         SqlParserContext.setSqlParserMsg(SqlParserMsg.createBySqlParserMode(sqlParserMode));
                     }
-                    break;
                 }
                 // 开启一个新的解析模式
-                case REQUIRES_NEW: {
+                case REQUIRES_NEW -> {
                     SqlParserContext.setSqlParserMsg(SqlParserMsg.createBySqlParserMode(sqlParserMode));
-                    break;
                 }
                 // 关闭 sql解析模式
-                case NOT_SUPPORTED: {
+                case NOT_SUPPORTED -> {
                     SqlParserContext.setSqlParserMsg(SqlParserMsg.createDisable());
-                    break;
                 }
             }
             /*

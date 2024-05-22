@@ -46,6 +46,13 @@ public class DispatcherContext {
     }
 
     /**
+     * 标记匿名请求
+     */
+    public static void markAnonymousRequest() {
+        setDispatcherType(DispatcherType.ANONYMOUS_REQUEST);
+    }
+
+    /**
      * 检查是否无状态调度，即是否非用户登录状态
      *
      * @return true：无状态调度，false：有状态调度

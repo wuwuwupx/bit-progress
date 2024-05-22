@@ -25,6 +25,20 @@ public class TenantContext {
     /**
      * 获取租户信息
      */
+    public static void setTenantInfo(TenantInfo tenantInfo) {
+        TENANT_INFO.set(tenantInfo);
+    }
+
+    /**
+     * 清除租户信息
+     */
+    public static void clearTenantInfo() {
+        TENANT_INFO.remove();
+    }
+
+    /**
+     * 获取租户信息
+     */
     public static TenantInfo getTenantInfoOrNew() {
         return Optional
                 .ofNullable(TENANT_INFO.get())
@@ -63,13 +77,6 @@ public class TenantContext {
         return Optional
                 .ofNullable(TENANT_INFO.get())
                 .orElseThrow(() -> exception);
-    }
-
-    /**
-     * 获取租户信息
-     */
-    public static void removeTenantInfo(CommonException exception) {
-        TENANT_INFO.remove();
     }
 
     /**
