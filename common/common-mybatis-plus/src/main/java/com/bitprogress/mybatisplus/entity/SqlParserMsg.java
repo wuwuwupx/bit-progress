@@ -37,6 +37,11 @@ public class SqlParserMsg {
     private TenantType tenantType;
 
     /**
+     * rpc传播
+     */
+    private Boolean rpcPropagate;
+
+    /**
      * 根据注解创建
      *
      * @param sqlParserMode sql解析模式注解
@@ -48,6 +53,7 @@ public class SqlParserMsg {
         sqlParserMsg.setParserType(sqlParserMode.parserType());
         sqlParserMsg.setSqlTypes(sqlParserMode.sqlTypes());
         sqlParserMsg.setTenantType(sqlParserMode.tenantType());
+        sqlParserMsg.setRpcPropagate(sqlParserMode.rpcPropagate());
         return sqlParserMsg;
     }
 
