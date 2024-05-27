@@ -1,9 +1,9 @@
-package com.bitprogress.mybatisplus.aspect;
+package com.bitprogress.ormparser.aspect;
 
-import com.bitprogress.mybatisplus.annotation.Propagation;
-import com.bitprogress.mybatisplus.annotation.SqlParserMode;
-import com.bitprogress.mybatisplus.context.SqlParserContext;
-import com.bitprogress.mybatisplus.entity.SqlParserMsg;
+import com.bitprogress.ormparser.annotation.Propagation;
+import com.bitprogress.ormparser.annotation.SqlParserMode;
+import com.bitprogress.ormparser.context.SqlParserContext;
+import com.bitprogress.ormparser.entity.SqlParserMsg;
 import lombok.SneakyThrows;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

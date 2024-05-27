@@ -5,6 +5,8 @@ import com.bitprogress.exception.IException;
 import com.bitprogress.usercontext.entity.UserInfo;
 import com.bitprogress.usercontext.enums.UserType;
 import com.bitprogress.util.CollectionUtils;
+import com.bitprogress.util.JsonUtils;
+import com.bitprogress.util.StringUtils;
 
 import java.util.Map;
 import java.util.Optional;
@@ -397,6 +399,14 @@ public class UserContext {
     public static void removeField(Consumer<UserInfo> consumer) {
         Optional.ofNullable(USER_INFO.get())
                 .ifPresent(consumer);
+    }
+
+    public static String getUserInfoJson() {
+        return JsonUtils.serializeObject(getUserInfo());
+    }
+
+    public static void setUserInfoJson(String userInfoJson) {
+        USER_INFO.set(JsonUtils.deserializeObject(userInfoJson, UserInfo.class));
     }
 
 }

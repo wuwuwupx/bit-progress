@@ -1,9 +1,8 @@
-package com.bitprogress.mybatisplus.annotation;
+package com.bitprogress.ormparser.annotation;
 
-import com.bitprogress.mybatisplus.context.SqlParserContext;
+import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormcontext.context.TenantContext;
-import com.bitprogress.mybatisplus.entity.SqlParserMsg;
-import org.springframework.transaction.annotation.Transactional;
+import com.bitprogress.ormparser.entity.SqlParserMsg;
 
 import java.lang.annotation.*;
 
@@ -16,7 +15,7 @@ import java.lang.annotation.*;
  * 当方法A调用方法B的时，方法B中的 UPDATE 语句仍会被插件进行默认解析处理（实际是否进行处理，最终以系统是否开启sql处理插件为准）
  * 因为虽然方法A过滤掉所有的类型 sql的处理，但在方法B的作用域中，方法A的解析模式状态已被擦除
  * <p>
- * 引入传播机制，借鉴 {@link Transactional} 的传播机制
+ * 引入传播机制，借鉴 Transactional 的传播机制
  * - 跟随当前解析模式，没有则创建新的解析模式
  * - 跟随当前解析模式
  * - 开启一个新的解析模式

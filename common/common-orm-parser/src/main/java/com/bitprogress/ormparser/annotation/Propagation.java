@@ -1,4 +1,4 @@
-package com.bitprogress.mybatisplus.annotation;
+package com.bitprogress.ormparser.annotation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

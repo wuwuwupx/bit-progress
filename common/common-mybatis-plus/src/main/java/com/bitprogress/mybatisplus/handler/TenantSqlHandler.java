@@ -1,8 +1,8 @@
 package com.bitprogress.mybatisplus.handler;
 
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
-import com.bitprogress.mybatisplus.annotation.TenantType;
-import com.bitprogress.mybatisplus.context.SqlParserContext;
+import com.bitprogress.ormparser.annotation.TenantType;
+import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormcontext.context.TenantContext;
 import com.bitprogress.mybatisplus.properties.TenantProperties;
 import com.bitprogress.util.CollectionUtils;

@@ -30,6 +30,7 @@
         <module>common-model</module>
         <module>common-easyexcel</module>
         <module>common-context</module>
+        <module>common-orm-parser</module>
     </modules>
 
 </project>

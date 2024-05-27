@@ -3,6 +3,7 @@ package com.bitprogress.ormcontext.context;
 import com.bitprogress.ormcontext.entity.TenantInfo;
 import com.bitprogress.exception.CommonException;
 import com.bitprogress.exception.IException;
+import com.bitprogress.util.JsonUtils;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -225,6 +226,14 @@ public class TenantContext {
                 .of(tenantInfo)
                 .map(fieldFunction)
                 .orElseThrow(supplier);
+    }
+
+    public static String getTenantInfoJson() {
+        return JsonUtils.serializeObject(getTenantInfo());
+    }
+
+    public static void setTenantInfoJson(String tenantInfoJson) {
+        TENANT_INFO.set(JsonUtils.deserializeObject(tenantInfoJson, TenantInfo.class));
     }
 
 }

@@ -39,7 +39,7 @@ public class JsonUtils {
         try {
             return mapper.writeValueAsString(o);
         } catch (JsonProcessingException e) {
-            logger.error("serialize {} errorMessage {} ", o.toString(), e.getMessage(), e);
+            logger.error("serialize {} errorMessage {} ", o, e.getMessage(), e);
             throw new RuntimeException("序列化异常" + e.getMessage());
         }
     }

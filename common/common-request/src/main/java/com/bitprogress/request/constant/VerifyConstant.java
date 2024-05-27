@@ -6,6 +6,21 @@ package com.bitprogress.request.constant;
 public class VerifyConstant {
 
     /**
+     * 请求来源
+     */
+    public static final String REQUEST_RESOURCE = "Request_Resource";
+
+    /**
+     * 请求来源
+     */
+    public static final String GATEWAY_ROUTE = "Gateway_Route";
+
+    /**
+     * 请求来源
+     */
+    public static final String FEIGN = "Feign";
+
+    /**
      * 追加用户ID
      */
     public static final String USER_ID = "User_Id";
@@ -44,6 +59,11 @@ public class VerifyConstant {
      * 追加权限信息
      */
     public static final String PERMISSIONS = "Permissions";
+
+    /**
+     * 追加 sql解析信息
+     */
+    public static final String SQL_PARSER_MSG = "Sql_Parser_Msg";
 
     /**
      * 请求头header
@@ -94,5 +114,9 @@ public class VerifyConstant {
      * 封装结果集
      */
     public static final String ENCAPSULATION_RESULT = "encapsulation_result";
+
+    public static final String DISPATCHER_TYPE = "Dispatcher_Type";
+    public static final String USER_INFO = "User_Info";
+    public static final String TENANT_INFO = "Tenant_Info";
 
 }

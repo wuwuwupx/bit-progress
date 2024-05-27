@@ -1,6 +1,7 @@
 package com.bitprogress.basecontext.context;
 
 import com.bitprogress.basecontext.enums.DispatcherType;
+import com.bitprogress.util.JsonUtils;
 
 import java.util.Objects;
 
@@ -59,6 +60,10 @@ public class DispatcherContext {
      */
     public static boolean isNoneStatusDispatch() {
         return DispatcherType.USER_REQUEST != getDispatcherType();
+    }
+
+    public static String getDispatcherTypeJson() {
+        return JsonUtils.serializeObject(getDispatcherType());
     }
 
 }

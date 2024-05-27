@@ -1,4 +1,4 @@
-package com.bitprogress.mybatisplus.annotation;
+package com.bitprogress.ormparser.annotation;
 
 import com.bitprogress.ormcontext.context.TenantContext;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Getter;
 
 /**
  * 租户类型
- * 后续考虑拓展 租户列表，用于 {@link SqlType#SELECT}
  */
 @Getter
 @AllArgsConstructor
@@ -26,5 +25,14 @@ public enum TenantType {
     ;
 
     private final int value;
+
+    public static TenantType getByValue(int value) {
+        for (TenantType tenantType : values()) {
+            if (tenantType.value == value) {
+                return tenantType;
+            }
+        }
+        return null;
+    }
 
 }

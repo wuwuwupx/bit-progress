@@ -2,9 +2,10 @@ package com.bitprogress.mybatisplus.plugins;
 
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.bitprogress.basecontext.context.DispatcherContext;
-import com.bitprogress.mybatisplus.annotation.SqlType;
-import com.bitprogress.mybatisplus.context.SqlParserContext;
+import com.bitprogress.ormparser.annotation.SqlType;
+import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.mybatisplus.handler.TenantSqlHandler;
+import com.bitprogress.ormparser.util.SqlParserUtils;
 import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.Select;
@@ -66,8 +67,8 @@ public class TenantSqlInnerInterceptor extends TenantLineInnerInterceptor {
             return;
         }
         // 检查是否使用 sql 解析模式
-        if (SqlParserContext.onSqlParser(sqlType)) {
-            if (SqlParserContext.ignoreProcess()) {
+        if (SqlParserUtils.onSqlParser(sqlType)) {
+            if (SqlParserUtils.ignoreProcess()) {
                 return;
             }
             // 设置当前 sql执行的租户类型
