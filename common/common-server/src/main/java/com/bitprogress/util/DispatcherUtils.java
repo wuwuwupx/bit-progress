@@ -1,6 +1,8 @@
 package com.bitprogress.util;
 
+import com.bitprogress.exception.RequestExceptionMessage;
 import com.bitprogress.request.constant.VerifyConstant;
+import com.bitprogress.request.enums.RequestSource;
 import com.bitprogress.request.enums.RequestType;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -11,15 +13,28 @@ public class DispatcherUtils {
     private static final Logger log = LoggerFactory.getLogger(DispatcherUtils.class);
 
     /**
-     * 获取调度类型
+     * 获取请求来源
      *
      * @param request 请求信息
      */
-    public static RequestType getDispatcherType(HttpServletRequest request) {
+    public static RequestSource getRequestSource(HttpServletRequest request) {
+        String requestSourceStr = request.getHeader(VerifyConstant.REQUEST_RESOURCE);
+        Assert.isNotEmpty(requestSourceStr, RequestExceptionMessage.REQUEST_SOURCE_MISS_WRONG_EXCEPTION);
+        RequestSource requestSource = RequestSource.getByValue(Integer.parseInt(requestSourceStr));
+        Assert.notNull(requestSource, RequestExceptionMessage.REQUEST_SOURCE_NOT_APPOINT_EXCEPTION);
+        return requestSource;
+    }
+
+    /**
+     * 获取请求类型
+     *
+     * @param request 请求信息
+     */
+    public static RequestType getRequestType(HttpServletRequest request) {
         String requestTypeStr = request.getHeader(VerifyConstant.REQUEST_TYPE);
         if (StringUtils.isNotEmpty(requestTypeStr)) {
             try {
-                return RequestType.valueOf(requestTypeStr);
+                return RequestType.getByValue(Integer.parseInt(requestTypeStr));
             } catch (Exception e) {
                 log.error("requestType convert error", e);
             }

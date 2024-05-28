@@ -12,13 +12,8 @@ public class ApplicationTokenProperties {
     public static final String PREFIX = "application.server.token";
 
     /**
-     * 对外接口token
+     * 服务路由token
      */
-    private String api;
-
-    /**
-     * 内部服务接口token
-     */
-    private String rest;
+    private String route;
 
 }

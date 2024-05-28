@@ -79,6 +79,16 @@ public class Assert {
     /**
      * 判断是否为空字符串，不为空字符串则抛出异常
      *
+     * @param str     需判断字符串
+     * @param message 异常信息
+     */
+    public static void isEmpty(String str, String message) {
+        isEmpty(str, CommonException.error(message));
+    }
+
+    /**
+     * 判断是否为空字符串，不为空字符串则抛出异常
+     *
      * @param str       需判断字符串
      * @param exception 异常信息
      */
@@ -96,6 +106,16 @@ public class Assert {
         if (str != null && !str.isEmpty()) {
             throw exception;
         }
+    }
+
+    /**
+     * 判断是否不为空字符串，为空字符串则抛出异常
+     *
+     * @param str     需判断字符串
+     * @param message 异常信息
+     */
+    public static void isNotEmpty(String str, String message) {
+        isNotEmpty(str, CommonException.error(message));
     }
 
     /**

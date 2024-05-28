@@ -11,16 +11,6 @@ public class VerifyConstant {
     public static final String REQUEST_RESOURCE = "Request_Resource";
 
     /**
-     * 请求来源
-     */
-    public static final String GATEWAY_ROUTE = "Gateway_Route";
-
-    /**
-     * 请求来源
-     */
-    public static final String FEIGN = "Feign";
-
-    /**
      * 追加用户ID
      */
     public static final String USER_ID = "User_Id";
@@ -93,12 +83,7 @@ public class VerifyConstant {
     /**
      * 对于Api接口的token追加
      */
-    public static final String ROUTE_API_TOKEN = "route_api_token";
-
-    /**
-     * 对于Rest接口的token追加
-     */
-    public static final String ROUTE_REST_TOKEN = "route_rest_token";
+    public static final String ROUTE_TOKEN = "route_token";
 
     /**
      * 对于基础的FeignClient接口的token

@@ -1,19 +1,22 @@
 package com.bitprogress.filter;
 
 import com.bitprogress.basecontext.context.DispatcherContext;
+import com.bitprogress.exception.RequestExceptionMessage;
 import com.bitprogress.ormcontext.context.TenantContext;
 import com.bitprogress.ormcontext.entity.TenantInfo;
+import com.bitprogress.ormparser.context.SqlParserContext;
+import com.bitprogress.ormparser.util.SqlParserUtils;
+import com.bitprogress.property.ApplicationTokenProperties;
+import com.bitprogress.request.constant.VerifyConstant;
+import com.bitprogress.request.enums.RequestSource;
 import com.bitprogress.request.enums.RequestType;
 import com.bitprogress.usercontext.context.UserContext;
 import com.bitprogress.usercontext.entity.UserInfo;
-import com.bitprogress.util.DispatcherUtils;
-import com.bitprogress.util.TenantUtils;
-import com.bitprogress.util.UserUtils;
+import com.bitprogress.util.*;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilterChain;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
@@ -22,6 +25,9 @@ import java.io.IOException;
  */
 @WebFilter
 public class UserFilter implements Filter {
+
+    @Autowired
+    private ApplicationTokenProperties applicationTokenProperties;
 
     /**
      * The <code>doFilter</code> method of the Filter is called by the container each time a request/response pair is passed
@@ -56,21 +62,55 @@ public class UserFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         try {
-            RequestType requestType = DispatcherUtils.getDispatcherType(httpRequest);
-            if (RequestType.USER_REQUEST.equals(requestType)) {
-                DispatcherContext.markUserRequest();
-                UserInfo userInfo = UserUtils.getUserInfo(httpRequest);
-                UserContext.setUserInfo(userInfo);
-                TenantInfo tenantInfo = TenantUtils.getTenantInfo(httpRequest);
-                TenantContext.setTenantInfo(tenantInfo);
-            } else {
-                DispatcherContext.markAnonymousRequest();
+            // 获取请求来源
+            RequestSource requestSource = DispatcherUtils.getRequestSource(httpRequest);
+
+            // 校验服务token
+            String requestRouteToken = httpRequest.getHeader(VerifyConstant.ROUTE_TOKEN);
+            String routeToken = applicationTokenProperties.getRoute();
+            boolean tokenEquals = StringUtils.equals(routeToken, requestRouteToken);
+            Assert.isTrue(tokenEquals, RequestExceptionMessage.REQUEST_TOKEN_NOT_APPOINT_EXCEPTION);
+
+            switch (requestSource) {
+                case GATEWAY_ROUTE -> {
+                    // 设置用户上下文
+                    RequestType requestType = DispatcherUtils.getRequestType(httpRequest);
+                    if (RequestType.USER_REQUEST.equals(requestType)) {
+                        DispatcherContext.markUserRequest();
+                        UserInfo userInfo = UserUtils.getUserInfo(httpRequest);
+                        UserContext.setUserInfo(userInfo);
+                        TenantInfo tenantInfo = TenantUtils.getTenantInfo(httpRequest);
+                        TenantContext.setTenantInfo(tenantInfo);
+                    } else {
+                        DispatcherContext.markAnonymousRequest();
+                    }
+                }
+                case FEIGN -> {
+                    // 设置上下文信息
+                    String dispatcherTypeJson = httpRequest.getHeader(VerifyConstant.DISPATCHER_TYPE);
+                    if (StringUtils.isNotEmpty(dispatcherTypeJson)) {
+                        DispatcherContext.setDispatcherTypeJson(dispatcherTypeJson);
+                    }
+                    String userInfoJson = httpRequest.getHeader(VerifyConstant.USER_INFO);
+                    if (StringUtils.isNotEmpty(userInfoJson)) {
+                        UserContext.setUserInfoJson(userInfoJson);
+                    }
+                    String tenantInfoJson = httpRequest.getHeader(VerifyConstant.TENANT_INFO);
+                    if (StringUtils.isNotEmpty(tenantInfoJson)) {
+                        TenantContext.setTenantInfoJson(tenantInfoJson);
+                    }
+                    String sqlParserMsgJson = httpRequest.getHeader(VerifyConstant.SQL_PARSER_MSG);
+                    if (StringUtils.isNotEmpty(sqlParserMsgJson)) {
+                        SqlParserUtils.setSqlParserMsgJson(sqlParserMsgJson);
+                    }
+                }
             }
             chain.doFilter(request, response);
         } finally {
             DispatcherContext.clearDispatcherType();
             UserContext.clearUserInfo();
             TenantContext.clearTenantInfo();
+            SqlParserContext.clearSqlParserMsg();
         }
     }
 

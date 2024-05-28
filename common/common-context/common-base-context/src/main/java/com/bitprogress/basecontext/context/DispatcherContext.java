@@ -1,7 +1,7 @@
 package com.bitprogress.basecontext.context;
 
 import com.bitprogress.basecontext.enums.DispatcherType;
-import com.bitprogress.util.JsonUtils;
+import com.bitprogress.basemodel.util.EnumUtils;
 
 import java.util.Objects;
 
@@ -63,7 +63,11 @@ public class DispatcherContext {
     }
 
     public static String getDispatcherTypeJson() {
-        return JsonUtils.serializeObject(getDispatcherType());
+        return getDispatcherType().getValue().toString();
+    }
+
+    public static void setDispatcherTypeJson(String dispatcherTypeJson) {
+        setDispatcherType(EnumUtils.getByValue(DispatcherType.class, Integer.parseInt(dispatcherTypeJson)));
     }
 
 }

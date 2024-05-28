@@ -56,7 +56,7 @@ public class SqlParserAspect {
             /*
              * 清除当前 sql解析模式和 sql类型
              */
-            SqlParserContext.removeSqlParserMsg();
+            SqlParserContext.clearSqlParserMsg();
             /*
              * 重置 sql解析模式和 sql类型
              */

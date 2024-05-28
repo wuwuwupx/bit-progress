@@ -1,6 +1,5 @@
 package com.bitprogress.filter;
 
-import com.bitprogress.constant.VerifyConstant;
 import com.bitprogress.auth.base.AuthException;
 import com.bitprogress.auth.base.AuthMsg;
 import com.bitprogress.auth.base.AuthResult;
@@ -91,7 +90,7 @@ public class SecurityGatewayFilter implements GlobalFilter {
         String routeApiToken = GatewayRouteMsg.getRouteApiToken(serviceId);
         Map<String, String> params = authMsg.getParams();
         ServerHttpRequest.Builder mutate = request.mutate();
-        mutate.header(VerifyConstant.USER_ID, userId).header(VerifyConstant.ROUTE_API_TOKEN, routeApiToken);
+//        mutate.header(VerifyConstant.USER_ID, userId).header(VerifyConstant.ROUTE_API_TOKEN, routeApiToken);
         if (CollectionUtils.isNotEmpty(params)) {
             params.forEach(mutate::header);
         }

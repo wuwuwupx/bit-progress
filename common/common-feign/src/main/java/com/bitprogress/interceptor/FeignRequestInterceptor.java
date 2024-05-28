@@ -1,16 +1,20 @@
 package com.bitprogress.interceptor;
 
 import com.bitprogress.basecontext.context.DispatcherContext;
-import com.bitprogress.feignclient.FeignClientService;
 import com.bitprogress.ormcontext.context.TenantContext;
 import com.bitprogress.ormparser.util.SqlParserUtils;
-import com.bitprogress.property.ServerTokenProperties;
 import com.bitprogress.request.constant.VerifyConstant;
+import com.bitprogress.request.enums.RequestSource;
 import com.bitprogress.usercontext.context.UserContext;
+import com.bitprogress.util.CollectionUtils;
 import com.bitprogress.util.StringUtils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.AllArgsConstructor;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.ServiceInstanceChooser;
+
+import java.util.Map;
 
 /**
  * @author wuwuwupx
@@ -19,22 +23,20 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FeignRequestInterceptor implements RequestInterceptor {
 
-    private final ServerTokenProperties serverTokenProperties;
+    private final ServiceInstanceChooser serviceInstanceChooser;
 
     /**
      * 为所有rest请求加上调用服务对应的token
      */
     @Override
     public void apply(RequestTemplate template) {
-        template.header(VerifyConstant.REQUEST_RESOURCE, VerifyConstant.FEIGN);
+        template.header(VerifyConstant.REQUEST_RESOURCE, RequestSource.FEIGN.getValue().toString());
         String serverName = template.feignTarget().name();
         // 基础FeignClient进行请求，带上对应的标识
-        if (FeignClientService.FEIGN_NAME.equals(serverName)) {
-            template.header(VerifyConstant.ROUTE_REST_TOKEN, VerifyConstant.FEIGN_COMMON_TOKEN);
-        } else {
-            String serverToken = serverTokenProperties.getServerTokenByServerName(serverName);
-            template.header(VerifyConstant.ROUTE_REST_TOKEN, serverToken);
-        }
+        ServiceInstance instance = serviceInstanceChooser.choose(serverName);
+        Map<String, String> metadata = instance.getMetadata();
+        String routeToken = CollectionUtils.getForMap(metadata, VerifyConstant.ROUTE_TOKEN);
+        template.header(VerifyConstant.ROUTE_TOKEN, routeToken);
         // 上下文信息
         String dispatcherTypeJson = DispatcherContext.getDispatcherTypeJson();
         if (StringUtils.isNotEmpty(dispatcherTypeJson)) {

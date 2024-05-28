@@ -25,7 +25,7 @@ public class SqlParserContext {
         SQL_PARSER_MSG.set(sqlParserMsg);
     }
 
-    public static void removeSqlParserMsg() {
+    public static void clearSqlParserMsg() {
         SQL_PARSER_MSG.remove();
     }
 
