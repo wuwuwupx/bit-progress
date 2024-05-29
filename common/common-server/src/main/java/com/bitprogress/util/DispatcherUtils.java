@@ -1,5 +1,6 @@
 package com.bitprogress.util;
 
+import com.bitprogress.basemodel.util.EnumUtils;
 import com.bitprogress.exception.RequestExceptionMessage;
 import com.bitprogress.request.constant.VerifyConstant;
 import com.bitprogress.request.enums.RequestSource;
@@ -20,7 +21,7 @@ public class DispatcherUtils {
     public static RequestSource getRequestSource(HttpServletRequest request) {
         String requestSourceStr = request.getHeader(VerifyConstant.REQUEST_RESOURCE);
         Assert.isNotEmpty(requestSourceStr, RequestExceptionMessage.REQUEST_SOURCE_MISS_WRONG_EXCEPTION);
-        RequestSource requestSource = RequestSource.getByValue(Integer.parseInt(requestSourceStr));
+        RequestSource requestSource = EnumUtils.getByValue(RequestSource.class, Integer.parseInt(requestSourceStr));
         Assert.notNull(requestSource, RequestExceptionMessage.REQUEST_SOURCE_NOT_APPOINT_EXCEPTION);
         return requestSource;
     }
@@ -34,7 +35,7 @@ public class DispatcherUtils {
         String requestTypeStr = request.getHeader(VerifyConstant.REQUEST_TYPE);
         if (StringUtils.isNotEmpty(requestTypeStr)) {
             try {
-                return RequestType.getByValue(Integer.parseInt(requestTypeStr));
+                return EnumUtils.getByValue(RequestType.class, Integer.parseInt(requestTypeStr));
             } catch (Exception e) {
                 log.error("requestType convert error", e);
             }

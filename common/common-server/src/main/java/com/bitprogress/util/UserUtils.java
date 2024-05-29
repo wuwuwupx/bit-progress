@@ -1,5 +1,6 @@
 package com.bitprogress.util;
 
+import com.bitprogress.basemodel.util.EnumUtils;
 import com.bitprogress.request.constant.VerifyConstant;
 import com.bitprogress.usercontext.context.UserContext;
 import com.bitprogress.usercontext.entity.UserInfo;
@@ -41,7 +42,7 @@ public class UserUtils {
         String userType = request.getHeader(VerifyConstant.USER_TYPE);
         if (StringUtils.isNotEmpty(userType)) {
             try {
-                userInfo.setUserType(UserType.matchOfValue(Integer.parseInt(userType)));
+                userInfo.setUserType(EnumUtils.getByValue(UserType.class, Integer.parseInt(userType)));
             } catch (Exception e) {
                 log.error("userType convert error", e);
             }

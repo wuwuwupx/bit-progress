@@ -17,7 +17,6 @@ import org.springframework.cloud.client.loadbalancer.ServiceInstanceChooser;
 import java.util.Map;
 
 /**
- * @author wuwuwupx
  * feign服务调用都需要加上对应服务的token
  */
 @AllArgsConstructor
@@ -26,14 +25,14 @@ public class FeignRequestInterceptor implements RequestInterceptor {
     private final ServiceInstanceChooser serviceInstanceChooser;
 
     /**
-     * 为所有rest请求加上调用服务对应的token
+     * 为所有feign请求加上调用服务对应的token
      */
     @Override
     public void apply(RequestTemplate template) {
         template.header(VerifyConstant.REQUEST_RESOURCE, RequestSource.FEIGN.getValue().toString());
-        String serverName = template.feignTarget().name();
+        String serverId = template.feignTarget().name();
         // 基础FeignClient进行请求，带上对应的标识
-        ServiceInstance instance = serviceInstanceChooser.choose(serverName);
+        ServiceInstance instance = serviceInstanceChooser.choose(serverId);
         Map<String, String> metadata = instance.getMetadata();
         String routeToken = CollectionUtils.getForMap(metadata, VerifyConstant.ROUTE_TOKEN);
         template.header(VerifyConstant.ROUTE_TOKEN, routeToken);

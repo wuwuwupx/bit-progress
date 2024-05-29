@@ -25,13 +25,4 @@ public enum RequestSource implements ValueEnum {
 
     private final Integer value;
 
-    public static RequestSource getByValue(Integer value) {
-        for (RequestSource requestSource : RequestSource.values()) {
-            if (requestSource.getValue().equals(value)) {
-                return requestSource;
-            }
-        }
-        return null;
-    }
-
 }

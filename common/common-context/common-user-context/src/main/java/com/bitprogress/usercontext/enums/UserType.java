@@ -20,19 +20,4 @@ public enum UserType implements ValueEnum, MessageEnum {
 
     private final String message;
 
-    /**
-     * 匹配用户类型
-     *
-     * @param value 用户类型value
-     * @return 用户类型
-     */
-    public static UserType matchOfValue(Integer value) {
-        for (UserType userType : values()) {
-            if (userType.getValue().equals(value)) {
-                return userType;
-            }
-        }
-        return null;
-    }
-
 }

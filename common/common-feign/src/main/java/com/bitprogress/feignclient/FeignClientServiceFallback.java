@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import java.net.URI;
 
 /**
- * @author wuwuwupx
  * 服务降级
  */
 @Component

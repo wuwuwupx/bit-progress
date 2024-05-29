@@ -25,13 +25,4 @@ public enum RequestType implements ValueEnum {
 
     private final Integer value;
 
-    public static RequestType getByValue(Integer value) {
-        for (RequestType requestType : RequestType.values()) {
-            if (requestType.getValue().equals(value)) {
-                return requestType;
-            }
-        }
-        return null;
-    }
-
 }
