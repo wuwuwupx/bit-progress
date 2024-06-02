@@ -1,13 +1,13 @@
 package com.bitprogress.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 
-/**
- * @author wuwuwupx
- * create on 2021/6/20 22:06
- * IOUtils is
- */
 public class IOUtils {
+
+    private static final Logger log = LoggerFactory.getLogger(IOUtils.class);
 
     /**
      * The default buffer size ({@value}) to use for
@@ -114,6 +114,26 @@ public class IOUtils {
             count += n;
         }
         return count;
+    }
+
+    /**
+     * Quietly (no exceptions) close Closable resource. In case of error it will
+     * be printed to {@link IOUtils} class logger.
+     *
+     * @param closeable
+     *            resource to close
+     */
+    public static void closeQuietly( final Closeable closeable ) {
+        // no need to log a NullPointerException here
+        if(closeable == null) {
+            return;
+        }
+
+        try {
+            closeable.close();
+        } catch ( Exception exc ) {
+            log.error("Unable to close resource: " + exc, exc );
+        }
     }
 
 }

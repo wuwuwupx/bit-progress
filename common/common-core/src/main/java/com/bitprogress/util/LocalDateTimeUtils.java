@@ -8,9 +8,6 @@ import java.util.Objects;
 
 /**
  * LocalDateTime 工具类
- *
- * @author wukun
- * created on 2019/10/29
  */
 public class LocalDateTimeUtils {
 
@@ -58,7 +55,7 @@ public class LocalDateTimeUtils {
     /**
      * 传入时间是否与当前时间在同一天
      *
-     * @param    time
+     * @param    time 传入时间
      * @return   Boolean
      */
     public static Boolean onSameDayWithNow(LocalDateTime time) {
@@ -68,10 +65,7 @@ public class LocalDateTimeUtils {
     /**
      *
      * 比较两个时间是否在同一天
-     *
-     * @param    time
-     * @param    comparativeTime
-     * @return   Boolean
+     * @return true：在同一天，false：不在同一天
      */
     public static Boolean onSameDay(LocalDateTime time, LocalDateTime comparativeTime) {
         return Objects.nonNull(time) && Objects.nonNull(comparativeTime) && time.toLocalDate().isEqual(comparativeTime.toLocalDate());
@@ -81,8 +75,7 @@ public class LocalDateTimeUtils {
      *
      * 比较传入时间与当前时间是否在同一周
      *
-     * @param    time
-     * @return   Boolean
+     * @return true：在同一周，false：不在同一周
      */
     public static Boolean onSameWeekWithNow(LocalDateTime time) {
         return Objects.nonNull(time) && onSameWeek(time, LocalDateTime.now());
@@ -92,9 +85,7 @@ public class LocalDateTimeUtils {
      *
      * 比较两个时间是否在同一周
      *
-     * @param    time
-     * @param    comparativeTime
-     * @return   Boolean
+     * @return true：在同一周，false：不在同一周
      */
     public static Boolean onSameWeek(LocalDateTime time, LocalDateTime comparativeTime) {
         if (Objects.isNull(time) || Objects.isNull(comparativeTime)) {
