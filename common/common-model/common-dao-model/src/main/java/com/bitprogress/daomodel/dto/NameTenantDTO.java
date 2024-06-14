@@ -5,15 +5,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+
 /**
  * tenantId name
  * Data Transfer Object
  */
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class NameTenantDTO extends TenantDTO {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * name

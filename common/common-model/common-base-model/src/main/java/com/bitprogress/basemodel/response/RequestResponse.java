@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+
 /**
  * result response
  */
@@ -14,6 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class RequestResponse extends Response {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * request code

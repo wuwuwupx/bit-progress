@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Schema(description = "时间段查询")
+@Schema(description = "时间段查询信息")
 @EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor

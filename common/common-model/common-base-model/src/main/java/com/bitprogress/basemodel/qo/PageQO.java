@@ -6,11 +6,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
+
 @EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageQO extends QO {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * current page index

@@ -1,22 +1,25 @@
 package com.bitprogress.servermodel.vo;
 
+import com.bitprogress.basemodel.VO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * 多值选项
- */
-@Schema(description = "多值选项")
+import java.io.Serial;
+
+@Schema(description = "名称展示信息")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MultivaluedOptionVO extends OptionVO {
+public class NameVO extends VO {
 
-    @Schema(description = "选项的值")
-    private String value;
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    @Schema(description = "名称")
+    private String name;
 
 }

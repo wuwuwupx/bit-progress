@@ -1,4 +1,4 @@
-package com.bitprogress.servermodel.vo;
+package com.bitprogress.servermodel.vo.option;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
  * Linkage option
  * 附带子选项列表
  */
-@Schema(description = "联动业务字典选项")
+@Schema(description = "联动选项展示信息")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor

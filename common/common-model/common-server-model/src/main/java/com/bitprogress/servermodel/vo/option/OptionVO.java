@@ -1,4 +1,4 @@
-package com.bitprogress.servermodel.vo;
+package com.bitprogress.servermodel.vo.option;
 
 import com.bitprogress.basemodel.VO;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  * option view object
  * 业务服务数据字典一般以 id - name 形式存在
  */
-@Schema(description = "基础业务字典选项")
+@Schema(description = "选项展示信息")
 @EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor

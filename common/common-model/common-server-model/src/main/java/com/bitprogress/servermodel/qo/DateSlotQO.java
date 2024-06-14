@@ -7,14 +7,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.time.LocalDate;
 
-@Schema(description = "日期范围查询")
+@Schema(description = "日期范围查询信息")
 @EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class DateSlotQO extends QO {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Schema(description = "开始日期")
     private LocalDate startDate;

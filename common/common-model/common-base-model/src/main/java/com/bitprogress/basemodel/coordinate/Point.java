@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.io.Serial;
+
 /**
  * 坐标点
  */
@@ -13,6 +15,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public abstract class Point<T extends Number, R extends Number> extends Coordinate {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * 横坐标

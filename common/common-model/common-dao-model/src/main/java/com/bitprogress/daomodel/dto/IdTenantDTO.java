@@ -1,21 +1,17 @@
 package com.bitprogress.daomodel.dto;
 
-import com.bitprogress.basemodel.DTO;
-import lombok.AllArgsConstructor;
+import com.bitprogress.basemodel.dto.IdDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 
 /**
  * Tenant Data Transfer Object
  */
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public abstract class TenantDTO extends DTO {
+public abstract class IdTenantDTO extends IdDTO {
 
     @Serial
     private static final long serialVersionUID = 1L;
