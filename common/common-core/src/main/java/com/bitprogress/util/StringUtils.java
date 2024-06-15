@@ -7,7 +7,6 @@ import java.util.UUID;
 
 /**
  * @author wuwuwupx
- * create on 2021/5/31 22:40
  */
 public class StringUtils {
 

@@ -1,14 +1,15 @@
 package com.bitprogress.basemodel.vo;
 
 import com.bitprogress.basemodel.VO;
-import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serial;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -44,11 +45,12 @@ public class PageVO<T> extends VO {
     }
 
     public static <T> PageVO<T> of(List<T> list) {
-        return new PageVO<>(list, CollectionUtils.size(list));
+        int size = Objects.isNull(list) ? 0 : list.size();
+        return new PageVO<>(list, size);
     }
 
     public static <T> PageVO<T> empty() {
-        return new PageVO<>(CollectionUtils.emptyList(), 0);
+        return new PageVO<>(new ArrayList<>(), 0);
     }
 
 }
