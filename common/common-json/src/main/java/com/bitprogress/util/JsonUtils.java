@@ -1,5 +1,6 @@
 package com.bitprogress.util;
 
+import com.bitprogress.basemodel.ToJson;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -35,6 +36,9 @@ public class JsonUtils {
     public static String serializeObject(Object o) {
         if (o == null) {
             return "";
+        }
+        if (o instanceof ToJson toJson) {
+            return toJson.toJson();
         }
         try {
             return mapper.writeValueAsString(o);
@@ -121,35 +125,6 @@ public class JsonUtils {
             return mapper.readValue(json, typeReference);
         } catch (JsonProcessingException e) {
             logger.error("deserializeSet {} errorMessage {} ", json, e.getMessage(), e);
-            throw new RuntimeException("反序列化异常" + e.getMessage());
-        }
-    }
-
-    /**
-     * 反序列化json字符串为map
-     *
-     * @param json json字符串
-     * @param <T>  目标类型
-     * @return 反序列化后的map
-     */
-    public static <T> Map<T, T> deserializeMap(String json, Class<T> target) {
-        return deserializeMap(json, target, target);
-    }
-
-    /**
-     * 反序列化json字符串为map
-     *
-     * @param json json字符串
-     * @param <T>  目标key类型
-     * @param <R>  目标value类型
-     * @return 反序列化后的map
-     */
-    public static <T, R> Map<T, R> deserializeMap(String json, Class<T> keyTarget, Class<R> valueTarget) {
-        try {
-            return mapper.readValue(json, new TypeReference<Map<T, R>>() {
-            });
-        } catch (IOException e) {
-            logger.error("deserializeMap {} errorMessage {} ", json, e.getMessage(), e);
             throw new RuntimeException("反序列化异常" + e.getMessage());
         }
     }

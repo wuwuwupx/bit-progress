@@ -1,6 +1,8 @@
 package com.bitprogress.excelmodel.cell;
 
-import com.bitprogress.basemodel.coordinate.Point;
+import com.bitprogress.basemodel.coordinate.IntAbscissa;
+import com.bitprogress.basemodel.coordinate.IntOrdinate;
+import com.bitprogress.basemodel.coordinate.IntPoint;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -10,7 +12,7 @@ import lombok.ToString;
  */
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class ExcelCell extends Point<Integer, Integer> implements ExcelCellIndex {
+public class ExcelCell extends IntPoint implements ExcelCellIndex {
 
     /**
      * 强制输入坐标
@@ -19,7 +21,17 @@ public class ExcelCell extends Point<Integer, Integer> implements ExcelCellIndex
      * @param columnIndex 列索引
      */
     public ExcelCell(Integer rowIndex, Integer columnIndex) {
-        super(columnIndex, rowIndex);
+        this(new IntAbscissa(columnIndex), new IntOrdinate(rowIndex));
+    }
+
+    /**
+     * 强制输入坐标
+     *
+     * @param abscissa 行索引
+     * @param ordinate 列索引
+     */
+    public ExcelCell(IntAbscissa abscissa, IntOrdinate ordinate) {
+        super(abscissa, ordinate);
     }
 
     /**
@@ -27,7 +39,7 @@ public class ExcelCell extends Point<Integer, Integer> implements ExcelCellIndex
      */
     @Override
     public Integer getRowIndex() {
-        return getOrdinate();
+        return getOrdinateIndex();
     }
 
     /**
@@ -35,6 +47,6 @@ public class ExcelCell extends Point<Integer, Integer> implements ExcelCellIndex
      */
     @Override
     public Integer getColumnIndex() {
-        return getAbscissa();
+        return getAbscissaIndex();
     }
 }

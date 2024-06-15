@@ -1,8 +1,11 @@
 package com.bitprogress.exception;
 
+import lombok.Getter;
+
 /**
  * Valid data exception
  */
+@Getter
 public class ValidationException extends RuntimeException {
 
     private final String code;
@@ -18,17 +21,5 @@ public class ValidationException extends RuntimeException {
         this.message = message;
     }
 
-
-    public String getCode() {
-        return code;
-    }
-
-    public Object[] getArgs() {
-        return args;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 
 }

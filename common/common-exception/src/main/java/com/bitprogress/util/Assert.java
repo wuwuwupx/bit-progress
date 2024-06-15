@@ -16,6 +16,16 @@ public class Assert {
      * @param expression 表达式结果
      * @param exception  异常信息
      */
+    public static void isTrue(boolean expression, String exception) {
+        isTrue(expression, CommonException.error(exception));
+    }
+
+    /**
+     * 判断是否为真，不为真则直接抛出异常
+     *
+     * @param expression 表达式结果
+     * @param exception  异常信息
+     */
     public static void isTrue(boolean expression, IException exception) {
         isTrue(expression, CommonException.error(exception));
     }
@@ -38,6 +48,16 @@ public class Assert {
      * @param object    判断对象
      * @param exception 异常信息
      */
+    public static void isNull(Object object, String exception) {
+        isNull(object, CommonException.error(exception));
+    }
+
+    /**
+     * 判断是否为null，不为null则抛出异常
+     *
+     * @param object    判断对象
+     * @param exception 异常信息
+     */
     public static void isNull(Object object, IException exception) {
         isNull(object, CommonException.error(exception));
     }
@@ -52,6 +72,16 @@ public class Assert {
         if (object != null) {
             throw exception;
         }
+    }
+
+    /**
+     * 判断是否不为null，为null则抛出异常
+     *
+     * @param object    判断对象
+     * @param exception 异常信息
+     */
+    public static void notNull(Object object, String exception) {
+        notNull(object, CommonException.error(exception));
     }
 
     /**

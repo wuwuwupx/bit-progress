@@ -2,7 +2,6 @@ package com.bitprogress.basemodel.coordinate;
 
 import com.bitprogress.basemodel.Coordinate;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -22,19 +21,33 @@ public abstract class Point<T extends Number, R extends Number> extends Coordina
     /**
      * 横坐标
      */
-    private final T abscissa;
+    private final Abscissa<T> abscissa;
 
     /**
      * 纵坐标
      */
-    private final R ordinate;
+    private final Ordinate<R> ordinate;
+
+    /**
+     * 获取横坐标索引
+     */
+    public T getAbscissaIndex() {
+        return abscissa.getIndex();
+    }
+
+    /**
+     * 获取纵坐标索引
+     */
+    public R getOrdinateIndex() {
+        return ordinate.getIndex();
+    }
 
     /**
      * 获取坐标字符串
      * (x,y)
      */
     public String getCoordinateString() {
-        return "(" + abscissa + "," + ordinate + ")";
+        return "(" + abscissa.getIndex() + "," + ordinate.getIndex() + ")";
     }
 
 }

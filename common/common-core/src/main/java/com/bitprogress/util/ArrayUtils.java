@@ -1,7 +1,6 @@
 package com.bitprogress.util;
 
 /**
- * @author wpx
  * 数组工具类
  */
 public class ArrayUtils {
@@ -58,14 +57,38 @@ public class ArrayUtils {
         return !isEmpty(array);
     }
 
+    /**
+     * 检查数组是否包含某个元素
+     *
+     * @param array        需要检查的数组
+     * @param objectToFind 需要检查的元素
+     * @return true：包含，false：不包含
+     */
     public static boolean contains(Object[] array, Object objectToFind) {
         return indexOf(array, objectToFind) != -1;
     }
 
+    /**
+     * 获取数组中元素的索引
+     * 不存在则返回 -1
+     *
+     * @param array        需要检查的数组
+     * @param objectToFind 需要检查的元素
+     * @return 元素在数组中的索引
+     */
     public static int indexOf(Object[] array, Object objectToFind) {
         return indexOf(array, objectToFind, 0);
     }
 
+    /**
+     * 获取数组中元素的索引
+     * 不存在则返回 -1
+     *
+     * @param array        需要检查的数组
+     * @param objectToFind 需要检查的元素
+     * @param startIndex   检查数组的开始索引
+     * @return 元素在数组中的索引
+     */
     public static int indexOf(Object[] array, Object objectToFind, int startIndex) {
         if (array != null) {
             if (startIndex < 0) {
