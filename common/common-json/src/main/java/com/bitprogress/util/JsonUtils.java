@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- * @author wpx
  * json转换工具类
  */
 public class JsonUtils {
@@ -20,6 +19,8 @@ public class JsonUtils {
     private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
 
     private static final ObjectMapper mapper = new ObjectMapper();
+
+    public static final String EMPTY_JSON = "{}";
 
     static {
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);

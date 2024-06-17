@@ -51,8 +51,9 @@ public class UserUtils {
         String roleId = request.getHeader(VerifyConstant.ROLE_ID);
         if (StringUtils.isNotEmpty(roleId)) {
             try {
-                Set<Long> roleIds = JsonUtils.deserializeSet(roleId, new TypeReference<Set<Long>>() {
-                });
+                TypeReference<Set<Long>> typeReference = new TypeReference<>() {
+                };
+                Set<Long> roleIds = JsonUtils.deserializeSet(roleId, typeReference);
                 userInfo.setRoleIds(roleIds);
             } catch (Exception e) {
                 log.error("roleId convert error", e);
@@ -62,9 +63,9 @@ public class UserUtils {
         String attendMessageStr = request.getHeader(VerifyConstant.ATTEND_MESSAGE);
         if (StringUtils.isNotEmpty(attendMessageStr)) {
             try {
-                Map<String, String> attendMessage = JsonUtils.deserializeMap(attendMessageStr,
-                        new TypeReference<Map<String, String>>() {
-                        });
+                TypeReference<Map<String, String>> typeReference = new TypeReference<>() {
+                };
+                Map<String, String> attendMessage = JsonUtils.deserializeMap(attendMessageStr, typeReference);
                 userInfo.setAttendMessage(attendMessage);
             } catch (Exception e) {
                 log.error("attendMessage convert error", e);
