@@ -3,12 +3,12 @@ package com.bitprogress.basemodel.enums;
 import com.bitprogress.basemodel.IEnum;
 
 /**
- * 需要定义value的枚举
+ * enum's value
  */
 public interface ValueEnum extends IEnum {
 
     /**
-     * 获取枚举的value
+     * get enum value
      */
     Integer getValue();
 
