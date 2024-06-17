@@ -1,5 +1,6 @@
 package com.bitprogress.util;
 
+import lombok.Getter;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -7,16 +8,13 @@ import org.springframework.context.ApplicationContext;
  */
 public class BeanManager {
 
+    @Getter
     private static ApplicationContext applicationContext = null;
 
     public static void setApplicationContext(ApplicationContext applicationContext) {
         if (null == BeanManager.applicationContext) {
             BeanManager.applicationContext = applicationContext;
         }
-    }
-
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
     }
 
     public static Object getBean(String name) {
