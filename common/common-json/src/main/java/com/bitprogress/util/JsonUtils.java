@@ -1,6 +1,6 @@
 package com.bitprogress.util;
 
-import com.bitprogress.basemodel.ToJson;
+import com.bitprogress.basemodel.IJson;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -37,8 +36,8 @@ public class JsonUtils {
         if (o == null) {
             return "";
         }
-        if (o instanceof ToJson toJson) {
-            return toJson.toJson();
+        if (o instanceof IJson iJson) {
+            return iJson.toJson();
         }
         try {
             return mapper.writeValueAsString(o);

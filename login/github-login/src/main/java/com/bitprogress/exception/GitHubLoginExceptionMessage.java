@@ -1,5 +1,6 @@
 package com.bitprogress.exception;
 
+import com.bitprogress.basemodel.IException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

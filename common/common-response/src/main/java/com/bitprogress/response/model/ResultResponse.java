@@ -8,7 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import static com.bitprogress.constant.ResultConstants.SUCCESS_MESSAGE;
+import java.io.Serial;
+
+import static com.bitprogress.constant.ResultConstants.*;
 
 /**
  * 结果集响应
@@ -18,6 +20,7 @@ import static com.bitprogress.constant.ResultConstants.SUCCESS_MESSAGE;
 @AllArgsConstructor
 public class ResultResponse<T> extends RequestResponse {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -38,7 +41,7 @@ public class ResultResponse<T> extends RequestResponse {
      * 请求成功，无返回信息
      */
     public static ResultResponse<Void> SUCCESS() {
-        return new ResultResponse<>(ResultConstants.SUCCESS_CODE, SUCCESS_MESSAGE);
+        return new ResultResponse<>(SUCCESS_CODE, SUCCESS_MESSAGE);
     }
 
     /**
@@ -47,7 +50,7 @@ public class ResultResponse<T> extends RequestResponse {
      * @param data 返回数据
      */
     public static <T> ResultResponse<T> success(T data) {
-        return success(ResultConstants.SUCCESS_CODE, SUCCESS_MESSAGE, data);
+        return success(SUCCESS_CODE, SUCCESS_MESSAGE, data);
     }
 
     /**
@@ -57,7 +60,7 @@ public class ResultResponse<T> extends RequestResponse {
      * @param data    返回数据
      */
     public static <T> ResultResponse<T> success(String message, T data) {
-        return success(ResultConstants.SUCCESS_CODE, message, data);
+        return success(SUCCESS_CODE, message, data);
     }
 
     /**
@@ -75,7 +78,7 @@ public class ResultResponse<T> extends RequestResponse {
      * 请求失败，无返回信息
      */
     public static ResultResponse<Void> FAIL() {
-        return fail(ResultConstants.FAIL_CODE, ResultConstants.FAIL_MESSAGE);
+        return fail(FAIL_CODE, FAIL_MESSAGE);
     }
 
     /**
@@ -84,7 +87,7 @@ public class ResultResponse<T> extends RequestResponse {
      * @param code 状态码
      */
     public static ResultResponse<Void> fail(Integer code) {
-        return fail(code, ResultConstants.FAIL_MESSAGE);
+        return fail(code, FAIL_MESSAGE);
     }
 
     /**
@@ -93,7 +96,7 @@ public class ResultResponse<T> extends RequestResponse {
      * @param message 请求信息
      */
     public static ResultResponse<Void> fail(String message) {
-        return fail(ResultConstants.FAIL_CODE, message);
+        return fail(FAIL_CODE, message);
     }
 
     /**

@@ -1,10 +1,10 @@
 package com.bitprogress.exception;
 
+import com.bitprogress.basemodel.IException;
 import com.bitprogress.constant.ResultConstants;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 /**
  * 项目通用异常
@@ -17,12 +17,19 @@ public class CommonException extends RuntimeException {
     /**
      * 状态码
      */
-    private Integer code;
+    private final Integer code;
 
     /**
      * 异常信息
      */
-    private String message;
+    private final String message;
+
+    /**
+     * Constructs a exception about code
+     */
+    public CommonException(Integer code) {
+        this(code, ResultConstants.FAIL_MESSAGE);
+    }
 
     /**
      * Constructs a exception about message
@@ -36,6 +43,14 @@ public class CommonException extends RuntimeException {
      */
     public CommonException(IException exception) {
         this(exception.getCode(), exception.getMessage());
+    }
+
+    /**
+     * Constructs a exception about Throwable and code
+     * default code {@link ResultConstants#FAIL_CODE}
+     */
+    public CommonException(Throwable cause, Integer code) {
+        this(cause, code, ResultConstants.FAIL_MESSAGE);
     }
 
     /**

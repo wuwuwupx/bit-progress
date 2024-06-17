@@ -4,7 +4,7 @@ package com.bitprogress.basemodel;
  * to json interface
  * simple to json
  */
-public interface ToJson {
+public interface IJson {
 
     String toJson();
 

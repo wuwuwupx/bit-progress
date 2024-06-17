@@ -6,7 +6,7 @@ import java.util.Map;
  * to map interface
  * simple to map
  */
-public interface ToMap {
+public interface IMap {
 
     Map<String, Object> toMap();
 

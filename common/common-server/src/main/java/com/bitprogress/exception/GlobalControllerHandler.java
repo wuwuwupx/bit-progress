@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Locale;
-
 /**
- * @author wuwuwupx
  * 全局异常处理
  */
 @RestControllerAdvice
@@ -33,11 +30,7 @@ public class GlobalControllerHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
     public ResultResponse<Void> handleBaseException(ValidationException e) {
-        String desc = applicationContext.getMessage(e.getCode(), e.getArgs(), e.getMessage(), Locale.getDefault());
-        if (StringUtils.isEmpty(desc)) {
-            desc = e.getCode();
-        }
-        return ResultResponse.fail(desc);
+        return ResultResponse.fail(e.getCode(), e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

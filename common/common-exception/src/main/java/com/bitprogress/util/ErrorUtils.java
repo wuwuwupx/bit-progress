@@ -26,34 +26,49 @@ public class ErrorUtils {
      * @return true：还有底层cause，false：没有底层cause
      */
     public static boolean hasCause(Throwable throwable) {
-        return Objects.nonNull(throwable.getCause());
+        return Objects.nonNull(getCause(throwable));
     }
 
     /**
      * 获取最底层的cause
      *
-     * @param throwable 传入的异常
+     * @param throwable   传入的异常
+     * @param endAtCommon 是否在遇到CommonException时结束
      * @return 最底层cause
      */
-    public static Throwable getLowestCause(Throwable throwable) {
+    public static Throwable getLowestCause(Throwable throwable, Boolean endAtCommon) {
+        if (endAtCommon && throwable instanceof CommonException) {
+            return throwable;
+        }
         while (hasCause(throwable)) {
-            throwable = throwable.getCause();
+            throwable = getCause(throwable);
+            if (endAtCommon && throwable instanceof CommonException) {
+                return throwable;
+            }
         }
         return throwable;
     }
 
     /**
      * 获取最底层cause的message
+     * 默认遇到commonException时结束
      *
      * @param throwable 传入的异常
      * @return 最底层cause的message
      */
     public static String getLowestMessage(Throwable throwable) {
-        Throwable lowestCause = getLowestCause(throwable);
-        if (lowestCause instanceof CommonException) {
-            CommonException exception = (CommonException) lowestCause;
-            return exception.getMessage();
-        }
+        return getLowestMessage(throwable, true);
+    }
+
+    /**
+     * 获取最底层cause的message
+     *
+     * @param throwable   传入的异常
+     * @param endAtCommon 是否在遇到CommonException时结束
+     * @return 最底层cause的message
+     */
+    public static String getLowestMessage(Throwable throwable, Boolean endAtCommon) {
+        Throwable lowestCause = getLowestCause(throwable, endAtCommon);
         return lowestCause.getMessage();
     }
 

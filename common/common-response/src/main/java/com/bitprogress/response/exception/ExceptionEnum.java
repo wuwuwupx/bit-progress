@@ -1,6 +1,6 @@
 package com.bitprogress.response.exception;
 
-import com.bitprogress.exception.IException;
+import com.bitprogress.basemodel.IException;
 import lombok.AllArgsConstructor;
 
 import static com.bitprogress.response.exception.ExceptionMessage.*;

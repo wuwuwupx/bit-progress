@@ -1,7 +1,7 @@
 package com.bitprogress.util;
 
 import com.bitprogress.exception.CommonException;
-import com.bitprogress.exception.IException;
+import com.bitprogress.basemodel.IException;
 
 import java.util.Collection;
 

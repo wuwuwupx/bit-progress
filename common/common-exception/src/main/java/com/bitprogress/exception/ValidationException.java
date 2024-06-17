@@ -6,19 +6,21 @@ import lombok.Getter;
  * Valid data exception
  */
 @Getter
-public class ValidationException extends RuntimeException {
+public class ValidationException extends CommonException {
 
-    private final String code;
-    private String message;
     private Object[] args;
 
-    public ValidationException(String code) {
-        this.code = code;
+    public ValidationException(Integer code) {
+        super(code);
     }
 
-    public ValidationException(String code, String message) {
-        this.code = code;
-        this.message = message;
+    public ValidationException(Integer code, String message) {
+        super(code, message);
+    }
+
+    public ValidationException(Integer code, String message, Object[] args) {
+        super(code, message);
+        this.args = args;
     }
 
 
