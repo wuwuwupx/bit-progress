@@ -1,4 +1,4 @@
-package com.bitprogress.exception;
+package com.bitprogress.github.exception;
 
 /**
  * @author wuwuwupx

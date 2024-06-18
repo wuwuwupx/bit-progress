@@ -1,7 +1,6 @@
-package com.bitprogress.exception;
+package com.bitprogress.github.exception;
 
 /**
- * @author wuwuwupx
  * GitHub登录模块错误信息
  */
 public class GitHubLoginErrorCodes {

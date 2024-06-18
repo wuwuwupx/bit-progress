@@ -1,10 +1,12 @@
-package com.bitprogress.model;
+package com.bitprogress.github.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 /**
- * @author wuwuwupx
+ * 鉴权参数
  */
+@Data
 public  class AuthorizationParams {
 
     /**

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>common</artifactId>
         <groupId>com.bitprogress</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,12 +15,12 @@
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-base-model</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-json</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

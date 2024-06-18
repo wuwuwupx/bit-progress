@@ -5,9 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.bitprogress</groupId>
-        <artifactId>bit-progress</artifactId>
-        <version>1.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <artifactId>common</artifactId>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>common-request</artifactId>
@@ -22,7 +21,7 @@
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-base-model</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

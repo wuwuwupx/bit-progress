@@ -5,13 +5,12 @@
     <parent>
         <artifactId>common</artifactId>
         <groupId>com.bitprogress</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>common-nacos</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
     <modules>
         <module>nacos-config</module>
         <module>nacos-discovery</module>

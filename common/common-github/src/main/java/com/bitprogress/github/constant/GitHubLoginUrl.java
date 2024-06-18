@@ -1,7 +1,6 @@
-package com.bitprogress.constant;
+package com.bitprogress.github.constant;
 
 /**
- * @author wuwuwupx
  * GitHub登录模块url
  */
 public class GitHubLoginUrl {

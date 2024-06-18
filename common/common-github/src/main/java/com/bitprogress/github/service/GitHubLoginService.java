@@ -1,27 +1,30 @@
-package com.bitprogress.service;
+package com.bitprogress.github.service;
 
 import com.bitprogress.constant.StringConstants;
 import com.bitprogress.exception.CommonException;
-import com.bitprogress.constant.GitHubLoginUrl;
-import com.bitprogress.exception.GitHubLoginExceptionMessage;
-import com.bitprogress.model.AuthorizationParams;
-import com.bitprogress.model.GitHubUser;
+import com.bitprogress.github.constant.GitHubLoginUrl;
+import com.bitprogress.github.exception.GitHubLoginExceptionMessage;
+import com.bitprogress.github.model.AuthorizationParams;
+import com.bitprogress.github.model.GitHubUser;
 import com.bitprogress.okhttp.util.OkHttpClientUtils;
 import com.bitprogress.util.JsonUtils;
-import okhttp3.*;
+import okhttp3.MediaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 /**
- * @author wuwuwupx
  * GitHub登录服务
  */
 public class GitHubLoginService {
 
+    private static final Logger log = LoggerFactory.getLogger(GitHubLoginService.class);
+
     /**
      * 获取AccessToken
      *
-     * @param params
+     * @param params 请求参数
      */
     public String getAccessToken(AuthorizationParams params) {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
@@ -30,7 +33,7 @@ public class GitHubLoginService {
             String result = OkHttpClientUtils.doPost(GitHubLoginUrl.GITHUB_ACCESS_TOKEN_URL, body, mediaType);
             return result.split(StringConstants.AND)[0].split(StringConstants.EQUAL_SIGN)[1];
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("GitHub登录AccessToken获取异常", e);
             throw new CommonException(GitHubLoginExceptionMessage.GITHUB_ACCESS_TOKEN_REQUEST_ERROR);
         }
     }
@@ -38,17 +41,12 @@ public class GitHubLoginService {
     /**
      * 获取用户信息
      *
-     * @param accessToken
+     * @param accessToken 访问令牌
      */
     public GitHubUser getGitHubUser(String accessToken) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(GitHubLoginUrl.GITHUB_USER_URL + "?access_token=" + accessToken)
-                .build();
         try{
-            Response response = client.newCall(request).execute();
-            String string = response.body().string();
-            return JsonUtils.deserializeObject(string, GitHubUser.class);
+            String result = OkHttpClientUtils.doGet(GitHubLoginUrl.GITHUB_USER_URL + "?access_token=" + accessToken);
+            return JsonUtils.deserializeObject(result, GitHubUser.class);
         }catch (IOException e){
             throw CommonException.error(GitHubLoginExceptionMessage.GITHUB_USER_REQUEST_ERROR);
         }
