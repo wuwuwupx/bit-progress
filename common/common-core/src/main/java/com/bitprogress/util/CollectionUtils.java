@@ -13,7 +13,6 @@ import static java.util.stream.Collectors.*;
 
 /**
  * 集合工具类
- * 流的操作可能导致性能下降
  */
 public class CollectionUtils {
 

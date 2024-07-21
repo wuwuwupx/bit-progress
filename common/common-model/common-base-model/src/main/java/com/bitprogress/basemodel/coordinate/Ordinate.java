@@ -1,6 +1,6 @@
 package com.bitprogress.basemodel.coordinate;
 
-import com.bitprogress.basemodel.Coordinate;
+import com.bitprogress.basemodel.Point;
 import lombok.*;
 
 import java.io.Serial;
@@ -8,11 +8,11 @@ import java.io.Serial;
 /**
  * 纵坐标
  */
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @AllArgsConstructor
 @ToString
-public abstract class Ordinate<T extends Number> extends Coordinate {
+public abstract class Ordinate<T extends Number> extends Point {
 
     @Serial
     private static final long serialVersionUID = 1L;

@@ -1,6 +1,6 @@
 package com.bitprogress.basemodel.coordinate;
 
-import com.bitprogress.basemodel.Coordinate;
+import com.bitprogress.basemodel.Point;
 import lombok.*;
 
 import java.io.Serial;
@@ -12,7 +12,7 @@ import java.io.Serial;
 @Getter
 @AllArgsConstructor
 @ToString
-public abstract class Abscissa<T extends Number> extends Coordinate {
+public abstract class Abscissa<T extends Number> extends Point {
 
     @Serial
     private static final long serialVersionUID = 1L;

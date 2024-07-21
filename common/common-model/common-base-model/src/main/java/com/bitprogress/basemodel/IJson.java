@@ -6,6 +6,9 @@ package com.bitprogress.basemodel;
  */
 public interface IJson {
 
+    /**
+     * return json string
+     */
     String toJson();
 
 }

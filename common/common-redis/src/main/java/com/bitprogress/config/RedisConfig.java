@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
- * @author wuwuwupx
  * 配置默认的Redis
  */
 @Configuration

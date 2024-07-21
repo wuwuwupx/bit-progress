@@ -1,6 +1,5 @@
 package com.bitprogress.basemodel.coordinate;
 
-import com.bitprogress.basemodel.Coordinate;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,12 +7,12 @@ import lombok.Getter;
 import java.io.Serial;
 
 /**
- * 坐标点
+ * 抽象坐标点
  */
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @AllArgsConstructor
-public abstract class Point<T extends Number, R extends Number> extends Coordinate {
+public abstract class AbstractCoordinate<T extends Number, R extends Number> extends Coordinate {
 
     @Serial
     private static final long serialVersionUID = 1L;
