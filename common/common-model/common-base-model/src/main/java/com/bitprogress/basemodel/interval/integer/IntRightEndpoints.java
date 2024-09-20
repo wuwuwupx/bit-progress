@@ -1,7 +1,7 @@
 package com.bitprogress.basemodel.interval.integer;
 
 import com.bitprogress.basemodel.interval.IntervalBoundaryType;
-import com.bitprogress.basemodel.interval.LeftEndpoints;
+import com.bitprogress.basemodel.interval.RightEndpoints;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -9,17 +9,17 @@ import lombok.ToString;
 import java.io.Serial;
 
 /**
- * 左端点
+ * 右端点
  */
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @ToString
-public class IntegerLeftEndpoints extends LeftEndpoints<Integer> {
+public class IntRightEndpoints extends RightEndpoints<Integer> {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public IntegerLeftEndpoints(Integer value, IntervalBoundaryType boundaryType) {
+    public IntRightEndpoints(Integer value, IntervalBoundaryType boundaryType) {
         super(value, boundaryType);
     }
 
@@ -31,7 +31,7 @@ public class IntegerLeftEndpoints extends LeftEndpoints<Integer> {
      */
     @Override
     public int compareTo(Integer value) {
-        return super.getValue().compareTo(value);
+        return getValue().compareTo(value);
     }
 
 }

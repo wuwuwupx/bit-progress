@@ -1,5 +1,6 @@
 package com.bitprogress.excelmodel.cell;
 
+import com.bitprogress.basemodel.coordinate.IntOrdinate;
 import com.bitprogress.basemodel.coordinate.Ordinate;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -10,7 +11,7 @@ import lombok.ToString;
  */
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class ExcelRow extends Ordinate<Integer> implements ExcelRowIndex {
+public class ExcelRow extends IntOrdinate implements ExcelRowIndex {
 
     public ExcelRow(Integer rowIndex) {
         super(rowIndex);

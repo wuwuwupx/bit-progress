@@ -1,6 +1,6 @@
 package com.bitprogress.excelmodel.cell;
 
-import com.bitprogress.basemodel.coordinate.Abscissa;
+import com.bitprogress.basemodel.coordinate.IntAbscissa;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -10,7 +10,7 @@ import lombok.ToString;
  */
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class ExcelColumn extends Abscissa<Integer> implements ExcelColumnIndex {
+public class ExcelColumn extends IntAbscissa implements ExcelColumnIndex {
 
     public ExcelColumn(Integer columnIndex) {
         super(columnIndex);

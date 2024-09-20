@@ -12,12 +12,12 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = false)
 @Getter
 @ToString
-public abstract class Abscissa<T extends Number> extends AbstractCoordinate<T> {
+public abstract class Applicate<T extends Number> extends AbstractCoordinate<T> {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public Abscissa(T index) {
+    public Applicate(T index) {
         super(index);
     }
 
@@ -26,7 +26,7 @@ public abstract class Abscissa<T extends Number> extends AbstractCoordinate<T> {
      */
     @Override
     public AxisType getAxisType() {
-        return AxisType.HORIZONTAL;
+        return AxisType.DEPTH;
     }
 
 }

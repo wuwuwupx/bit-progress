@@ -10,12 +10,12 @@ import java.io.Serial;
  */
 @EqualsAndHashCode(callSuper = true)
 @Getter
-public class IntCoordinate extends AbstractCoordinate<Integer, Integer> {
+public class IntPoint2D extends AbstractPoint2D<Integer> {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public IntCoordinate(IntAbscissa abscissa, IntOrdinate ordinate) {
+    public IntPoint2D(IntAbscissa abscissa, IntOrdinate ordinate) {
         super(abscissa, ordinate);
     }
 

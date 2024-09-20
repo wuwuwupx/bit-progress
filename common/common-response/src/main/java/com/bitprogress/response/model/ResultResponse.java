@@ -1,7 +1,6 @@
 package com.bitprogress.response.model;
 
 import com.bitprogress.basemodel.response.RequestResponse;
-import com.bitprogress.constant.ResultConstants;
 import com.bitprogress.exception.CommonException;
 import com.bitprogress.response.exception.ExceptionEnum;
 import lombok.AllArgsConstructor;

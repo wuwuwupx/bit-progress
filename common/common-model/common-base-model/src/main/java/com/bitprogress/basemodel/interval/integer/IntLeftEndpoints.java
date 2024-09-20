@@ -1,26 +1,25 @@
 package com.bitprogress.basemodel.interval.integer;
 
 import com.bitprogress.basemodel.interval.IntervalBoundaryType;
-import com.bitprogress.basemodel.interval.RightEndpoints;
+import com.bitprogress.basemodel.interval.LeftEndpoints;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.io.Serial;
-import java.math.BigDecimal;
 
 /**
- * 右端点
+ * 左端点
  */
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @ToString
-public class IntegerRightEndpoints extends RightEndpoints<Integer> {
+public class IntLeftEndpoints extends LeftEndpoints<Integer> {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public IntegerRightEndpoints(Integer value, IntervalBoundaryType boundaryType) {
+    public IntLeftEndpoints(Integer value, IntervalBoundaryType boundaryType) {
         super(value, boundaryType);
     }
 
@@ -32,7 +31,7 @@ public class IntegerRightEndpoints extends RightEndpoints<Integer> {
      */
     @Override
     public int compareTo(Integer value) {
-        return getValue().compareTo(value);
+        return super.getValue().compareTo(value);
     }
 
 }

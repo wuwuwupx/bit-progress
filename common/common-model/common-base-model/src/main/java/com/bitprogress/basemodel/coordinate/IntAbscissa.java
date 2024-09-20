@@ -20,4 +20,15 @@ public class IntAbscissa extends Abscissa<Integer> {
     public IntAbscissa(Integer index) {
         super(index);
     }
+
+    /**
+     * 打印坐标的值
+     *
+     * @return 展示的值
+     */
+    @Override
+    public String printValue() {
+        return getIndex().toString();
+    }
+
 }

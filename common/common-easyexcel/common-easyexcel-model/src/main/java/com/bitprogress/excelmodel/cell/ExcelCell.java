@@ -2,7 +2,7 @@ package com.bitprogress.excelmodel.cell;
 
 import com.bitprogress.basemodel.coordinate.IntAbscissa;
 import com.bitprogress.basemodel.coordinate.IntOrdinate;
-import com.bitprogress.basemodel.coordinate.IntCoordinate;
+import com.bitprogress.basemodel.coordinate.IntPoint2D;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -12,7 +12,7 @@ import lombok.ToString;
  */
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class ExcelCell extends IntCoordinate implements ExcelCellIndex {
+public class ExcelCell extends IntPoint2D implements ExcelCellIndex {
 
     /**
      * 强制输入坐标
