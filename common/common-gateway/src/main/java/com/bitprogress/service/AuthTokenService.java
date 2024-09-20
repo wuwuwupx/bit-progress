@@ -3,11 +3,6 @@ package com.bitprogress.service;
 import com.bitprogress.auth.base.AuthMsg;
 import com.bitprogress.auth.base.AuthResult;
 
-/**
- * 相较于集成鉴权框架更加轻量，只进行了token的生成和校验，而不干涉登录的逻辑
- *
- * @author wpx
- **/
 public interface AuthTokenService {
 
     /**

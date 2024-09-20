@@ -57,7 +57,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public <T extends AuthMsg> AuthResult<T> checkToken(String authentication, Class<T> target) {
         String token;
-        // 如果请求未携带token信息, 直接权限拒绝
+        // 如果请求未正确携带token信息, 直接权限拒绝
         if (StringUtils.isEmpty(authentication) || !authentication.startsWith(BEARER)
                 || Objects.isNull(token = getToken(authentication))) {
             AuthResult<T> authResult = new AuthResult<>();
@@ -71,7 +71,7 @@ public class AuthServiceImpl implements AuthService {
     /**
      * 获取 Authorization header 的 token 值
      *
-     * @param authorizationHeader
+     * @param authorizationHeader 请求头
      */
     private String getToken(String authorizationHeader) {
         String[] authTokens = authorizationHeader.split(StringUtils.SPACE);

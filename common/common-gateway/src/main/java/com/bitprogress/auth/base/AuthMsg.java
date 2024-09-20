@@ -1,16 +1,25 @@
 package com.bitprogress.auth.base;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 /**
- * @author wuwuwupx
  * 授权信息
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthMsg implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -23,23 +32,8 @@ public class AuthMsg implements Serializable {
      */
     private Map<String, String> params;
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public Map<String, String> getParams() {
         return Objects.isNull(params) ? new HashMap<>(2) : params;
-    }
-
-    public void setParams(Map<String, String> params) {
-        this.params = params;
-    }
-
-    public AuthMsg() {
     }
 
 }

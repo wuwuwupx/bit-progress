@@ -5,8 +5,9 @@ import com.bitprogress.auth.base.AuthResult;
 import org.springframework.http.HttpHeaders;
 
 /**
- * @author wuwuwupx
  * 授权鉴权服务
+ * - 获取权限字符
+ * - 匹配token
  */
 public interface AuthService {
 

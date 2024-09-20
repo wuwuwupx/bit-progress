@@ -29,8 +29,7 @@ import java.util.Map;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_LOADBALANCER_RESPONSE_ATTR;
 
 /**
- * @author wpx
- * Created on 2021/1/23 16:20
+ * 鉴权过滤器
  */
 @Configuration
 public class SecurityGatewayFilter implements GlobalFilter {
