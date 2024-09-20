@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.io.Serial;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * 抽象区间
@@ -130,6 +131,20 @@ public abstract class AbstractInterval<T extends Number> extends Interval {
         return this.getLeftEndpoints().isContains(interval.getLeftEndpoints())
                 ? this.getRightEndpoints().isContains(interval.getLeftEndpoints())
                 : interval.getRightEndpoints().isContains(this.getLeftEndpoints());
+    }
+
+    /**
+     * 获取区间字符串
+     * (x,y)、(x,y]、[x,y)、[x,y]
+     *
+     * @param toStringFunction 转换函数
+     */
+    public String getIntervalString(Function<T, String> toStringFunction) {
+        return leftEndpoints.getBoundarySymbols()
+                + toStringFunction.apply(leftEndpoints.getValue())
+                + ","
+                + toStringFunction.apply(rightEndpoints.getValue())
+                + rightEndpoints.getBoundarySymbols();
     }
 
     /**

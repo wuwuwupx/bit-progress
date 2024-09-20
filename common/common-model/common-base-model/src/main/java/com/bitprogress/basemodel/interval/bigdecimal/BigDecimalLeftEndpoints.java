@@ -1,5 +1,7 @@
-package com.bitprogress.basemodel.interval;
+package com.bitprogress.basemodel.interval.bigdecimal;
 
+import com.bitprogress.basemodel.interval.IntervalBoundaryType;
+import com.bitprogress.basemodel.interval.LeftEndpoints;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -8,17 +10,17 @@ import java.io.Serial;
 import java.math.BigDecimal;
 
 /**
- * 右端点
+ * 左端点
  */
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @ToString
-public class BigDecimalRightEndpoints extends RightEndpoints<BigDecimal> {
+public class BigDecimalLeftEndpoints extends LeftEndpoints<BigDecimal> {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public BigDecimalRightEndpoints(BigDecimal value, IntervalBoundaryType boundaryType) {
+    public BigDecimalLeftEndpoints(BigDecimal value, IntervalBoundaryType boundaryType) {
         super(value, boundaryType);
     }
 
@@ -30,7 +32,7 @@ public class BigDecimalRightEndpoints extends RightEndpoints<BigDecimal> {
      */
     @Override
     public int compareTo(BigDecimal value) {
-        return getValue().compareTo(value);
+        return super.getValue().compareTo(value);
     }
 
 }

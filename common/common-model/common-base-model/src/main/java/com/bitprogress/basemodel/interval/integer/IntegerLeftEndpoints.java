@@ -1,11 +1,12 @@
-package com.bitprogress.basemodel.interval;
+package com.bitprogress.basemodel.interval.integer;
 
+import com.bitprogress.basemodel.interval.IntervalBoundaryType;
+import com.bitprogress.basemodel.interval.LeftEndpoints;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.io.Serial;
-import java.math.BigDecimal;
 
 /**
  * 左端点
@@ -13,12 +14,12 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @ToString
-public class BigDecimalLeftEndpoints extends LeftEndpoints<BigDecimal> {
+public class IntegerLeftEndpoints extends LeftEndpoints<Integer> {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public BigDecimalLeftEndpoints(BigDecimal value, IntervalBoundaryType boundaryType) {
+    public IntegerLeftEndpoints(Integer value, IntervalBoundaryType boundaryType) {
         super(value, boundaryType);
     }
 
@@ -29,7 +30,7 @@ public class BigDecimalLeftEndpoints extends LeftEndpoints<BigDecimal> {
      * @return 0：相等， < 0：小于value， >0 ：大于value
      */
     @Override
-    public int compareTo(BigDecimal value) {
+    public int compareTo(Integer value) {
         return super.getValue().compareTo(value);
     }
 

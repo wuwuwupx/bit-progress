@@ -1,5 +1,7 @@
-package com.bitprogress.basemodel.interval;
+package com.bitprogress.basemodel.interval.bigdecimal;
 
+import com.bitprogress.basemodel.interval.AbstractInterval;
+import com.bitprogress.basemodel.interval.IntervalBoundaryType;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
