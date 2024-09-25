@@ -1,7 +1,7 @@
 package com.bitprogress.usercontext.context;
 
-import com.bitprogress.exception.CommonException;
 import com.bitprogress.basemodel.IException;
+import com.bitprogress.exception.CommonException;
 import com.bitprogress.usercontext.entity.UserInfo;
 import com.bitprogress.usercontext.enums.UserType;
 import com.bitprogress.util.CollectionUtils;
@@ -300,6 +300,136 @@ public class UserContext {
      */
     public static Set<Long> getRoleIdsOrThrow(CommonException exception) {
         return getFieldOrThrow(UserInfo::getRoleIds, () -> exception);
+    }
+
+    /**
+     * 是否可操作所有租户
+     */
+    public static Boolean getOperateAllTenant() {
+        return getOperateAllTenantOrDefault();
+    }
+
+    /**
+     * 设置是否可操作所有租户
+     *
+     * @param operateAllTenant 是否可操作所有租户
+     */
+    public static void setOperateAllTenant(Boolean operateAllTenant) {
+        setField(userInfo -> userInfo.setOperateAllTenant(operateAllTenant));
+    }
+
+    /**
+     * 清除是否可操作所有租户
+     */
+    public static void removeOperateAllTenant() {
+        removeField(userInfo -> userInfo.setOperateAllTenant(null));
+    }
+
+    /**
+     * 是否可操作所有租户
+     */
+    public static Boolean getOperateAllTenantOrDefault() {
+        return getOperateAllTenantOrDefault(false);
+    }
+
+    /**
+     * 获取是否可操作所有租户
+     */
+    public static Boolean getOperateAllTenantOrDefault(Boolean operateAllTenant) {
+        return getFieldOrDefault(UserInfo::getOperateAllTenant, operateAllTenant);
+    }
+
+    /**
+     * 获取是否可操作所有租户
+     */
+    public static Boolean getOperateAllTenantOrThrow() {
+        return getOperateAllTenantOrThrow("未读取到角色ID");
+    }
+
+    /**
+     * 获取是否可操作所有租户
+     */
+    public static Boolean getOperateAllTenantOrThrow(String message) {
+        return getFieldOrThrow(UserInfo::getOperateAllTenant, () -> CommonException.error(message));
+    }
+
+    /**
+     * 获取是否可操作所有租户
+     */
+    public static Boolean getOperateAllTenantOrThrow(IException exception) {
+        return getFieldOrThrow(UserInfo::getOperateAllTenant, () -> CommonException.error(exception));
+    }
+
+    /**
+     * 获取是否可操作所有租户
+     */
+    public static Boolean getOperateAllTenantOrThrow(CommonException exception) {
+        return getFieldOrThrow(UserInfo::getOperateAllTenant, () -> exception);
+    }
+
+    /**
+     * 获取可操作租户ID
+     */
+    public static Set<Long> getOperateTenantIds() {
+        return getOperateTenantIdsOrDefault();
+    }
+
+    /**
+     * 设置可操作租户ID
+     *
+     * @param operateTenantIds 是否可操作所有租户
+     */
+    public static void setOperateTenantIds(Set<Long> operateTenantIds) {
+        setField(userInfo -> userInfo.setOperateTenantIds(operateTenantIds));
+    }
+
+    /**
+     * 清除可操作租户ID
+     */
+    public static void removeOperateTenantIds() {
+        removeField(userInfo -> userInfo.setOperateTenantIds(null));
+    }
+
+    /**
+     * 是否可操作租户ID
+     */
+    public static Set<Long> getOperateTenantIdsOrDefault() {
+        return getOperateTenantIdsOrDefault(CollectionUtils.emptySet());
+    }
+
+    /**
+     * 获取可操作租户ID
+     */
+    public static Set<Long> getOperateTenantIdsOrDefault(Set<Long> OperateTenantIds) {
+        return getFieldOrDefault(UserInfo::getOperateTenantIds, OperateTenantIds);
+    }
+
+    /**
+     * 获取可操作租户ID
+     */
+    public static Set<Long> getOperateTenantIdsOrThrow() {
+        return getOperateTenantIdsOrThrow("未读取到角色ID");
+    }
+
+    /**
+     * 获取可操作租户ID
+     */
+    public static Set<Long> getOperateTenantIdsOrThrow(String message) {
+        return getFieldOrThrow(UserInfo::getOperateTenantIds, () -> CommonException.error(message));
+    }
+
+    /**
+     * 获取可操作租户ID
+     */
+    public static Set<Long> getOperateTenantIdsOrThrow(IException exception) {
+        return getFieldOrThrow(UserInfo::getOperateTenantIds, () -> CommonException.error(exception));
+    }
+
+    /**
+     * 获取可操作租户ID
+     */
+    public static Set<Long> getOperateTenantIdsOrThrow(CommonException exception) {
+        return getFieldOrThrow(UserInfo::getOperateTenantIds, () -> exception);
     }
 
     /**

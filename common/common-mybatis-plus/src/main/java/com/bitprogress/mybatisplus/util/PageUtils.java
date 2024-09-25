@@ -29,7 +29,7 @@ public class PageUtils {
      * @param function   转换方法
      * @return 转换后的分页数据
      */
-    public static <T, R> PageVO<R> conversionBean(IPage<T> sourcePage, Function<T, R> function) {
+    public static <T, R> PageVO<R> convertBean(IPage<T> sourcePage, Function<T, R> function) {
         List<T> resources = sourcePage.getRecords();
         return CollectionUtils.isEmpty(resources)
                 ? PageVO.empty()
@@ -43,7 +43,7 @@ public class PageUtils {
      * @param function   转换方法
      * @return 转换后的分页数据
      */
-    public static <T, R> PageVO<R> conversionList(IPage<T> sourcePage, Function<List<T>, List<R>> function) {
+    public static <T, R> PageVO<R> convertList(IPage<T> sourcePage, Function<List<T>, List<R>> function) {
         List<T> sourceRecords = sourcePage.getRecords();
         return CollectionUtils.isEmpty(sourceRecords)
                 ? PageVO.empty()
@@ -57,7 +57,7 @@ public class PageUtils {
      * @param function   转换方法
      * @return 转换后的分页数据
      */
-    public static <T, R> PageVO<R> conversionBean(PageVO<T> sourcePage, Function<T, R> function) {
+    public static <T, R> PageVO<R> convertBean(PageVO<T> sourcePage, Function<T, R> function) {
         List<T> resources = sourcePage.getRecords();
         return CollectionUtils.isEmpty(resources)
                 ? PageVO.empty()
@@ -71,7 +71,7 @@ public class PageUtils {
      * @param function   转换方法
      * @return 转换后的分页数据
      */
-    public static <T, R> PageVO<R> conversionList(PageVO<T> sourcePage, Function<List<T>, List<R>> function) {
+    public static <T, R> PageVO<R> convertList(PageVO<T> sourcePage, Function<List<T>, List<R>> function) {
         List<T> sourceRecords = sourcePage.getRecords();
         return CollectionUtils.isEmpty(sourceRecords)
                 ? PageVO.empty()
@@ -85,9 +85,9 @@ public class PageUtils {
      * @param function   转换方法
      * @return 转换后的分页数据
      */
-    public static <T, R, U> PageVO<R> conversionList(PageVO<T> sourcePage,
-                                                     BiFunction<List<T>, U, List<R>> function,
-                                                     U u) {
+    public static <T, R, U> PageVO<R> convertList(PageVO<T> sourcePage,
+                                                  BiFunction<List<T>, U, List<R>> function,
+                                                  U u) {
         List<T> sourceRecords = sourcePage.getRecords();
         return CollectionUtils.isEmpty(sourceRecords)
                 ? PageVO.empty()

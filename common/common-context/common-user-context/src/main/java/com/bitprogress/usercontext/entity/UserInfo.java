@@ -32,6 +32,17 @@ public class UserInfo {
     private Set<Long> roleIds;
 
     /**
+     * 是否可操作所有租户
+     * 为防止越权，默认不可操作
+     */
+    private Boolean operateAllTenant;
+
+    /**
+     * 可操作租户ID
+     */
+    private Set<Long> operateTenantIds;
+
+    /**
      * 附带信息
      */
     private Map<String, String> attendMessage;
