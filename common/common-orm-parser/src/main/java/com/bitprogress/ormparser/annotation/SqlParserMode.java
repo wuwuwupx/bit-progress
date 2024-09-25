@@ -1,5 +1,6 @@
 package com.bitprogress.ormparser.annotation;
 
+import com.bitprogress.ormcontext.context.TenantContextUtils;
 import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormcontext.context.TenantContext;
 import com.bitprogress.ormparser.entity.SqlParserMsg;
@@ -25,9 +26,9 @@ import java.lang.annotation.*;
  * - 包含 {@link SqlType#NONE} 则表示对所有 sql类型生效
  * <p>
  * 引入租户类型，默认当前租户
- * - {@link TenantType#CURRENT} 当前租户，sql解析后设置租户ID为操作用户当前的租户ID {@link TenantContext#getTenantId()}
- * - {@link TenantType#OPERATE} 被操作租户，sql解析后设置租户ID为操作的租户ID {@link TenantContext#getOperateTenantId()}
- * 应该在设置 {@link TenantContext#setOperateTenantId(Long)} 时校验是否有权限操作该租户
+ * - {@link TenantType#CURRENT} 当前租户，sql解析后设置租户ID为操作用户当前的租户ID {@link TenantContextUtils#getTenantId()}
+ * - {@link TenantType#OPERATE} 被操作租户，sql解析后设置租户ID为操作的租户ID {@link TenantContextUtils#getOperateTenantId()}
+ * 应该在设置 {@link TenantContextUtils#setOperateTenantId(Long)} 时校验是否有权限操作该租户
  * <p>
  * 引入rpc传播方式
  * - true，rpc调用传播当前解析模式

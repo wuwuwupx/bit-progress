@@ -1,6 +1,7 @@
 package com.bitprogress.mybatisplus.handler;
 
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
+import com.bitprogress.ormcontext.context.TenantContextUtils;
 import com.bitprogress.ormparser.annotation.TenantType;
 import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormcontext.context.TenantContext;
@@ -26,8 +27,8 @@ public class TenantSqlHandler implements TenantLineHandler {
     public Expression getTenantId() {
         TenantType tenantType = SqlParserContext.getCurrentSqlTenantType();
         Long tenantId = TenantType.OPERATE.equals(tenantType)
-                ? TenantContext.getOperateTenantId()
-                : TenantContext.getTenantId();
+                ? TenantContextUtils.getOperateTenantId()
+                : TenantContextUtils.getTenantId();
         return new LongValue(tenantId);
     }
 

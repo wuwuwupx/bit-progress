@@ -40,13 +40,9 @@ public class SqlParserAspect {
                     }
                 }
                 // 开启一个新的解析模式
-                case REQUIRES_NEW -> {
-                    SqlParserContext.setSqlParserMsg(SqlParserMsg.createBySqlParserMode(sqlParserMode));
-                }
+                case REQUIRES_NEW -> SqlParserContext.setSqlParserMsg(SqlParserMsg.createBySqlParserMode(sqlParserMode));
                 // 关闭 sql解析模式
-                case NOT_SUPPORTED -> {
-                    SqlParserContext.setSqlParserMsg(SqlParserMsg.createDisable());
-                }
+                case NOT_SUPPORTED -> SqlParserContext.setSqlParserMsg(SqlParserMsg.createDisable());
             }
             /*
              * 执行当前方法

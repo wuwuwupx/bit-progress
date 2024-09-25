@@ -13,7 +13,6 @@ import java.util.Set;
 
 
 /**
- * @author wuwuwupx
  *  该类继承了 Spring BeanUtils, 对部分方法进行了增强与补充.
  */
 public class BeanUtils extends org.springframework.beans.BeanUtils {
@@ -30,7 +29,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
     public static <S, T> T copyProperties(S source, Class<T> targetClazz) {
         T to;
         try {
-            to = targetClazz.newInstance();
+            to = targetClazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -61,8 +60,8 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
     public static <T> T copyNonNullProperties(Object src, Class<T> target) {
         T t;
         try {
-            t = target.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            t = target.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         copyProperties(src, t, getNullPropertyNames(src));

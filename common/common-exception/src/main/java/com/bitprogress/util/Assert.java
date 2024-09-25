@@ -43,6 +43,38 @@ public class Assert {
     }
 
     /**
+     * 判断是否不为真，为真则直接抛出异常
+     *
+     * @param expression 表达式结果
+     * @param exception  异常信息
+     */
+    public static void isFalse(boolean expression, String exception) {
+        isFalse(expression, CommonException.error(exception));
+    }
+
+    /**
+     * 判断是否不为真，为真则直接抛出异常
+     *
+     * @param expression 表达式结果
+     * @param exception  异常信息
+     */
+    public static void isFalse(boolean expression, IException exception) {
+        isFalse(expression, CommonException.error(exception));
+    }
+
+    /**
+     * 判断是否不为真，为真则直接抛出异常
+     *
+     * @param expression 表达式结果
+     * @param exception  异常信息
+     */
+    public static void isFalse(boolean expression, CommonException exception) {
+        if (expression) {
+            throw exception;
+        }
+    }
+
+    /**
      * 判断是否为null，不为null则抛出异常
      *
      * @param object    判断对象
