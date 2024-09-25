@@ -26,6 +26,11 @@ public class VerifyConstant {
     public static final String ROLE_ID = "Role_Id";
 
     /**
+     * 追加可操作租户ID列表
+     */
+    public static final String OPERATE_TENANT_IDS = "Operate_Tenant_Ids";
+
+    /**
      * 追加租户ID
      */
     public static final String TENANT_ID = "Tenant_Id";

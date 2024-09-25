@@ -32,6 +32,11 @@ public class UserInfo {
     private Set<Long> roleIds;
 
     /**
+     * 租户ID
+     */
+    private Long tenantId;
+
+    /**
      * 是否可操作所有租户
      * 为防止越权，默认不可操作
      */

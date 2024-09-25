@@ -77,9 +77,9 @@ public class UserFilter implements Filter {
                     RequestType requestType = DispatcherUtils.getRequestType(httpRequest);
                     if (RequestType.USER_REQUEST.equals(requestType)) {
                         DispatcherContext.markUserRequest();
-                        UserInfo userInfo = UserUtils.getUserInfo(httpRequest);
+                        UserInfo userInfo = UserUtils.analysisUserInfo(httpRequest);
                         UserContext.setUserInfo(userInfo);
-                        TenantInfo tenantInfo = TenantUtils.getTenantInfo(httpRequest);
+                        TenantInfo tenantInfo = TenantUtils.getTenantInfo(userInfo);
                         TenantContext.setTenantInfo(tenantInfo);
                     } else {
                         DispatcherContext.markAnonymousRequest();
