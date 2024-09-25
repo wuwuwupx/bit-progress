@@ -9,7 +9,7 @@ import java.util.function.Function;
 /**
  * 数据填充工具类
  */
-public class FillUtils {
+public class FillerUtils {
 
     /**
      * 根据名称填充ID
