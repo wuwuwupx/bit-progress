@@ -1,6 +1,6 @@
 package com.bitprogress.ormparser.annotation;
 
-import com.bitprogress.ormcontext.context.TenantContext;
+import com.bitprogress.basemodel.enums.ValueEnum;
 import com.bitprogress.ormcontext.context.TenantContextUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum TenantType {
+public enum TenantType implements ValueEnum {
 
     /**
      * 当前租户，获取的值为 {@link TenantContextUtils#getTenantId()}
@@ -25,15 +25,6 @@ public enum TenantType {
 
     ;
 
-    private final int value;
-
-    public static TenantType getByValue(int value) {
-        for (TenantType tenantType : values()) {
-            if (tenantType.value == value) {
-                return tenantType;
-            }
-        }
-        return null;
-    }
+    private final Integer value;
 
 }

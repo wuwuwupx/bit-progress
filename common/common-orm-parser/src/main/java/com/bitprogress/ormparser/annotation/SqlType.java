@@ -1,5 +1,6 @@
 package com.bitprogress.ormparser.annotation;
 
+import com.bitprogress.basemodel.enums.ValueEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -8,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum SqlType {
+public enum SqlType implements ValueEnum {
 
     NONE(0),
 
@@ -22,15 +23,6 @@ public enum SqlType {
 
     ;
 
-    private final int value;
-
-    public static SqlType getByValue(int value) {
-        for (SqlType sqlType : SqlType.values()) {
-            if (sqlType.value == value) {
-                return sqlType;
-            }
-        }
-        return null;
-    }
+    private final Integer value;
 
 }

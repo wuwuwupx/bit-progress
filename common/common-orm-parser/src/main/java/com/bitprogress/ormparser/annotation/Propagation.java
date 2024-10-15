@@ -1,5 +1,6 @@
 package com.bitprogress.ormparser.annotation;
 
+import com.bitprogress.basemodel.enums.ValueEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -8,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum Propagation {
+public enum Propagation implements ValueEnum {
 
     /**
      * 跟随当前的解析模式，没有则创建新的解析模式
@@ -32,6 +33,6 @@ public enum Propagation {
 
     ;
 
-    private final int value;
+    private final Integer value;
 
 }

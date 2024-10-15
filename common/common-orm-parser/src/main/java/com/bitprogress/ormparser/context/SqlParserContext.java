@@ -17,14 +17,23 @@ public class SqlParserContext {
      */
     private static final ThreadLocal<TenantType> CURRENT_SQL_TENANT_TYPE = new ThreadLocal<>();
 
+    /**
+     * 获取解析模式信息
+     */
     public static SqlParserMsg getSqlParserMsg() {
         return SQL_PARSER_MSG.get();
     }
 
+    /**
+     * 设置解析模式信息
+     */
     public static void setSqlParserMsg(SqlParserMsg sqlParserMsg) {
         SQL_PARSER_MSG.set(sqlParserMsg);
     }
 
+    /**
+     * 清除解析模式信息
+     */
     public static void clearSqlParserMsg() {
         SQL_PARSER_MSG.remove();
     }

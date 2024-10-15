@@ -1,5 +1,6 @@
 package com.bitprogress.ormparser.entity;
 
+import com.bitprogress.basemodel.util.EnumUtils;
 import com.bitprogress.ormparser.annotation.ParserType;
 import com.bitprogress.ormparser.annotation.SqlParserMode;
 import com.bitprogress.ormparser.annotation.SqlType;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * sql 解析模式信息
@@ -88,12 +90,17 @@ public class SqlParserMsg {
 
     @JsonSetter(value = "parserType")
     public void setParserTypeJson(Integer parserType) {
-        this.parserType = ParserType.getByValue(parserType);
+        this.parserType = EnumUtils.getByValue(ParserType.class, parserType);
     }
 
     @JsonGetter(value = "sqlTypes")
     public Integer[] getSqlTypesJson() {
-        return Objects.isNull(sqlTypes) ? null : Arrays.stream(sqlTypes).map(SqlType::getValue).toArray(Integer[]::new);
+        return Objects.isNull(sqlTypes)
+                ? null
+                : Arrays
+                .stream(sqlTypes)
+                .map(SqlType::getValue)
+                .toArray(Integer[]::new);
     }
 
     @JsonSetter(value = "sqlTypes")
@@ -101,17 +108,23 @@ public class SqlParserMsg {
         if (Objects.isNull(sqlTypes)) {
             return;
         }
-        this.sqlTypes = Arrays.stream(sqlTypes).map(SqlType::getByValue).toArray(SqlType[]::new);
+        this.sqlTypes = Arrays
+                .stream(sqlTypes)
+                .map(sqlType -> EnumUtils.getByValue(SqlType.class, sqlType))
+                .toArray(SqlType[]::new);
     }
 
     @JsonGetter(value = "tenantType")
     public Integer getTenantTypeJson() {
-        return Objects.isNull(tenantType) ? null : tenantType.getValue();
+        return Optional
+                .ofNullable(tenantType)
+                .map(TenantType::getValue)
+                .orElse(null);
     }
 
     @JsonSetter(value = "tenantType")
     public void setTenantTypeJson(Integer tenantType) {
-        this.tenantType = TenantType.getByValue(tenantType);
+        this.tenantType = EnumUtils.getByValue(TenantType.class, tenantType);
     }
 
     @JsonGetter(value = "rpcPropagate")

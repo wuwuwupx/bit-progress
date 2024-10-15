@@ -2,7 +2,6 @@ package com.bitprogress.ormparser.annotation;
 
 import com.bitprogress.ormcontext.context.TenantContextUtils;
 import com.bitprogress.ormparser.context.SqlParserContext;
-import com.bitprogress.ormcontext.context.TenantContext;
 import com.bitprogress.ormparser.entity.SqlParserMsg;
 
 import java.lang.annotation.*;

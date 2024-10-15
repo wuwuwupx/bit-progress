@@ -1,5 +1,6 @@
 package com.bitprogress.ormparser.annotation;
 
+import com.bitprogress.basemodel.enums.ValueEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -8,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ParserType {
+public enum ParserType implements ValueEnum {
 
     /**
      * 忽略解析
@@ -22,15 +23,6 @@ public enum ParserType {
 
     ;
 
-    private final int value;
-
-    public static ParserType getByValue(int value) {
-        for (ParserType parserType : ParserType.values()) {
-            if (parserType.value == value) {
-                return parserType;
-            }
-        }
-        return null;
-    }
+    private final Integer value;
 
 }
