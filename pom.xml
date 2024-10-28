@@ -30,6 +30,7 @@
         <spring.cloud.alibaba.dubbo.version>2021.1</spring.cloud.alibaba.dubbo.version>
         <!-- MyBatis-Plus Version -->
         <mybatisplus.version>3.5.6</mybatisplus.version>
+        <mybatisplus.join.version>1.5.1</mybatisplus.join.version>
         <!-- Mysql Connector Version -->
         <mysql.java.connector.version>8.0.28</mysql.java.connector.version>
         <!-- Lombok Version -->
@@ -96,6 +97,13 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-core</artifactId>
                 <version>${mybatisplus.version}</version>
+            </dependency>
+
+            <!--mybatis-plus-join 扩展包-->
+            <dependency>
+                <groupId>com.github.yulichang</groupId>
+                <artifactId>mybatis-plus-join-boot-starter</artifactId>
+                <version>${mybatisplus.join.version}</version>
             </dependency>
 
             <!-- Mysql Connector -->

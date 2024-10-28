@@ -1,5 +1,6 @@
 package com.bitprogress.daomodel.dto;
 
+import com.bitprogress.basemodel.dto.NameDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,14 +16,14 @@ import java.io.Serial;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NameTenantDTO extends TenantDTO {
+public class NameTenantDTO extends NameDTO {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
-     * name
+     * tenant id
      */
-    private String name;
+    private Long tenantId;
 
 }
