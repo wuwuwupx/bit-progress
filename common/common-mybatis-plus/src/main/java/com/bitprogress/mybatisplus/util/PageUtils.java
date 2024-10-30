@@ -1,7 +1,9 @@
 package com.bitprogress.mybatisplus.util;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bitprogress.basemodel.qo.OrderColumnItem;
 import com.bitprogress.basemodel.qo.PageQO;
 import com.bitprogress.basemodel.vo.PageVO;
 import com.bitprogress.util.CollectionUtils;
@@ -19,7 +21,13 @@ public class PageUtils {
      * @return mybatis-plus分页对象
      */
     public static <T> Page<T> toPage(PageQO qo) {
-        return new Page<>(qo.getPageIndex(), qo.getPageSize());
+        Page<T> page = new Page<>(qo.getPageIndex(), qo.getPageSize());
+        List<OrderColumnItem> orders = qo.getOrders();
+        if (CollectionUtils.isNotEmpty(orders)) {
+            page.setOrders(CollectionUtils.toList(orders, item ->
+                    new OrderItem().setColumn(item.getColumn()).setAsc(item.getAsc())));
+        }
+        return page;
     }
 
     /**
@@ -31,9 +39,12 @@ public class PageUtils {
      */
     public static <T, R> PageVO<R> convertBean(IPage<T> sourcePage, Function<T, R> function) {
         List<T> resources = sourcePage.getRecords();
+        long total = sourcePage.getTotal();
+        long size = sourcePage.getSize();
+        long current = sourcePage.getCurrent();
         return CollectionUtils.isEmpty(resources)
-                ? PageVO.empty()
-                : PageVO.of(CollectionUtils.toList(resources, function), sourcePage.getTotal());
+                ? PageVO.empty(total, size, current)
+                : PageVO.of(CollectionUtils.toList(resources, function), total, size, current);
     }
 
     /**
@@ -45,9 +56,12 @@ public class PageUtils {
      */
     public static <T, R> PageVO<R> convertList(IPage<T> sourcePage, Function<List<T>, List<R>> function) {
         List<T> sourceRecords = sourcePage.getRecords();
+        long total = sourcePage.getTotal();
+        long size = sourcePage.getSize();
+        long current = sourcePage.getCurrent();
         return CollectionUtils.isEmpty(sourceRecords)
-                ? PageVO.empty()
-                : PageVO.of(function.apply(sourceRecords), sourcePage.getTotal());
+                ? PageVO.empty(total, size, current)
+                : PageVO.of(function.apply(sourceRecords), total, size, current);
     }
 
     /**
@@ -59,9 +73,12 @@ public class PageUtils {
      */
     public static <T, R> PageVO<R> convertBean(PageVO<T> sourcePage, Function<T, R> function) {
         List<T> resources = sourcePage.getRecords();
+        long total = sourcePage.getTotal();
+        long size = sourcePage.getSize();
+        long current = sourcePage.getCurrent();
         return CollectionUtils.isEmpty(resources)
-                ? PageVO.empty()
-                : PageVO.of(CollectionUtils.toList(resources, function), sourcePage.getTotal());
+                ? PageVO.empty(total, size, current)
+                : PageVO.of(CollectionUtils.toList(resources, function), total, size, current);
     }
 
     /**
@@ -73,9 +90,12 @@ public class PageUtils {
      */
     public static <T, R> PageVO<R> convertList(PageVO<T> sourcePage, Function<List<T>, List<R>> function) {
         List<T> sourceRecords = sourcePage.getRecords();
+        long total = sourcePage.getTotal();
+        long size = sourcePage.getSize();
+        long current = sourcePage.getCurrent();
         return CollectionUtils.isEmpty(sourceRecords)
-                ? PageVO.empty()
-                : PageVO.of(function.apply(sourceRecords), sourcePage.getTotal());
+                ? PageVO.empty(total, size, current)
+                : PageVO.of(function.apply(sourceRecords), total, size, current);
     }
 
     /**
@@ -89,9 +109,12 @@ public class PageUtils {
                                                   BiFunction<List<T>, U, List<R>> function,
                                                   U u) {
         List<T> sourceRecords = sourcePage.getRecords();
+        long total = sourcePage.getTotal();
+        long size = sourcePage.getSize();
+        long current = sourcePage.getCurrent();
         return CollectionUtils.isEmpty(sourceRecords)
-                ? PageVO.empty()
-                : PageVO.of(function.apply(sourceRecords, u), sourcePage.getTotal());
+                ? PageVO.empty(total, size, current)
+                : PageVO.of(function.apply(sourceRecords, u), total, size, current);
     }
 
 }

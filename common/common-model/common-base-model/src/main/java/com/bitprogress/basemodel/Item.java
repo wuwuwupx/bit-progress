@@ -4,9 +4,9 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * point
+ * data item
  */
-public abstract class Point implements Serializable {
+public abstract class Item implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serial;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
@@ -27,5 +29,10 @@ public class PageQO extends QO {
      * default 10
      */
     private int pageSize = 10;
+
+    /**
+     * order column list
+     */
+    private List<OrderColumnItem> orders = new ArrayList<>();
 
 }
