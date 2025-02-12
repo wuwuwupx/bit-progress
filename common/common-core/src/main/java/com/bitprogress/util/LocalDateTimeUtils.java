@@ -1,10 +1,14 @@
 package com.bitprogress.util;
 
+import com.bitprogress.enums.time.MomentType;
+import com.bitprogress.enums.time.WeekType;
+
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * LocalDateTime 工具类
@@ -12,115 +16,40 @@ import java.util.Objects;
 public class LocalDateTimeUtils {
 
     public static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_PATTERN);
     public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
+    public static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_DATE_PATTERN);
     public static final String DEFAULT_TIME_PATTERN = "HH:mm:ss";
+    public static final DateTimeFormatter DEFAULT_TIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_TIME_PATTERN);
 
     /**
-     * 时刻类型
+     * 判断时间是否在指定时间范围内, 默认包含边界值
+     *
+     * @param toCompare 待判断的日期
+     * @param begin     范围起始值
+     * @param end       范围结束值
+     * @return 是否在指定时间范围内
      */
-    public enum MomentType {
-        /**
-         * 一天的第一个时刻
-         */
-        FIRST,
-
-        /**
-         * 一天的最后一个时刻(最后一个时刻仅精确到秒)
-         */
-        LAST,
-        ;
+    public static boolean isBetween(LocalDateTime toCompare, LocalDateTime begin, LocalDateTime end) {
+        return isBetween(toCompare, begin, end, true);
     }
 
     /**
-     * 周类型
+     * 判断时间是否在指定时间范围内
+     *
+     * @param toCompare 待判断的日期
+     * @param begin     范围起始值
+     * @param end       范围结束值
+     * @param inclusive 是否包含边界值
+     * @return 是否在指定时间范围内
      */
-    public enum WeekType {
-        /**
-         * 上一周
-         */
-        PRE_WEEK,
-
-        /**
-         * 当前周
-         */
-        THIS_WEEK,
-
-        /**
-         * 当前周
-         */
-        NEXT_WEEK,
-        ;
-    }
-
-    /**
-     * 传入时间是否与当前时间在同一天
-     *
-     * @param    time 传入时间
-     * @return   Boolean
-     */
-    public static Boolean onSameDayWithNow(LocalDateTime time) {
-        return Objects.nonNull(time) && onSameDay(time, LocalDateTime.now());
-    }
-
-    /**
-     *
-     * 比较两个时间是否在同一天
-     * @return true：在同一天，false：不在同一天
-     */
-    public static Boolean onSameDay(LocalDateTime time, LocalDateTime comparativeTime) {
-        return Objects.nonNull(time) && Objects.nonNull(comparativeTime) && time.toLocalDate().isEqual(comparativeTime.toLocalDate());
-    }
-
-    /**
-     *
-     * 比较传入时间与当前时间是否在同一周
-     *
-     * @return true：在同一周，false：不在同一周
-     */
-    public static Boolean onSameWeekWithNow(LocalDateTime time) {
-        return Objects.nonNull(time) && onSameWeek(time, LocalDateTime.now());
-    }
-
-    /**
-     *
-     * 比较两个时间是否在同一周
-     *
-     * @return true：在同一周，false：不在同一周
-     */
-    public static Boolean onSameWeek(LocalDateTime time, LocalDateTime comparativeTime) {
-        if (Objects.isNull(time) || Objects.isNull(comparativeTime)) {
-            return false;
+    public static boolean isBetween(LocalDateTime toCompare, LocalDateTime begin, LocalDateTime end, boolean inclusive) {
+        if (begin.isAfter(end)) {
+            throw new IllegalArgumentException("The begin time can not be after the end time!");
         }
-        LocalDateTime weekFirst = getWeekFirstMoment(comparativeTime);
-        LocalDateTime weekLast = getWeekLastMoment(comparativeTime);
-        return time.isAfter(weekFirst) && time.isBefore(weekLast) || time.isEqual(weekFirst) || time.isEqual(weekLast);
-    }
-
-    /**
-     *
-     * 比较传入时间与当前时间是否在同一月
-     *
-     * @param    time
-     * @return   Boolean
-     */
-    public static Boolean onSameMonthWithNow(LocalDateTime time) {
-        return Objects.nonNull(time) && onSameMonth(time, LocalDateTime.now());
-    }
-
-    /**
-     *
-     * 比较两个时间是否在同一周
-     *
-     * @param    time
-     * @return   Boolean
-     */
-    public static Boolean onSameMonth(LocalDateTime time, LocalDateTime comparativeTime) {
-        if (Objects.isNull(time) || Objects.isNull(comparativeTime)) {
-            return false;
-        }
-        LocalDateTime monthFirst = getFirstDayOfMonth(comparativeTime, MomentType.FIRST);
-        LocalDateTime monthLast = getLastDayOfMonth(comparativeTime, MomentType.LAST);
-        return time.isAfter(monthFirst) && time.isBefore(monthLast) || time.isEqual(monthFirst) || time.isEqual(monthLast);
+        return inclusive
+                ? toCompare.isEqual(begin) || toCompare.isEqual(end) || (toCompare.isAfter(begin) && toCompare.isBefore(end))
+                : toCompare.isAfter(begin) && toCompare.isBefore(end);
     }
 
     /**
@@ -150,185 +79,104 @@ public class LocalDateTimeUtils {
      * @param type 时刻类型
      * @return 时间对象的时刻转化为指定的时刻类型
      */
-    private static LocalDateTime getMomentByType(LocalDateTime time, MomentType type) {
+    public static LocalDateTime getMomentByType(LocalDateTime time, MomentType type) {
         if (Objects.isNull(time)) {
             throw new RuntimeException("Time can not be null !");
         }
+        return switch (type) {
+            case FIRST -> getFirstMoment(time);
+            case LAST -> getLastMoment(time);
+        };
+    }
 
-        switch (type) {
-            case FIRST:
-                return getFirstMoment(time);
-            case LAST:
-                return getLastMoment(time);
-            default:
-                return time;
+    /**
+     * 传入时间是否与当前时间在同一天
+     *
+     * @param time 传入时间
+     * @return Boolean
+     */
+    public static boolean isToday(LocalDateTime time) {
+        return Objects.nonNull(time) && time.toLocalDate().isEqual(LocalDate.now());
+    }
+
+    /**
+     * 比较两个时间是否在同一天
+     *
+     * @return true：在同一天，false：不在同一天
+     */
+    public static Boolean onSameDay(LocalDateTime time, LocalDateTime comparativeTime) {
+        return Objects.nonNull(time)
+                && Objects.nonNull(comparativeTime)
+                && time.toLocalDate().isEqual(comparativeTime.toLocalDate());
+    }
+
+    /**
+     * 比较传入时间与当前时间是否在同一周
+     *
+     * @return true：在同一周，false：不在同一周
+     */
+    public static Boolean onSameWeekWithNow(LocalDateTime time) {
+        return onSameWeek(time, LocalDateTime.now());
+    }
+
+    /**
+     * 比较两个时间是否在同一周
+     *
+     * @return true：在同一周，false：不在同一周
+     */
+    public static Boolean onSameWeek(LocalDateTime time, LocalDateTime comparativeTime) {
+        if (Objects.isNull(time) || Objects.isNull(comparativeTime)) {
+            return false;
         }
+        LocalDate weekFirst = LocalDateUtils.getFirstDayOfWeek(comparativeTime);
+        LocalDate weekLast = LocalDateUtils.getLastDayOfWeek(comparativeTime);
+        return LocalDateUtils.isBetween(time.toLocalDate(), weekFirst, weekLast);
     }
 
     /**
-     * 根据传入的时间获取所在月第一天 00:00:00
+     * 比较传入时间与当前时间是否在同一月
      *
-     * @param time time
-     * @return 所在月第一天
+     * @param time 检查的时间
+     * @return Boolean
      */
-    public static LocalDateTime getFirstDayOfMonth(LocalDateTime time) {
-        return getMomentByType(time.with(TemporalAdjusters.firstDayOfMonth()), MomentType.FIRST);
+    public static Boolean onSameMonthWithNow(LocalDateTime time) {
+        return LocalDateUtils.onSameMonthWithToday(time.toLocalDate());
     }
 
     /**
+     * 比较两个时间是否在同一月
      *
-     * 获取传入的时间所在月的第一天的传入时刻
-     *
-     * @param    time
-     * @return   LocalDateTime
+     * @param time 检查的时间
+     * @return Boolean
      */
-    public static LocalDateTime getMomentFirstDayOfMonth(LocalDateTime time) {
-        return time.with(TemporalAdjusters.firstDayOfMonth());
-    }
-
-    /**
-     * 根据传入的时间获取所在月第一天
-     *
-     * @param time time
-     * @param type 时刻的类型
-     * @return 所在月第一天
-     */
-    public static LocalDateTime getFirstDayOfMonth(LocalDateTime time, MomentType type) {
-        return getMomentByType(time.with(TemporalAdjusters.firstDayOfMonth()), type);
-    }
-
-    /**
-     *
-     * 根据传入时间获取所在周的某一天开始或结束时刻  （周一 --- 周日）
-     *
-     * @param    time
-     * @param    dayOfWeek
-     * @param    weekType
-     * @param    momentType
-     * @return   LocalDateTime
-     */
-    public static LocalDateTime getWeekDay(LocalDateTime time, DayOfWeek dayOfWeek, WeekType weekType, MomentType momentType){
-        if (Objects.isNull(time)) {
-            throw new RuntimeException("Time can not be null !");
+    public static Boolean onSameMonth(LocalDateTime time, LocalDateTime comparativeTime) {
+        if (Objects.isNull(time) || Objects.isNull(comparativeTime)) {
+            return false;
         }
-        switch (momentType){
-            case FIRST:
-                return getWeekDay(time.toLocalDate().atTime(LocalTime.MIN), dayOfWeek, weekType);
-            case LAST:
-                return getWeekDay(time.toLocalDate().atTime(LocalTime.MAX), dayOfWeek, weekType);
-            default:
-                return time;
+        return LocalDateUtils.onSameMonth(time.toLocalDate(), comparativeTime.toLocalDate());
+    }
+
+    /**
+     * 比较传入时间与当前时间是否在同一年
+     *
+     * @param time 检查的时间
+     * @return Boolean
+     */
+    public static Boolean onSameYearWithNow(LocalDateTime time) {
+        return LocalDateUtils.onSameYearWithToday(time.toLocalDate());
+    }
+
+    /**
+     * 比较两个时间是否在同一年
+     *
+     * @param time 检查的时间
+     * @return Boolean
+     */
+    public static Boolean onSameYear(LocalDateTime time, LocalDateTime comparativeTime) {
+        if (Objects.isNull(time) || Objects.isNull(comparativeTime)) {
+            return false;
         }
-    }
-
-    /**
-     *
-     * 根据传入时间获取所在周的某一天的当前时刻  （周一 --- 周日）
-     *
-     * @param    time
-     * @param    dayOfWeek
-     * @param    type
-     * @return   LocalDateTime
-     */
-    public static LocalDateTime getWeekDay(LocalDateTime time, DayOfWeek dayOfWeek, WeekType type){
-        if (Objects.isNull(time)) {
-            throw new RuntimeException("Time can not be null !");
-        }
-        switch (type){
-            case PRE_WEEK:
-                return getPreWeekDay(time, dayOfWeek);
-            case THIS_WEEK:
-                return getThisWeekDay(time, dayOfWeek);
-            case NEXT_WEEK:
-                return getNextWeekDay(time, dayOfWeek);
-            default:
-                return time;
-        }
-    }
-
-    /**
-     *
-     * 根据传入时间获取上一周的某一天 （周一 --- 周日）
-     *
-     * @Author   wpx
-     * @param    time
-     * @param    dayOfWeek
-     * @return   LocalDateTime
-     */
-    private static LocalDateTime getPreWeekDay(LocalDateTime time, DayOfWeek dayOfWeek){
-        return getThisWeekDay(time.plusWeeks(-1), dayOfWeek);
-    }
-
-    /**
-     *
-     * 根据传入时间获取所在周的某一天当前时刻  （周一 --- 周日）
-     *
-     * @Author   wpx
-     * @param    time
-     * @param    dayOfWeek
-     * @return   LocalDateTime
-     */
-    private static LocalDateTime getThisWeekDay(LocalDateTime time, DayOfWeek dayOfWeek){
-        return Objects.equals(dayOfWeek, time.getDayOfWeek()) ? time : getDayOfWeek(time, dayOfWeek);
-    }
-
-    /**
-     *
-     * 根据传入时间获取下一周的某一天 （周一 --- 周日）
-     *
-     * @Author   wpx
-     * @param    time
-     * @param    dayOfWeek
-     * @return   LocalDateTime
-     */
-    private static LocalDateTime getNextWeekDay(LocalDateTime time, DayOfWeek dayOfWeek){
-        return getThisWeekDay(time.plusWeeks(1), dayOfWeek);
-    }
-
-    /**
-     *
-     * 根据传入时间获取所在周的某一天
-     *
-     * @Author   wpx
-     * @param    time
-     * @param    dayOfWeek
-     * @return   LocalDateTime
-     */
-    private static LocalDateTime getDayOfWeek(LocalDateTime time, DayOfWeek dayOfWeek) {
-        return time.getDayOfWeek().getValue() > dayOfWeek.getValue() ? time.with(TemporalAdjusters.previous(dayOfWeek)) : time.with(TemporalAdjusters.next(dayOfWeek));
-    }
-
-    /**
-     *
-     * 获取传入时间所在周的开始时刻 周一 00:00:00
-     *
-     * @param    time
-     * @return   LocalDateTime
-     */
-    public static LocalDateTime getWeekFirstMoment(LocalDateTime time){
-        return getWeekDay(time, DayOfWeek.MONDAY, WeekType.THIS_WEEK, MomentType.FIRST);
-    }
-
-    /**
-     *
-     * 获取传入时间所在周的结束时刻 周日 23:59:59
-     *
-     * @param    time
-     * @return   LocalDateTime
-     */
-    public static LocalDateTime getWeekLastMoment(LocalDateTime time){
-        return getWeekDay(time, DayOfWeek.SUNDAY, WeekType.THIS_WEEK, MomentType.LAST);
-    }
-
-    /**
-     * 获取下一天
-     *
-     * @param time LocalDateTime
-     * @param type 时刻的类型
-     * @return 下一天的
-     */
-    public static LocalDateTime getNextDay(LocalDateTime time, MomentType type) {
-        return getMomentByType(time.plusDays(1), type);
+        return LocalDateUtils.onSameYear(time.toLocalDate(), comparativeTime.toLocalDate());
     }
 
     /**
@@ -337,21 +185,163 @@ public class LocalDateTimeUtils {
      * @param time LocalDateTime
      * @return 下一天的 00:00:00
      */
-    public static LocalDateTime getNextDay(LocalDateTime time) {
-        return getMomentByType(time.plusDays(1), MomentType.FIRST);
+    public static LocalDateTime getFirstMomentOfNextDay(LocalDateTime time) {
+        if (Objects.isNull(time)) {
+            throw new RuntimeException("Time can not be null !");
+        }
+        return time
+                .plusDays(1)
+                .with(LocalTime.MIN);
+    }
+
+    /**
+     * 根据传入时间获取上一周的某一天 （周一 --- 周日）
+     *
+     * @param time      时间对象
+     * @param dayOfWeek 周几
+     * @return 特定时间
+     */
+    private static LocalDateTime getPreWeekDayWithSameTime(LocalDateTime time, DayOfWeek dayOfWeek) {
+        return time
+                .with(dayOfWeek)
+                .minusWeeks(1);
+    }
+
+    /**
+     * 根据传入时间获取所在周的某一天当前时刻  （周一 --- 周日）
+     *
+     * @param time      时间对象
+     * @param dayOfWeek 周几
+     * @return 特定日期
+     */
+    private static LocalDateTime getThisWeekDayWithSameTime(LocalDateTime time, DayOfWeek dayOfWeek) {
+        return time
+                .with(dayOfWeek);
+    }
+
+    /**
+     * 根据传入时间获取下一周的某一天 （周一 --- 周日）
+     *
+     * @param time      时间对象
+     * @param dayOfWeek 周几
+     * @return 特定日期
+     */
+    private static LocalDateTime getNextWeekDayWithSameTime(LocalDateTime time, DayOfWeek dayOfWeek) {
+        return time
+                .plusWeeks(1)
+                .with(dayOfWeek);
+    }
+
+    /**
+     * 根据传入时间获取所在周的某一天的当前时刻  （周一 --- 周日）
+     *
+     * @param time      时间对象
+     * @param dayOfWeek 周几
+     * @param type      周类型
+     * @return 特定时间
+     */
+    public static LocalDateTime getWeekDayWithSameTime(LocalDateTime time, DayOfWeek dayOfWeek, WeekType type) {
+        if (Objects.isNull(time)) {
+            throw new RuntimeException("Time can not be null !");
+        }
+        return switch (type) {
+            case PRE_WEEK -> getPreWeekDayWithSameTime(time, dayOfWeek);
+            case THIS_WEEK -> getThisWeekDayWithSameTime(time, dayOfWeek);
+            case NEXT_WEEK -> getNextWeekDayWithSameTime(time, dayOfWeek);
+        };
+    }
+
+    /**
+     * 根据传入时间获取所在周的某一天开始或结束时刻  （周一 --- 周日）
+     *
+     * @param time       时间对象
+     * @param dayOfWeek  周几
+     * @param weekType   周类型
+     * @param momentType 时刻类型
+     * @return 特定时间
+     */
+    public static LocalDateTime getWeekDayWithMomentType(LocalDateTime time,
+                                                         DayOfWeek dayOfWeek,
+                                                         WeekType weekType,
+                                                         MomentType momentType) {
+        if (Objects.isNull(time)) {
+            throw new RuntimeException("Time can not be null !");
+        }
+        return switch (momentType) {
+            case FIRST -> getWeekDayWithSameTime(time, dayOfWeek, weekType).with(LocalTime.MIN);
+            case LAST -> getWeekDayWithSameTime(time, dayOfWeek, weekType).with(LocalTime.MAX);
+        };
+    }
+
+    /**
+     * ISO 8601国际标准
+     * 获取传入时间所在周的开始时刻 周一 00:00:00
+     *
+     * @param time 时间对象
+     * @return LocalDateTime
+     */
+    public static LocalDateTime getFirstMomentOfWeek(LocalDateTime time) {
+        return getWeekDayWithMomentType(time, DayOfWeek.MONDAY, WeekType.THIS_WEEK, MomentType.FIRST);
+    }
+
+    /**
+     * ISO 8601国际标准
+     * 获取传入时间所在周的结束时刻 周日 23:59:59
+     *
+     * @param time 时间对象
+     * @return LocalDateTime
+     */
+    public static LocalDateTime getLastMomentOfWeek(LocalDateTime time) {
+        return getWeekDayWithMomentType(time, DayOfWeek.SUNDAY, WeekType.THIS_WEEK, MomentType.LAST);
+    }
+
+    /**
+     * 根据传入的时间获取所在月第一天 00:00:00
+     *
+     * @param time time
+     * @return 所在月的第一时刻
+     */
+    public static LocalDateTime getFirstMomentOfMonth(LocalDateTime time) {
+        return time
+                .with(TemporalAdjusters.firstDayOfMonth())
+                .with(LocalTime.MIN);
     }
 
     /**
      * 根据传入的LocalDateTime 转为对应当前月的最后一天
      *
      * @param time LocalDateTime
-     * @param type 时刻的类型
      * @return 当前月的最后一天
      */
-    public static LocalDateTime getLastDayOfMonth(LocalDateTime time, MomentType type) {
-        return getMomentByType(time.with(TemporalAdjusters.lastDayOfMonth()), type);
+    public static LocalDateTime getLastMomentOfMonth(LocalDateTime time) {
+        return time
+                .with(TemporalAdjusters.lastDayOfMonth())
+                .with(LocalTime.MAX);
     }
 
+    /**
+     * 根据传入的时间获取所在月第一天 00:00:00
+     *
+     * @param time time
+     * @return 所在年份的第一时刻
+     */
+    public static LocalDateTime getFirstMomentOfYear(LocalDateTime time) {
+        return time
+                .with(TemporalAdjusters.firstDayOfYear())
+                .with(LocalTime.MIN);
+    }
+
+    /**
+     * 根据传入的LocalDateTime 转为对应当前月的最后一天
+     *
+     * @param time LocalDateTime
+     * @return 当前年份的最后一天
+     */
+    public static LocalDateTime getLastMomentOfYear(LocalDateTime time) {
+        return time
+                .with(TemporalAdjusters.lastDayOfYear())
+                .with(LocalTime.MAX);
+    }
 
     /**
      * 格式化 LocalDateTime , 默认 'yyyy-MM-dd HH:mm:ss' 格式.
@@ -360,7 +350,7 @@ public class LocalDateTimeUtils {
      * @return yyyy-MM-dd HH:mm:ss
      */
     public static String format(LocalDateTime time) {
-        return time.format(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_PATTERN));
+        return time.format(DEFAULT_DATE_TIME_FORMATTER);
     }
 
     /**
@@ -375,14 +365,27 @@ public class LocalDateTimeUtils {
     }
 
     /**
+     * 比较两个两个时间的差值（绝对值）
+     *
+     * @param startTime startTime
+     * @param endTime   endTime
+     * @param timeUnit  timeUnit
+     * @return 时间差值(绝对值)
+     */
+    public static long getDuration(LocalDateTime startTime, LocalDateTime endTime, TimeUnit timeUnit) {
+        Duration duration = Duration.between(startTime, endTime);
+        return Math.abs(timeUnit.convert(duration));
+    }
+
+    /**
      * 比较两个两个日期的差值(绝对值),以毫秒的形式返回
      *
-     * @param one one
-     * @param two two
+     * @param startTime startTime
+     * @param endTime   endTime
      * @return 日期毫秒差值(绝对值)
      */
-    public static long getDuration(LocalDateTime one, LocalDateTime two) {
-        return Math.abs(toMilliseconds(two) - toMilliseconds(one));
+    public static long getDuration(LocalDateTime startTime, LocalDateTime endTime) {
+        return getDuration(startTime, endTime, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -391,18 +394,63 @@ public class LocalDateTimeUtils {
      * @param time time
      * @return 指定时间到现在的差值(绝对值)
      */
-    public static long getDurationFromNow(LocalDateTime time) {
-        return Math.abs(toMilliseconds(time) - toMilliseconds(LocalDateTime.now()));
+    public static long getDurationToNow(LocalDateTime time) {
+        return getDuration(LocalDateTime.now(), time);
     }
 
     /**
-     * 从现在到明天00:00:00 的毫秒值
+     * 计算从指定时间到现在的差值(绝对值),以毫秒的形式返回
      *
-     * @return 从现在到明天00:00:00 的毫秒值
+     * @param time time
+     * @return 指定时间到现在的差值(绝对值)
      */
-    public static long getDurationFromNowToNextDay() {
-        LocalDateTime now = LocalDateTime.now();
-        return Math.abs(toMilliseconds(now) - toMilliseconds(getNextDay(now)));
+    public static long getDurationToNow(LocalDateTime time, TimeUnit timeUnit) {
+        return getDuration(LocalDateTime.now(), time, timeUnit);
+    }
+
+    /**
+     * 获取传入时间当天剩余的毫秒数（绝对值）
+     *
+     * @return 传入时间当天剩余的毫秒数（绝对值）
+     */
+    public static long getRemainingDurationOfDay(LocalDateTime time) {
+        return getDuration(time, getLastMoment(time));
+    }
+
+    /**
+     * 获取传入时间当天剩余的时间（绝对值）
+     *
+     * @return 传入时间当天剩余的时间（绝对值）
+     */
+    public static long getRemainingDurationOfDay(LocalDateTime time, TimeUnit unit) {
+        return getDuration(time, getLastMoment(time), unit);
+    }
+
+    /**
+     * 获取传入时间所属周剩余的时间（绝对值）
+     *
+     * @return 传入时间所属周剩余的时间（绝对值）
+     */
+    public static long getRemainingDurationOfWeek(LocalDateTime time, TimeUnit unit) {
+        return getDuration(time, getLastMomentOfWeek(time), unit);
+    }
+
+    /**
+     * 获取传入时间所属月剩余的时间（绝对值）
+     *
+     * @return 传入时间所属月剩余的时间（绝对值）
+     */
+    public static long getRemainingDurationOfMonth(LocalDateTime time, TimeUnit unit) {
+        return getDuration(time, getLastMomentOfMonth(time), unit);
+    }
+
+    /**
+     * 获取传入时间所属月剩余的时间（绝对值）
+     *
+     * @return 传入时间所属月剩余的时间（绝对值）
+     */
+    public static long getRemainingDurationOfYear(LocalDateTime time, TimeUnit unit) {
+        return getDuration(time, getLastMomentOfYear(time), unit);
     }
 
     /**
@@ -412,80 +460,101 @@ public class LocalDateTimeUtils {
      * @return 对应的毫秒值
      */
     public static long toMilliseconds(LocalDateTime time) {
-        return time.toInstant(ZoneOffset.of("+8")).toEpochMilli();
-    }
-
-    /**
-     * 判断日期是否在指定时间范围内
-     *
-     * @param toCompare 待判断的日期
-     * @param begin     范围起始值
-     * @param end       范围结束值
-     * @return 是否在指定时间范围内
-     */
-    public boolean isBetween(LocalDateTime toCompare, LocalDateTime begin, LocalDateTime end) {
-        if (begin.isAfter(end)) {
-            throw new IllegalArgumentException("The begin time can not be after the end time!");
-        }
-        return toCompare.isAfter(begin) && toCompare.isBefore(end);
+        return time
+                .atZone(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
     }
 
     /**
      * 根据传入时间格式化到小时
      *
-     * @param    time
-     * @return   LocalDateTime
+     * @param time 传入时间
+     * @return 传入时间对应的小时开始时刻
      */
     public static LocalDateTime toLocalDateHour(LocalDateTime time) {
-        return time.toLocalDate().atTime(time.getHour(), 0, 0);
+        return time
+                .toLocalDate()
+                .atTime(time.getHour(), 0, 0, 0);
     }
 
     /**
      * 根据传入时间格式化到小时  不包含日期
      *
-     * @param    time
-     * @return   LocalTime
+     * @param time 传入时间
+     * @return 传入时间对应的小时开始时刻
      */
     public static LocalTime toLocalTimeHour(LocalDateTime time) {
-        return toLocalDateHour(time).toLocalTime();
+        return time.toLocalTime().withMinute(0).withSecond(0).withNano(0);
     }
 
     /**
-     * 转换为 date
+     * 获取更早的时间
      *
-     * @param time
-     * @return
+     * @param time        time
+     * @param anotherTime anotherTime
+     * @return 两个时间中更早的一个
      */
-    public static Date toDate(LocalDateTime time) {
-        return Date.from(time.atZone(ZoneId.systemDefault()).toInstant());
-    }
-
-    /**
-     * 获取最大的时间
-     *
-     * @param    time
-     * @param    dateTime
-     * @return   LocalDateTime
-     */
-    public static LocalDateTime maxTime(LocalDateTime time, LocalDateTime dateTime) {
-        if (Objects.isNull(time) || Objects.isNull(dateTime)) {
+    public static LocalDateTime getEarlierTime(LocalDateTime time, LocalDateTime anotherTime) {
+        if (Objects.isNull(time) || Objects.isNull(anotherTime)) {
             throw new IllegalArgumentException("time can't null");
         }
-        return time.isAfter(dateTime) ? time : dateTime;
+        return time.isAfter(anotherTime) ? anotherTime : time;
     }
 
     /**
-     * 获取最小时间
+     * 获取最早的时间
      *
-     * @param    time
-     * @param    dateTime
-     * @return   LocalDateTime
+     * @param times 时间数组
+     * @return 最早的时间
      */
-    public static LocalDateTime minTime(LocalDateTime time, LocalDateTime dateTime) {
-        if (Objects.isNull(time) || Objects.isNull(dateTime)) {
+    public static LocalDateTime getEarliestTime(LocalDateTime... times) {
+        if (ArrayUtils.isEmpty(times)) {
+            throw new IllegalArgumentException("times can't null");
+        }
+        return Arrays.stream(times)
+                .filter(Objects::nonNull)
+                .min(LocalDateTime::compareTo)
+                .orElseThrow(() -> new IllegalArgumentException("Unable to read the valid time!"));
+    }
+
+    /**
+     * 获取更晚的时间
+     *
+     * @param time        time
+     * @param anotherTime anotherTime
+     * @return 两个时间中更晚的一个
+     */
+    public static LocalDateTime getLaterTime(LocalDateTime time, LocalDateTime anotherTime) {
+        if (Objects.isNull(time) || Objects.isNull(anotherTime)) {
             throw new IllegalArgumentException("time can't null");
         }
-        return time.isBefore(dateTime) ? time : dateTime;
+        return time.isAfter(anotherTime) ? time : anotherTime;
+    }
+
+    /**
+     * 获取最晚的时间
+     *
+     * @param times times
+     * @return 最晚的时间
+     */
+    public static LocalDateTime getLatestTime(LocalDateTime... times) {
+        if (ArrayUtils.isEmpty(times)) {
+            throw new IllegalArgumentException("times can't null");
+        }
+        return Arrays.stream(times)
+                .filter(Objects::nonNull)
+                .max(LocalDateTime::compareTo)
+                .orElseThrow(() -> new IllegalArgumentException("Unable to get the valid time!"));
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().minusDays(1), TimeUnit.HOURS));
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), TimeUnit.MINUTES));
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), TimeUnit.SECONDS));
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), TimeUnit.MILLISECONDS));
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), TimeUnit.MICROSECONDS));
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), TimeUnit.NANOSECONDS));
     }
 
 }

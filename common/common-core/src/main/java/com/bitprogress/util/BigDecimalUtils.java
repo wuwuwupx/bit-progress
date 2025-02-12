@@ -4,6 +4,7 @@ import com.bitprogress.basemodel.interval.IntervalBoundaryType;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class BigDecimalUtils {
@@ -137,6 +138,26 @@ public class BigDecimalUtils {
             return null;
         }
         return x.compareTo(y) > 0 ? x : y;
+    }
+
+    /**
+     * 求和
+     *
+     * @param params 求和参数
+     * @return 计算结果
+     */
+    public static BigDecimal addAll(BigDecimal... params) {
+        return CollectionUtils.sumBigDecimal(params);
+    }
+
+    /**
+     * 求和
+     *
+     * @param params 求和参数
+     * @return 计算结果
+     */
+    public static BigDecimal addAll(String... params) {
+        return CollectionUtils.sumBigDecimal(BigDecimal::new, params);
     }
 
     /**

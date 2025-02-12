@@ -1,6 +1,6 @@
 package com.bitprogress.auth.service;
 
-import com.bitprogress.auth.base.AuthMsg;
+import com.bitprogress.auth.base.AuthInfo;
 import com.bitprogress.auth.base.AuthProperties;
 import com.bitprogress.auth.base.AuthResult;
 import com.bitprogress.auth.base.TokenUtils;
@@ -21,9 +21,7 @@ import static com.bitprogress.auth.base.AuthException.AUTH_TOKEN_WRONG;
 /**
  * 采用shiro模式的token校验，而非继承了shiro
  * 相较于集成鉴权框架更加轻量，只进行了token的生成和校验，而不干涉登录的逻辑
- *
- * @author wpx
- **/
+ */
 @Service
 public class AuthTokenServiceImpl implements AuthTokenService {
 
@@ -35,31 +33,28 @@ public class AuthTokenServiceImpl implements AuthTokenService {
     @Autowired
     private AuthProperties authProperties;
 
-    @Autowired
-    private TokenUtils tokenUtils;
-
     private static final String BASE_STRING = "abcdefghijklmnopqrstuvwxyz0123456789";
 
     /**
      * 登录
      *
-     * @param userId  用户ID
-     * @param authMsg 用户登录信息
+     * @param userId   用户ID
+     * @param authInfo 用户登录信息
      * @return 登录后的token
      */
     @Override
-    public <T extends AuthMsg> String login(String userId, T authMsg) {
-        return updateToken(userId, authMsg);
+    public <T extends AuthInfo> String login(String userId, T authInfo) {
+        return updateToken(userId, authInfo);
     }
 
     /**
      * 更新token
      *
-     * @param userId  用户ID
-     * @param authMsg 登录信息
+     * @param userId   用户ID
+     * @param authInfo 登录信息
      * @return 登录后的token
      */
-    private <T extends AuthMsg> String updateToken(String userId, T authMsg) {
+    private <T extends AuthInfo> String updateToken(String userId, T authInfo) {
         String salt = randomString(5);
         String tokenPrefix = authProperties.getTokenPrefix();
         String tokenName = authProperties.getTokenName();
@@ -68,13 +63,13 @@ public class AuthTokenServiceImpl implements AuthTokenService {
             return null;
         }
         String content = generateEncodeContent(userId, salt);
-        String token = tokenUtils.encode(content);
+        String token = TokenUtils.encode(content);
         logger.info("setToken userId: [{}] = token:[{}]", userId, token);
-        if (authMsg == null) {
-            authMsg = (T) new AuthMsg();
+        if (authInfo == null) {
+            authInfo = (T) new AuthInfo();
         }
-        authMsg.setToken(token);
-        String value = JsonUtils.serializeObject(authMsg);
+        authInfo.setToken(token);
+        String value = JsonUtils.serializeObject(authInfo);
         stringRedisService.setForValueTtl(tokenPrefix + tokenName + userId, value, cacheDays, TimeUnit.DAYS);
         return token;
     }
@@ -108,36 +103,40 @@ public class AuthTokenServiceImpl implements AuthTokenService {
      * @return token检验结果
      */
     @Override
-    public <T extends AuthMsg> AuthResult<T> checkToken(String token, Class<T> target) {
-        AuthResult<T> auth = new AuthResult<>();
-        String userIdTokenRole = this.tokenUtils.decode(token);
+    public <T extends AuthInfo> AuthResult<T> checkToken(String token, Class<T> target) {
+        AuthResult<T> authResult = new AuthResult<>();
+        // 解密token
+        String userIdTokenRole = TokenUtils.decode(token);
+
+        // 读取token信息
         String userId;
         try {
             String[] split = userIdTokenRole.split("\\.");
             userId = split[0];
-            auth.setUserId(userId);
         } catch (Exception var7) {
-            auth.setResult(false);
-            auth.setAuthException(AUTH_TOKEN_WRONG);
-            return auth;
+            authResult.setResult(false);
+            authResult.setAuthException(AUTH_TOKEN_WRONG);
+            return authResult;
         }
+
+        // 获取用户信息
         String tokenPrefix = authProperties.getTokenPrefix();
         String tokenName = authProperties.getTokenName();
         String value = stringRedisService.getForValue(tokenPrefix + tokenName + userId);
         if (StringUtils.isEmpty(value)) {
-            auth.setResult(false);
-            auth.setAuthException(AUTH_TOKEN_WRONG);
-            return auth;
+            authResult.setResult(false);
+            authResult.setAuthException(AUTH_TOKEN_WRONG);
+            return authResult;
         }
-        T authMsg = JsonUtils.deserializeObject(value, target);
-        String redisToken = authMsg.getToken();
-        auth.setAuthMsg(authMsg);
-        boolean result = StringUtils.nonEmpty(redisToken) && token.equals(redisToken);
-        auth.setResult(result);
+        T userInfo = JsonUtils.deserializeObject(value, target);
+        String redisToken = userInfo.getToken();
+        authResult.setUserInfo(userInfo);
+        boolean result = StringUtils.isNotEmpty(redisToken) && token.equals(redisToken);
+        authResult.setResult(result);
         if (!result) {
-            auth.setAuthException(AUTH_TOKEN_WRONG);
+            authResult.setAuthException(AUTH_TOKEN_WRONG);
         }
-        return auth;
+        return authResult;
     }
 
     /**
@@ -197,7 +196,7 @@ public class AuthTokenServiceImpl implements AuthTokenService {
      */
     @Override
     public String encodeToken(String rawToken) {
-        return tokenUtils.encode(rawToken);
+        return TokenUtils.encode(rawToken);
     }
 
     /**
@@ -208,6 +207,6 @@ public class AuthTokenServiceImpl implements AuthTokenService {
      */
     @Override
     public String decodeToken(String token) {
-        return tokenUtils.decode(token);
+        return TokenUtils.decode(token);
     }
 }

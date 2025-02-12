@@ -10,6 +10,8 @@
     <modules>
         <module>common</module>
         <module>server</module>
+        <module>api</module>
+        <module>openfeign</module>
     </modules>
 
     <properties>
@@ -51,6 +53,7 @@
         <!-- MapStruct -->
         <org.redisson.version>2.15.2</org.redisson.version>
         <easyexcel.version>3.3.2</easyexcel.version>
+        <jakarta.validation.api.version>3.0.2</jakarta.validation.api.version>
     </properties>
 
     <packaging>pom</packaging>
@@ -165,6 +168,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>easyexcel</artifactId>
                 <version>${easyexcel.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>${jakarta.validation.api.version}</version>
             </dependency>
 
         </dependencies>

@@ -20,22 +20,43 @@ public class StringUtils {
 
     public static final String STRING_VALUE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
+    public static final String DEFAULT_CAMEL_CASE_DELIMITER = "_";
+
+    /**
+     * 判断字符串是否为空
+     *
+     * @param str 字符串
+     */
     public static boolean isEmpty(String str) {
         return str == null || str.isEmpty();
     }
 
-    public static boolean nonEmpty(String str) {
-        return !isEmpty(str);
-    }
-
+    /**
+     * 判断字符串是否不为空
+     *
+     * @param str 字符串
+     */
     public static boolean isNotEmpty(String str) {
         return !isEmpty(str);
     }
 
+    /**
+     * 检查字符串是否以指定字符开始
+     *
+     * @param str    检查字符串
+     * @param prefix 需要检查前缀
+     */
     public static boolean startWithIgnoreCase(CharSequence str, CharSequence prefix) {
         return startWith(str, prefix, true);
     }
 
+    /**
+     * 检查字符串是否以指定字符开始
+     *
+     * @param str        检查字符串
+     * @param prefix     需要检查前缀
+     * @param ignoreCase 是否忽略大小写
+     */
     public static boolean startWith(CharSequence str, CharSequence prefix, boolean ignoreCase) {
         return startWith(str, prefix, ignoreCase, false);
     }
@@ -115,27 +136,114 @@ public class StringUtils {
     }
 
     /**
-     * 驼峰转换
-     * camelCase -> camel_case
+     * 反向驼峰转换，使用默认分隔符 _
+     * firstNameLastName -> first_name_last_name
+     * FirstNameLastName -> first_name_last_name
+     * FIRST_NAME_LAST_NAME -> first_name_last_name
      *
      * @param str 需要转换的字符串
      */
-    public static String camelCase(String str) {
+    public static String reverseCamelCase(String str) {
+        return reverseCamelCase(str, DEFAULT_CAMEL_CASE_DELIMITER);
+    }
+
+    /**
+     * 反向驼峰转换
+     * 假设 ${camelCaseDelimiter} 为 _
+     * firstNameLastName -> first_name_last_name
+     * FirstNameLastName -> first_name_last_name
+     * FIRST_NAME_LAST_NAME -> first_name_last_name
+     *
+     * @param str 需要转换的字符串
+     */
+    public static String reverseCamelCase(String str, String camelCaseDelimiter) {
         if (isEmpty(str)) {
             return "";
         }
         int length = str.length();
-        StringBuilder sb = new StringBuilder(length);
+        StringBuilder result = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
             char c = str.charAt(i);
             if (Character.isUpperCase(c)) {
-                sb.append(StringConstants.UNDERLINE);
-                sb.append(Character.toLowerCase(c));
+                if (i != 0) {
+                    result.append(camelCaseDelimiter);
+                }
+                result.append(Character.toLowerCase(c));
             } else {
-                sb.append(c);
+                result.append(c);
             }
         }
-        return sb.toString();
+        return result.toString();
+    }
+
+    /**
+     * 小驼峰命名转换方法，使用默认分隔符 _
+     * first_name_last_name -> firstNameLastName
+     *
+     * @param input 需要转换的字符串
+     * @return 转换后的字符串
+     */
+    public static String toLowerCamelCase(String input) {
+        return toLowerCamelCase(input, DEFAULT_CAMEL_CASE_DELIMITER);
+    }
+
+    /**
+     * 小驼峰命名转换方法
+     * first_name_last_name -> firstNameLastName
+     *
+     * @param input              需要转换的字符串
+     * @param camelCaseDelimiter 驼峰分隔符
+     * @return 转换后的字符串
+     */
+    public static String toLowerCamelCase(String input, String camelCaseDelimiter) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        String[] words = input.split(camelCaseDelimiter);
+        StringBuilder result = new StringBuilder(words[0].toLowerCase());
+
+        for (int i = 1; i < words.length; i++) {
+            result.append(Character.toUpperCase(words[i].charAt(0)))
+                    .append(words[i].substring(1).toLowerCase());
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * 大驼峰命名转换方法，使用默认分隔符 _
+     * first_name_last_name -> FirstNameLastName
+     *
+     * @param input 需要转换的字符串
+     * @return 转换后的字符串
+     */
+    public static String toUpperCamelCase(String input) {
+        return toUpperCamelCase(input, DEFAULT_CAMEL_CASE_DELIMITER);
+    }
+
+    /**
+     * 大驼峰命名转换方法
+     * first_name_last_name -> FirstNameLastName
+     *
+     * @param input              需要转换的字符串
+     * @param camelCaseDelimiter 驼峰分隔符
+     * @return 转换后的字符串
+     */
+    public static String toUpperCamelCase(String input, String camelCaseDelimiter) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        String[] words = input.split(camelCaseDelimiter);
+        StringBuilder result = new StringBuilder();
+
+        for (String word : words) {
+            result.append(Character.toUpperCase(word.charAt(0)))
+                    .append(word.substring(1).toLowerCase());
+        }
+
+        return result.toString();
     }
 
     /**
@@ -161,7 +269,7 @@ public class StringUtils {
     }
 
     /**
-     * 判断是否为空，并且不是空白字符
+     * 判断字符串是否包含文本
      *
      * @param str 要判断的value
      * @return 结果
@@ -170,6 +278,12 @@ public class StringUtils {
         return (str != null && !str.isEmpty() && containsText(str));
     }
 
+    /**
+     * 判断字符串是否包含文本
+     *
+     * @param str 要判断的value
+     * @return 结果
+     */
     private static boolean containsText(CharSequence str) {
         int strLen = str.length();
         for (int i = 0; i < strLen; i++) {
@@ -178,6 +292,21 @@ public class StringUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * 去掉小数点后多余的0
+     *
+     * @param str 传入的字符串
+     * @return 去除多余0后的字符串
+     */
+    public static String stripTrailingZeros(String str) {
+        // 去掉小数点后的0
+        if (str.contains(".")) {
+            str = str.replaceAll("\\.0*$", "");
+            str = str.replaceAll("\\.([1-9]*)0+$", ".$1");
+        }
+        return str;
     }
 
 }

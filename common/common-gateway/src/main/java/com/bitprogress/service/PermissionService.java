@@ -1,10 +1,9 @@
 package com.bitprogress.service;
 
-import com.bitprogress.auth.base.AuthMsg;
+import com.bitprogress.auth.base.AuthInfo;
 import com.bitprogress.auth.base.AuthResult;
 
 /**
- * @author wpx
  * 权限匹配服务
  */
 public interface PermissionService {
@@ -18,7 +17,7 @@ public interface PermissionService {
      * @param method     方法
      * @param url        接口url
      */
-    default void authorizePermission(AuthResult<AuthMsg> authResult, String method, String url) {
+    default void authorizePermission(AuthResult<AuthInfo> authResult, String method, String url) {
     }
 
 }

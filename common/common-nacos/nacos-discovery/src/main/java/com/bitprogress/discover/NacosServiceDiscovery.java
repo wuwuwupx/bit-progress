@@ -75,7 +75,7 @@ public class NacosServiceDiscovery {
 		}
 		// 如果指定了服务版本，则需要匹配对应版本的服务
 		Map<String, String> instanceMetadata = instance.getMetadata();
-		if (StringUtils.nonEmpty(targetVersion)) {
+		if (StringUtils.isNotEmpty(targetVersion)) {
 			String version = instanceMetadata.get(VERSION);
 			if (!StringUtils.equals(version, targetVersion)) {
 				return null;

@@ -5,11 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author wpx
- * Created on 2021/1/26 16:56
- * 
- */
 public class GatewayRouteMsg {
 
     /**

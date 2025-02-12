@@ -1,6 +1,6 @@
 package com.bitprogress.service;
 
-import com.bitprogress.auth.base.AuthMsg;
+import com.bitprogress.auth.base.AuthInfo;
 import com.bitprogress.auth.base.AuthResult;
 
 public interface AuthTokenService {
@@ -12,7 +12,7 @@ public interface AuthTokenService {
      * @param authMsg 用户登录信息
      * @return 登录后的token
      */
-    <T extends AuthMsg> String login(String userId, T authMsg);
+    <T extends AuthInfo> String login(String userId, T authMsg);
 
     /**
      * 登出
@@ -28,7 +28,7 @@ public interface AuthTokenService {
      * @param target 检验token后返回的AuthResult类型
      * @return token检验结果
      */
-    <T extends AuthMsg> AuthResult<T> checkToken(String token, Class<T> target);
+    <T extends AuthInfo> AuthResult<T> checkToken(String token, Class<T> target);
 
     /**
      * 从token中解析出userID

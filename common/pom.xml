@@ -34,6 +34,7 @@
         <module>common-orm-parser</module>
         <module>common-request</module>
         <module>common-github</module>
+        <module>common-validation</module>
     </modules>
 
 </project>

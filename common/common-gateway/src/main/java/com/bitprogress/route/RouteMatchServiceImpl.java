@@ -8,7 +8,6 @@ import org.springframework.util.AntPathMatcher;
 import java.util.List;
 
 /**
- * @author wuwuwupx
  * 路由匹配服务
  */
 @Service
@@ -19,7 +18,7 @@ public class RouteMatchServiceImpl implements MatchService {
      */
     private static final String MATCH_URL_PRE = "/api/";
 
-    private AntPathMatcher matcher = new AntPathMatcher();
+    private final AntPathMatcher matcher = new AntPathMatcher();
 
     /**
      * 查询是否为不校验路由
@@ -61,7 +60,6 @@ public class RouteMatchServiceImpl implements MatchService {
      * @param url     请求路径
      */
     private boolean pathMatch(String pattern, String method, String url) {
-        AntPathMatcher pathMatcher = this.matcher;
 
         //使用空格分隔，e.g. GET /api/user，如果没有METHOD，直接取URI部分
         String pUri, pMethod;
@@ -77,8 +75,8 @@ public class RouteMatchServiceImpl implements MatchService {
         }
 
         //如果pMethod为空，uri匹配，则匹配成功；若不为空，需要完全匹配
-        return (null != pMethod && (pMethod.equals(method) && pathMatcher.match(pUri, url)))
-                || (null == pMethod && pathMatcher.match(pUri, url));
+        return (null != pMethod && (pMethod.equals(method) && matcher.match(pUri, url)))
+                || (null == pMethod && matcher.match(pUri, url));
     }
 
 }

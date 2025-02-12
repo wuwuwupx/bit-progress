@@ -1,8 +1,10 @@
 package com.bitprogress.auth.base;
 
+import com.bitprogress.exception.CommonException;
 import jakarta.xml.bind.DatatypeConverter;
 import jakarta.xml.bind.annotation.adapters.HexBinaryAdapter;
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -16,18 +18,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 /**
- * @author wuwuwupx
- * create on 2021/6/13 20:37
  * token工具类
  */
-@Component
 public class TokenUtils {
 
-    private String rule = "#*J&@J(#_=*!A";
+    private static final Logger log = LoggerFactory.getLogger(TokenUtils.class);
 
     private static Cipher encodeCipher;
     private static Cipher decodeCipher;
-    private static Key key;
 
     /**
      * 构造函数，初始化信息
@@ -37,40 +35,38 @@ public class TokenUtils {
         try {
             keyGenerator = KeyGenerator.getInstance("AES");
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+            String rule = "#*J&@J(#_=*!A";
             secureRandom.setSeed(rule.getBytes(StandardCharsets.UTF_8));
             keyGenerator.init(128, secureRandom);
             SecretKey secretKey = keyGenerator.generateKey();
             byte[] keyBytes = secretKey.getEncoded();
-            key = new SecretKeySpec(keyBytes, "AES");
+            Key key = new SecretKeySpec(keyBytes, "AES");
             encodeCipher = Cipher.getInstance("AES");
             encodeCipher.init(Cipher.ENCRYPT_MODE, key);
             decodeCipher = Cipher.getInstance("AES");
             decodeCipher.init(Cipher.DECRYPT_MODE, key);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
+            log.error("TokenUtils init error ", e);
+            throw CommonException.error("TokenUtils init error");
         }
     }
 
-    public String encode(String content) {
+    public static String encode(String content) {
         try {
             byte[] encodeResult = encodeCipher.doFinal(content.getBytes());
             return new HexBinaryAdapter().marshal(encodeResult);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("TokenUtils encode error ", e);
         }
         return null;
     }
 
-    public String decode(String content) {
+    public static String decode(String content) {
         try {
             byte[] decodeResult = decodeCipher.doFinal(DatatypeConverter.parseHexBinary(content));
             return new String(decodeResult);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("TokenUtils decode error ", e);
         }
         return null;
     }

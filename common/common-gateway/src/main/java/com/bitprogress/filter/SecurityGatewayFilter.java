@@ -1,25 +1,27 @@
 package com.bitprogress.filter;
 
 import com.bitprogress.auth.base.AuthException;
-import com.bitprogress.auth.base.AuthMsg;
+import com.bitprogress.auth.base.AuthInfo;
 import com.bitprogress.auth.base.AuthResult;
 import com.bitprogress.auth.base.Result;
-import com.bitprogress.route.GatewayRouteMsg;
+import com.bitprogress.request.constant.VerifyConstant;
+import com.bitprogress.request.enums.RequestSource;
+import com.bitprogress.request.enums.RequestType;
 import com.bitprogress.service.AuthService;
 import com.bitprogress.service.MatchService;
 import com.bitprogress.service.PermissionService;
 import com.bitprogress.util.CollectionUtils;
 import com.bitprogress.util.JsonUtils;
-import com.bitprogress.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.DefaultResponse;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -31,7 +33,7 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
 /**
  * 鉴权过滤器
  */
-@Configuration
+@Service
 public class SecurityGatewayFilter implements GlobalFilter {
 
     @Autowired
@@ -59,18 +61,17 @@ public class SecurityGatewayFilter implements GlobalFilter {
         String authentication = authService.getAuthentication(headers);
 
         if (matchService.ignoreAuthentication(method, url)) {
-            return mutateExchange(chain, exchange, request, StringUtils.MINUS_ONE, new AuthMsg());
+            return mutateExchange(chain, exchange, request, RequestType.ANONYMOUS_REQUEST, new AuthInfo());
         }
         // 校验token
-        AuthResult<AuthMsg> authResult = authService.checkToken(authentication, AuthMsg.class);
+        AuthResult<AuthInfo> authResult = authService.checkToken(authentication, AuthInfo.class);
         if (authResult.getResult()) {
             permissionService.authorizePermission(authResult, method, url);
             // 权限校验通过
             if (authResult.getResult()) {
-                return mutateExchange(chain, exchange, request, authResult.getUserId(), authResult.getAuthMsg());
+                return mutateExchange(chain, exchange, request, RequestType.USER_REQUEST, authResult.getUserInfo());
             }
         }
-
 
         return unauthorized(exchange, authResult.getAuthException());
     }
@@ -82,19 +83,23 @@ public class SecurityGatewayFilter implements GlobalFilter {
     private Mono<Void> mutateExchange(GatewayFilterChain chain,
                                       ServerWebExchange exchange,
                                       ServerHttpRequest request,
-                                      String userId,
-                                      AuthMsg authMsg) {
+                                      RequestType requestType,
+                                      AuthInfo authInfo) {
         DefaultResponse response = (DefaultResponse) exchange.getAttributes().get(GATEWAY_LOADBALANCER_RESPONSE_ATTR);
-        String serviceId = response.getServer().getServiceId();
-        String routeApiToken = GatewayRouteMsg.getRouteApiToken(serviceId);
-        Map<String, String> params = authMsg.getParams();
+        ServiceInstance server = response.getServer();
+        String userInfo = authInfo.getUserInfo();
         ServerHttpRequest.Builder mutate = request.mutate();
-//        mutate.header(VerifyConstant.USER_ID, userId).header(VerifyConstant.ROUTE_API_TOKEN, routeApiToken);
-        if (CollectionUtils.isNotEmpty(params)) {
-            params.forEach(mutate::header);
-        }
+        // 设置请求头信息
+        mutate.header(VerifyConstant.REQUEST_RESOURCE, RequestSource.GATEWAY_ROUTE.getValue().toString())
+                .header(VerifyConstant.ROUTE_TOKEN, server.getMetadata().get(VerifyConstant.ROUTE_TOKEN))
+                .header(VerifyConstant.REQUEST_TYPE, requestType.getValue().toString())
+                .header(VerifyConstant.USER_ID, authInfo.getUserId())
+                .header(VerifyConstant.USER_INFO, userInfo);
         ServerHttpRequest httpRequest = mutate.build();
-        ServerWebExchange cmsExchange = exchange.mutate().request(httpRequest).build();
+        ServerWebExchange cmsExchange = exchange
+                .mutate()
+                .request(httpRequest)
+                .build();
         return chain.filter(cmsExchange);
     }
 

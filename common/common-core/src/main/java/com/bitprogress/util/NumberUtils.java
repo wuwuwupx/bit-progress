@@ -4,7 +4,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author wuwuwupx
- * create on 2021/7/10 23:20
  * 数字工具类
  */
 public class NumberUtils {

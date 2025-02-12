@@ -1,6 +1,6 @@
 package com.bitprogress.auth.service;
 
-import com.bitprogress.auth.base.AuthMsg;
+import com.bitprogress.auth.base.AuthInfo;
 import com.bitprogress.service.AuthService;
 import com.bitprogress.service.AuthTokenService;
 import com.bitprogress.util.StringUtils;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 
 /**
- * @author wuwuwupx
  * 授权鉴权服务
  */
 @Service
@@ -55,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
      * @return Result
      */
     @Override
-    public <T extends AuthMsg> AuthResult<T> checkToken(String authentication, Class<T> target) {
+    public <T extends AuthInfo> AuthResult<T> checkToken(String authentication, Class<T> target) {
         String token;
         // 如果请求未正确携带token信息, 直接权限拒绝
         if (StringUtils.isEmpty(authentication) || !authentication.startsWith(BEARER)

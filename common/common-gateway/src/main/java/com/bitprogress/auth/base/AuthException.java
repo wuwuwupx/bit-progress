@@ -1,5 +1,10 @@
 package com.bitprogress.auth.base;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum AuthException {
 
     /**
@@ -24,28 +29,8 @@ public enum AuthException {
 
     ;
 
-    private String code;
+    private final String code;
 
-    private String msg;
+    private final String msg;
 
-    AuthException(String code, String msg) {
-        this.code = code;
-        this.msg = msg;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
 }

@@ -2151,6 +2151,57 @@ public class CollectionUtils {
     /**
      * 对集合进行求和
      *
+     * @param params 求和的集合
+     * @return 集合的和
+     */
+    public static BigDecimal sumBigDecimal(BigDecimal... params) {
+        if (ArrayUtils.isEmpty(params)) {
+            return BigDecimal.ZERO;
+        }
+        return Arrays.stream(params)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * 对集合进行求和
+     *
+     * @param params 求和的集合
+     * @return 集合的和
+     */
+    public static BigDecimal sumBigDecimal(String... params) {
+        if (ArrayUtils.isEmpty(params)) {
+            return BigDecimal.ZERO;
+        }
+        return Arrays.stream(params)
+                .filter(StringUtils::isNotEmpty)
+                .map(BigDecimal::new)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * 对集合进行求和
+     *
+     * @param params 求和的集合
+     * @return 集合的和
+     */
+    @SafeVarargs
+    public static <T, R extends Number> BigDecimal sumBigDecimal(Function<T, R> function, T... params) {
+        if (ArrayUtils.isEmpty(params)) {
+            return BigDecimal.ZERO;
+        }
+        return Arrays.stream(params)
+                .filter(Objects::nonNull)
+                .map(function)
+                .filter(Objects::nonNull)
+                .map(String::valueOf)
+                .map(BigDecimal::new)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * 对集合进行求和
+     *
      * @param collection 求和的集合
      * @return 集合的和
      */
@@ -2166,21 +2217,49 @@ public class CollectionUtils {
      * @param <T>        集合的元素类型
      * @return 集合的和
      */
-    public static <T> BigDecimal sumBigDecimal(Collection<T> collection, Function<T, BigDecimal> function) {
-        BigDecimal sum = BigDecimal.ZERO;
-        if (isNotEmpty(collection)) {
-            for (T t : collection) {
-                if (Objects.isNull(t)) {
-                    continue;
-                }
-                BigDecimal apply = function.apply(t);
-                if (Objects.isNull(apply)) {
-                    continue;
-                }
-                sum = sum.add(apply);
-            }
+    public static <T, R extends Number> BigDecimal sumBigDecimal(Collection<T> collection, Function<T, R> function) {
+        if (isEmpty(collection)) {
+            return BigDecimal.ZERO;
         }
-        return sum;
+        return collection.stream()
+                .filter(Objects::nonNull)
+                .map(function)
+                .filter(Objects::nonNull)
+                .map(String::valueOf)
+                .map(BigDecimal::new)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
+     * 对集合进行求和
+     *
+     * @param params 求和的集合
+     * @return 集合的和
+     */
+    @SafeVarargs
+    public static <T extends Number> Long sumLong(T... params) {
+        return sumLong(Function.identity(), params);
+    }
+
+    /**
+     * 对集合进行求和
+     *
+     * @param params   求和的集合
+     * @param function 转换函数（转换为Number的子类）
+     * @param <T>      集合的元素类型
+     * @return 集合的和
+     */
+    @SafeVarargs
+    public static <T, R extends Number> Long sumLong(Function<T, R> function, T... params) {
+        if (ArrayUtils.isEmpty(params)) {
+            return 0L;
+        }
+        return Arrays.stream(params)
+                .filter(Objects::nonNull)
+                .map(function)
+                .filter(Objects::nonNull)
+                .mapToLong(Number::longValue)
+                .sum();
     }
 
     /**
@@ -2202,20 +2281,15 @@ public class CollectionUtils {
      * @return 集合的和
      */
     public static <T, R extends Number> Long sumLong(Collection<T> collection, Function<T, R> function) {
-        long sum = 0;
-        if (isNotEmpty(collection)) {
-            for (T t : collection) {
-                if (Objects.isNull(t)) {
-                    continue;
-                }
-                R r = function.apply(t);
-                if (Objects.isNull(r)) {
-                    continue;
-                }
-                sum += r.longValue();
-            }
+        if (isEmpty(collection)) {
+            return 0L;
         }
-        return sum;
+        return collection.stream()
+                .filter(Objects::nonNull)
+                .map(function)
+                .filter(Objects::nonNull)
+                .mapToLong(Number::longValue)
+                .sum();
     }
 
     /**
@@ -2237,21 +2311,50 @@ public class CollectionUtils {
      * @return 集合的和
      */
     public static <T, R extends Number> Double sumDouble(Collection<T> collection, Function<T, R> function) {
-        BigDecimal sum = new BigDecimal("0");
-        if (isNotEmpty(collection)) {
-            for (T t : collection) {
-                if (Objects.isNull(t)) {
-                    continue;
-                }
-                R r = function.apply(t);
-                if (Objects.isNull(r)) {
-                    continue;
-                }
-                BigDecimal doubleR = new BigDecimal(String.valueOf(r.doubleValue()));
-                sum = sum.add(doubleR);
-            }
+        if (isEmpty(collection)) {
+            return 0D;
         }
-        return sum.doubleValue();
+        return collection.stream()
+                .filter(Objects::nonNull)
+                .map(function)
+                .filter(Objects::nonNull)
+                .map(Number::doubleValue)
+                .map(BigDecimal::new)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .doubleValue();
+    }
+
+    /**
+     * 对集合进行求和
+     *
+     * @param params 求和的集合
+     * @return 集合的和
+     */
+    @SafeVarargs
+    public static <T extends Number> Integer sumInteger(T... params) {
+        if (ArrayUtils.isEmpty(params)) {
+            return 0;
+        }
+        return sumInteger(Function.identity(), params);
+    }
+
+    /**
+     * 对集合进行求和
+     *
+     * @param params 求和的集合
+     * @return 集合的和
+     */
+    @SafeVarargs
+    public static <T, R extends Number> Integer sumInteger(Function<T, R> function, T... params) {
+        if (ArrayUtils.isEmpty(params)) {
+            return 0;
+        }
+        return Arrays.stream(params)
+                .filter(Objects::nonNull)
+                .map(function)
+                .filter(Objects::nonNull)
+                .mapToInt(Number::intValue)
+                .sum();
     }
 
     /**
@@ -2273,20 +2376,15 @@ public class CollectionUtils {
      * @return 集合的和
      */
     public static <T, R extends Number> Integer sumInteger(Collection<T> collection, Function<T, R> function) {
-        int sum = 0;
-        if (isNotEmpty(collection)) {
-            for (T t : collection) {
-                if (Objects.isNull(t)) {
-                    continue;
-                }
-                R r = function.apply(t);
-                if (Objects.isNull(r)) {
-                    continue;
-                }
-                sum += r.intValue();
-            }
+        if (isEmpty(collection)) {
+            return 0;
         }
-        return sum;
+        return collection.stream()
+                .filter(Objects::nonNull)
+                .map(function)
+                .filter(Objects::nonNull)
+                .mapToInt(Number::intValue)
+                .sum();
     }
 
     /**

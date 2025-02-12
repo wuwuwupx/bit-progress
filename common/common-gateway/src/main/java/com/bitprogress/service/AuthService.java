@@ -1,6 +1,6 @@
 package com.bitprogress.service;
 
-import com.bitprogress.auth.base.AuthMsg;
+import com.bitprogress.auth.base.AuthInfo;
 import com.bitprogress.auth.base.AuthResult;
 import org.springframework.http.HttpHeaders;
 
@@ -26,6 +26,6 @@ public interface AuthService {
      * @param target         返回的AuthResult类型
      * @return Result
      */
-    <T extends AuthMsg> AuthResult<T> checkToken(String authentication, Class<T> target);
+    <T extends AuthInfo> AuthResult<T> checkToken(String authentication, Class<T> target);
 
 }

@@ -23,9 +23,6 @@ import static com.bitprogress.constant.GatewayConstants.VERSION;
 import static com.bitprogress.util.CollectionUtils.filterList;
 import static org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory.PROPERTY_NAME;
 
-/**
- * @author wpx
- */
 public class GatewayServiceInstanceListSupplier implements ServiceInstanceListSupplier {
 
     /**
