@@ -1,4 +1,4 @@
-package com.bitprogress.basemodel.interval;
+package com.bitprogress.basemodel;
 
 import java.io.Serial;
 import java.io.Serializable;

@@ -1,5 +1,7 @@
-package com.bitprogress.basemodel.interval;
+package com.bitprogress.basemodel.endpoint.interval;
 
+import com.bitprogress.basemodel.endpoint.interval.enums.BoundaryType;
+import com.bitprogress.basemodel.endpoint.interval.enums.EndpointType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -12,32 +14,35 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 @Getter
 @ToString
-public abstract class LeftEndpoints<T extends Number> extends Endpoints<T> {
+public abstract class LeftIntervalEndpoint<T> extends IntervalEndpoint<T> {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public LeftEndpoints(T value, IntervalBoundaryType boundaryType) {
+    public LeftIntervalEndpoint(T value, BoundaryType boundaryType) {
         super(value, boundaryType);
     }
 
     /**
      * 获取端点类型
      */
-    public EndpointsType getEndpointsType() {
-        return EndpointsType.LEFT;
+    public EndpointType getEndpointType() {
+        return EndpointType.LEFT;
     }
 
     /**
      * 是否包含value
+     * 值的无穷属性无法判断正负，所以无法判断
      * 由于是端点的包含，左端点则判断是否小于等于value，右端点则判断是否大于等于value
      * 小于等于、大于等于 要根据端点的区间类型判断
      *
      * @param value 需要比较的值
      */
-    @Override
-    public boolean isValueContains(T value) {
-        int compare = this.compareTo(value);
+    public boolean valueContains(T value) {
+        if (value == null) {
+            throw new IllegalArgumentException("value is nul, legal judgment");
+        }
+        int compare = this.valueCompareTo(value);
         return this.isOpen() ? compare < 0 : compare <= 0;
     }
 
@@ -47,16 +52,16 @@ public abstract class LeftEndpoints<T extends Number> extends Endpoints<T> {
      * 由于是端点的包含，左端点则判断是否小于等于value，右端点则判断是否大于等于value
      * 小于等于、大于等于 要根据端点的边界类型判断
      *
-     * @param endpoints 需要匹配的端点
+     * @param intervalEndpoint 需要匹配的端点
      */
     @Override
-    public boolean isEndpointsContains(Endpoints<T> endpoints) {
-        int compare = this.compareTo(endpoints.getValue());
+    public boolean endpointContains(IntervalEndpoint<T> intervalEndpoint) {
+        int compare = this.valueCompareTo(intervalEndpoint.getValue());
         if (compare == 0) {
-            if (EndpointsType.RIGHT.equals(endpoints.getEndpointsType())) {
-                return this.isClose() && endpoints.isClose();
+            if (EndpointType.RIGHT.equals(intervalEndpoint.getEndpointType())) {
+                return this.isClose() && intervalEndpoint.isClose();
             } else {
-                return this.isClose() || endpoints.isOpen();
+                return this.isClose() || intervalEndpoint.isOpen();
             }
         } else {
             return compare < 0;

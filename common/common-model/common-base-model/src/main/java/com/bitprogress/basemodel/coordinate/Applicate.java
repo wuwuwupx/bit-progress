@@ -1,5 +1,6 @@
 package com.bitprogress.basemodel.coordinate;
 
+import com.bitprogress.basemodel.coordinate.enums.AxisType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;

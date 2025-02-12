@@ -1,7 +1,7 @@
 package com.bitprogress.basemodel.interval.bigdecimal;
 
-import com.bitprogress.basemodel.interval.AbstractInterval;
-import com.bitprogress.basemodel.interval.IntervalBoundaryType;
+import com.bitprogress.basemodel.interval.NumberInterval;
+import com.bitprogress.basemodel.endpoint.interval.enums.BoundaryType;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
@@ -10,18 +10,18 @@ import java.math.BigDecimal;
  * BigDecimal 类型端点的区间
  */
 @EqualsAndHashCode(callSuper = true)
-public class BigDecimalInterval extends AbstractInterval<BigDecimal> {
+public class BigDecimalInterval extends NumberInterval<BigDecimal> {
 
-    public BigDecimalInterval(BigDecimalLeftEndpoints leftEndpoints, BigDecimalRightEndpoints rightEndpoints) {
+    public BigDecimalInterval(BigDecimalLeftEndpoint leftEndpoints, BigDecimalRightEndpoint rightEndpoints) {
         super(leftEndpoints, rightEndpoints);
     }
 
     public BigDecimalInterval(BigDecimal leftEndpointsValue,
-                              IntervalBoundaryType leftBoundaryType,
+                              BoundaryType leftBoundaryType,
                               BigDecimal rightEndpointsValue,
-                              IntervalBoundaryType rightBoundaryType) {
-        super(new BigDecimalLeftEndpoints(leftEndpointsValue, leftBoundaryType),
-                new BigDecimalRightEndpoints(rightEndpointsValue, rightBoundaryType));
+                              BoundaryType rightBoundaryType) {
+        super(new BigDecimalLeftEndpoint(leftEndpointsValue, leftBoundaryType),
+                new BigDecimalRightEndpoint(rightEndpointsValue, rightBoundaryType));
     }
 
 }

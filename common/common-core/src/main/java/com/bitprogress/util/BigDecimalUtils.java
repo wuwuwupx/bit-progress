@@ -1,10 +1,9 @@
 package com.bitprogress.util;
 
-import com.bitprogress.basemodel.interval.IntervalBoundaryType;
+import com.bitprogress.basemodel.endpoint.interval.enums.BoundaryType;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class BigDecimalUtils {
@@ -42,7 +41,7 @@ public class BigDecimalUtils {
      * @return true：目标值在区间内，false：目标值不在区间内（包括目标值为空和区间不完整的情况）
      */
     public static boolean isBetweenClose(BigDecimal source, BigDecimal pointX, BigDecimal pointY) {
-        return isBetween(source, pointX, pointY, IntervalBoundaryType.CLOSE, IntervalBoundaryType.CLOSE);
+        return isBetween(source, pointX, pointY, BoundaryType.CLOSE, BoundaryType.CLOSE);
     }
 
     /**
@@ -54,7 +53,7 @@ public class BigDecimalUtils {
      * @return true：目标值在区间内，false：目标值不在区间内（包括目标值为空和区间不完整的情况）
      */
     public static boolean isBetweenOpen(BigDecimal source, BigDecimal pointX, BigDecimal pointY) {
-        return isBetween(source, pointX, pointY, IntervalBoundaryType.OPEN, IntervalBoundaryType.OPEN);
+        return isBetween(source, pointX, pointY, BoundaryType.OPEN, BoundaryType.OPEN);
     }
 
     /**
@@ -66,7 +65,7 @@ public class BigDecimalUtils {
      * @return true：目标值在区间内，false：目标值不在区间内（包括目标值为空和区间不完整的情况）
      */
     public static boolean isBetweenLORC(BigDecimal source, BigDecimal pointX, BigDecimal pointY) {
-        return isBetween(source, pointX, pointY, IntervalBoundaryType.OPEN, IntervalBoundaryType.CLOSE);
+        return isBetween(source, pointX, pointY, BoundaryType.OPEN, BoundaryType.CLOSE);
     }
 
     /**
@@ -78,7 +77,7 @@ public class BigDecimalUtils {
      * @return true：目标值在区间内，false：目标值不在区间内（包括目标值为空和区间不完整的情况）
      */
     public static boolean isBetweenLCRO(BigDecimal source, BigDecimal pointX, BigDecimal pointY) {
-        return isBetween(source, pointX, pointY, IntervalBoundaryType.CLOSE, IntervalBoundaryType.OPEN);
+        return isBetween(source, pointX, pointY, BoundaryType.CLOSE, BoundaryType.OPEN);
     }
 
     /**
@@ -94,8 +93,8 @@ public class BigDecimalUtils {
     public static boolean isBetween(BigDecimal source,
                                     BigDecimal pointX,
                                     BigDecimal pointY,
-                                    IntervalBoundaryType left,
-                                    IntervalBoundaryType right) {
+                                    BoundaryType left,
+                                    BoundaryType right) {
         if (Objects.isNull(source) || Objects.isNull(pointX) || Objects.isNull(pointY)) {
             return false;
         }
@@ -104,12 +103,12 @@ public class BigDecimalUtils {
         BigDecimal min = minX ? pointX : pointY;
         BigDecimal max = minX ? pointY : pointX;
         int minCompare = source.compareTo(min);
-        boolean leftResult = IntervalBoundaryType.OPEN.equals(left) ? minCompare > 0 : minCompare >= 0;
+        boolean leftResult = BoundaryType.OPEN.equals(left) ? minCompare > 0 : minCompare >= 0;
         if (!leftResult) {
             return false;
         }
         int maxCompare = source.compareTo(max);
-        return IntervalBoundaryType.OPEN.equals(right) ? maxCompare < 0 : maxCompare <= 0;
+        return BoundaryType.OPEN.equals(right) ? maxCompare < 0 : maxCompare <= 0;
     }
 
     /**

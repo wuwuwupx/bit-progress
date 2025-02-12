@@ -1,4 +1,4 @@
-package com.bitprogress.basemodel.coordinate;
+package com.bitprogress.basemodel.coordinate.enums;
 
 import com.bitprogress.basemodel.enums.MessageEnum;
 import com.bitprogress.basemodel.enums.ValueEnum;

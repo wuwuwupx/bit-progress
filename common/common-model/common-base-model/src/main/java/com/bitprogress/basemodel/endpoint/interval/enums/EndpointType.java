@@ -1,4 +1,4 @@
-package com.bitprogress.basemodel.interval;
+package com.bitprogress.basemodel.endpoint.interval.enums;
 
 import com.bitprogress.basemodel.enums.MessageEnum;
 import com.bitprogress.basemodel.enums.ValueEnum;
@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum EndpointsType implements ValueEnum, MessageEnum {
+public enum EndpointType implements ValueEnum, MessageEnum {
 
     /**
      * 区间开始的端点
