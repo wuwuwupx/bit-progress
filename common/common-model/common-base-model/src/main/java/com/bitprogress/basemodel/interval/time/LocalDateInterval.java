@@ -30,7 +30,7 @@ public class LocalDateInterval extends BasicInterval<LocalDate> {
      */
     @Override
     protected String printValueSpan() {
-        return String.valueOf(getRightEndpointValue().until(getLeftEndpointValue(), ChronoUnit.DAYS));
+        return String.valueOf(Math.abs(getRightEndpointValue().until(getLeftEndpointValue(), ChronoUnit.DAYS)));
     }
 
 }

@@ -548,13 +548,4 @@ public class LocalDateTimeUtils {
                 .orElseThrow(() -> new IllegalArgumentException("Unable to get the valid time!"));
     }
 
-    public static void main(String[] args) {
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().minusDays(1), ChronoUnit.HOURS));
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), ChronoUnit.MINUTES));
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), ChronoUnit.SECONDS));
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), ChronoUnit.MILLIS));
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), ChronoUnit.MICROS));
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), ChronoUnit.NANOS));
-    }
-
 }
