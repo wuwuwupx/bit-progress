@@ -24,4 +24,16 @@ public class BigDecimalInterval extends NumberInterval<BigDecimal> {
                 new BigDecimalRightEndpoint(rightEndpointsValue, rightBoundaryType));
     }
 
+    /**
+     * 获取区间间距
+     */
+    @Override
+    protected String printValueSpan() {
+        return getRightEndpointValue()
+                .subtract(getLeftEndpointValue())
+                .abs()
+                .stripTrailingZeros()
+                .toPlainString();
+    }
+
 }

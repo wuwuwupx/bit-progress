@@ -10,6 +10,7 @@ import lombok.Getter;
 
 import java.io.Serial;
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -17,7 +18,6 @@ import java.util.function.Function;
  */
 @EqualsAndHashCode(callSuper = true)
 @Getter
-@AllArgsConstructor
 public abstract class BasicInterval<T> extends Interval {
 
     @Serial
@@ -32,6 +32,14 @@ public abstract class BasicInterval<T> extends Interval {
      * 右端点
      */
     private final RightIntervalEndpoint<T> rightEndpoint;
+
+    public BasicInterval(LeftIntervalEndpoint<T> leftEndpoint, RightIntervalEndpoint<T> rightEndpoint) {
+        if (Objects.isNull(leftEndpoint) || Objects.isNull(rightEndpoint)) {
+            throw new IllegalArgumentException("endpoint must not be null");
+        }
+        this.leftEndpoint = leftEndpoint;
+        this.rightEndpoint = rightEndpoint;
+    }
 
     /**
      * 左端点值
@@ -66,6 +74,28 @@ public abstract class BasicInterval<T> extends Interval {
      */
     public boolean isSemiOpen() {
         return (leftEndpoint.isOpen() && rightEndpoint.isClose()) || (leftEndpoint.isClose() && rightEndpoint.isOpen());
+    }
+
+    /**
+     * 获取区间间距
+     */
+    public String printSpan() {
+        if (leftEndpoint.isInfinite() || rightEndpoint.isInfinite()) {
+            return "∞";
+        }
+        return printValueSpan();
+    }
+
+    /**
+     * 获取区间间距
+     */
+    protected abstract String printValueSpan();
+
+    /**
+     * 获取区间间距
+     */
+    public String printSpan(BiFunction<T, T, String> toStringFunction) {
+        return toStringFunction.apply(getLeftEndpointValue(), getRightEndpointValue());
     }
 
     /**

@@ -37,6 +37,9 @@ public abstract class IntervalEndpoint<T> extends Endpoint<T> {
 
     public IntervalEndpoint(T value, BoundaryType boundaryType) {
         super(value);
+        if (null == boundaryType) {
+            throw new IllegalArgumentException("boundaryType must not be null");
+        }
         this.boundaryType = boundaryType;
         this.isInfinite = null == value;
     }

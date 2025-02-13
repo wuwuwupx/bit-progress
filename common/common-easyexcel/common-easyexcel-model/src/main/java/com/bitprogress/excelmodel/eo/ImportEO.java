@@ -1,4 +1,4 @@
-package com.bitprogress.excelmodel.model;
+package com.bitprogress.excelmodel.eo;
 
 import com.bitprogress.basemodel.EO;
 import lombok.AllArgsConstructor;

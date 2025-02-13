@@ -22,4 +22,12 @@ public class IntInterval extends NumberInterval<Integer> {
                 new IntRightEndpoint(rightEndpointsValue, rightBoundaryType));
     }
 
+    /**
+     * 获取区间间距
+     */
+    @Override
+    protected String printValueSpan() {
+        return String.valueOf(Math.abs(getRightEndpointValue() - getLeftEndpointValue()));
+    }
+
 }
