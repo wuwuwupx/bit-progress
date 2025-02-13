@@ -5,6 +5,7 @@ import com.bitprogress.enums.time.WeekType;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.Objects;
@@ -365,27 +366,26 @@ public class LocalDateTimeUtils {
     }
 
     /**
-     * 比较两个两个时间的差值（绝对值）
+     * 获取两个时间的差值（绝对值）
      *
-     * @param startTime startTime
-     * @param endTime   endTime
-     * @param timeUnit  timeUnit
+     * @param startTime  startTime
+     * @param endTime    endTime
+     * @param chronoUnit chronoUnit
      * @return 时间差值(绝对值)
      */
-    public static long getDuration(LocalDateTime startTime, LocalDateTime endTime, TimeUnit timeUnit) {
-        Duration duration = Duration.between(startTime, endTime);
-        return Math.abs(timeUnit.convert(duration));
+    public static long getDuration(LocalDateTime startTime, LocalDateTime endTime, ChronoUnit chronoUnit) {
+        return Math.abs(startTime.until(endTime, chronoUnit));
     }
 
     /**
-     * 比较两个两个日期的差值(绝对值),以毫秒的形式返回
+     * 获取两个时间的差值(绝对值),以纳秒的形式返回
      *
      * @param startTime startTime
      * @param endTime   endTime
      * @return 日期毫秒差值(绝对值)
      */
     public static long getDuration(LocalDateTime startTime, LocalDateTime endTime) {
-        return getDuration(startTime, endTime, TimeUnit.MILLISECONDS);
+        return getDuration(startTime, endTime, ChronoUnit.NANOS);
     }
 
     /**
@@ -404,8 +404,8 @@ public class LocalDateTimeUtils {
      * @param time time
      * @return 指定时间到现在的差值(绝对值)
      */
-    public static long getDurationToNow(LocalDateTime time, TimeUnit timeUnit) {
-        return getDuration(LocalDateTime.now(), time, timeUnit);
+    public static long getDurationToNow(LocalDateTime time, ChronoUnit chronoUnit) {
+        return getDuration(LocalDateTime.now(), time, chronoUnit);
     }
 
     /**
@@ -422,8 +422,8 @@ public class LocalDateTimeUtils {
      *
      * @return 传入时间当天剩余的时间（绝对值）
      */
-    public static long getRemainingDurationOfDay(LocalDateTime time, TimeUnit unit) {
-        return getDuration(time, getLastMoment(time), unit);
+    public static long getRemainingDurationOfDay(LocalDateTime time, ChronoUnit chronoUnit) {
+        return getDuration(time, getLastMoment(time), chronoUnit);
     }
 
     /**
@@ -431,8 +431,8 @@ public class LocalDateTimeUtils {
      *
      * @return 传入时间所属周剩余的时间（绝对值）
      */
-    public static long getRemainingDurationOfWeek(LocalDateTime time, TimeUnit unit) {
-        return getDuration(time, getLastMomentOfWeek(time), unit);
+    public static long getRemainingDurationOfWeek(LocalDateTime time, ChronoUnit chronoUnit) {
+        return getDuration(time, getLastMomentOfWeek(time), chronoUnit);
     }
 
     /**
@@ -440,8 +440,8 @@ public class LocalDateTimeUtils {
      *
      * @return 传入时间所属月剩余的时间（绝对值）
      */
-    public static long getRemainingDurationOfMonth(LocalDateTime time, TimeUnit unit) {
-        return getDuration(time, getLastMomentOfMonth(time), unit);
+    public static long getRemainingDurationOfMonth(LocalDateTime time, ChronoUnit chronoUnit) {
+        return getDuration(time, getLastMomentOfMonth(time), chronoUnit);
     }
 
     /**
@@ -449,8 +449,8 @@ public class LocalDateTimeUtils {
      *
      * @return 传入时间所属月剩余的时间（绝对值）
      */
-    public static long getRemainingDurationOfYear(LocalDateTime time, TimeUnit unit) {
-        return getDuration(time, getLastMomentOfYear(time), unit);
+    public static long getRemainingDurationOfYear(LocalDateTime time, ChronoUnit chronoUnit) {
+        return getDuration(time, getLastMomentOfYear(time), chronoUnit);
     }
 
     /**
@@ -549,12 +549,12 @@ public class LocalDateTimeUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().minusDays(1), TimeUnit.HOURS));
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), TimeUnit.MINUTES));
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), TimeUnit.SECONDS));
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), TimeUnit.MILLISECONDS));
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), TimeUnit.MICROSECONDS));
-        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), TimeUnit.NANOSECONDS));
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().minusDays(1), ChronoUnit.HOURS));
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), ChronoUnit.MINUTES));
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), ChronoUnit.SECONDS));
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), ChronoUnit.MILLIS));
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), ChronoUnit.MICROS));
+        System.out.println(getDuration(LocalDateTime.now(), LocalDateTime.now().plusDays(1), ChronoUnit.NANOS));
     }
 
 }

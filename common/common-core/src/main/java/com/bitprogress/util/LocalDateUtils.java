@@ -106,7 +106,7 @@ public class LocalDateUtils {
      * @return 是否是同一年
      */
     public static boolean onSameYearWithToday(LocalDate date) {
-        return onSameMonth(date, LocalDate.now());
+        return onSameYear(date, LocalDate.now());
     }
 
     /**
@@ -121,7 +121,7 @@ public class LocalDateUtils {
             return false;
         }
         LocalDate firstDay = getFirstDayOfYear(comparativeDate);
-        LocalDate lastDay = getLastDayOfMonth(comparativeDate);
+        LocalDate lastDay = getLastDayOfYear(comparativeDate);
         return isBetween(date, firstDay, lastDay);
     }
 
@@ -244,7 +244,9 @@ public class LocalDateUtils {
      * @return 特定日期
      */
     private static LocalDate getNextWeekDay(LocalDate date, DayOfWeek dayOfWeek) {
-        return date.with(dayOfWeek);
+        return date
+                .with(dayOfWeek)
+                .plusWeeks(1);
     }
 
     /**
@@ -389,6 +391,41 @@ public class LocalDateUtils {
         return time
                 .toLocalDate()
                 .with(TemporalAdjusters.lastDayOfYear());
+    }
+
+    public static void main(String[] args) {
+        LocalDate date = LocalDate.now();
+        System.out.println(getWeekDay(date, DayOfWeek.MONDAY, WeekType.PRE_WEEK));
+        System.out.println(getWeekDay(date, DayOfWeek.MONDAY, WeekType.THIS_WEEK));
+        System.out.println(getWeekDay(date, DayOfWeek.MONDAY, WeekType.NEXT_WEEK));
+        System.out.println(getFirstDayOfWeek(date));
+        System.out.println(getLastDayOfWeek(date));
+        System.out.println(getFirstDayOfMonth(date));
+        System.out.println(getLastDayOfMonth(date));
+        System.out.println(getFirstDayOfYear(date));
+        System.out.println(getLastDayOfYear(date));
+        System.out.println(isToday(date));
+        System.out.println(isToday(date.plusDays(1)));
+        System.out.println("onSameWeekWithToday: " + date + onSameWeekWithToday(date));
+        System.out.println("onSameWeekWithToday: " + date.plusDays(4) + onSameWeekWithToday(date.plusDays(4)));
+        System.out.println("onSameMonthWithToday: " + onSameMonthWithToday(date));
+        System.out.println("onSameMonthWithToday: " + date.plusWeeks(3) + onSameMonthWithToday(date.plusWeeks(3)));
+        LocalDate localDate = date.plusDays(200);
+        System.out.println(localDate);
+        System.out.println("onSameYearWithToday: " + localDate + onSameYearWithToday(localDate));
+        System.out.println("onSameYearWithToday: " + date.plusWeeks(50) + onSameYearWithToday(date.plusWeeks(50)));
+        System.out.println("isBetween: " + date.minusDays(1) + "-" + date + "-" + date.plusDays(1) + isBetween(date, date.minusDays(1), date.plusDays(1)));
+
+        LocalDateTime time = LocalDateTime.now();
+        System.out.println(getWeekDay(time, DayOfWeek.MONDAY, WeekType.PRE_WEEK));
+        System.out.println(getWeekDay(time, DayOfWeek.MONDAY, WeekType.THIS_WEEK));
+        System.out.println(getWeekDay(time, DayOfWeek.MONDAY, WeekType.NEXT_WEEK));
+        System.out.println(getFirstDayOfWeek(time));
+        System.out.println(getLastDayOfWeek(time));
+        System.out.println(getFirstDayOfMonth(time));
+        System.out.println(getLastDayOfMonth(time));
+        System.out.println(getFirstDayOfYear(time));
+        System.out.println(getLastDayOfYear(time));
     }
 
 }
