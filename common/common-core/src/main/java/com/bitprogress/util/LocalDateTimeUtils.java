@@ -5,11 +5,12 @@ import com.bitprogress.enums.time.WeekType;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 /**
  * LocalDateTime 工具类
@@ -17,11 +18,79 @@ import java.util.concurrent.TimeUnit;
 public class LocalDateTimeUtils {
 
     public static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-    public static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_PATTERN);
+    public static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
+            .appendPattern(DEFAULT_DATE_TIME_PATTERN)
+            .optionalStart()
+            .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)
+            .toFormatter();
     public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
     public static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_DATE_PATTERN);
     public static final String DEFAULT_TIME_PATTERN = "HH:mm:ss";
     public static final DateTimeFormatter DEFAULT_TIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_TIME_PATTERN);
+
+    /**
+     * 格式化 LocalDateTime , 默认 'yyyy-MM-dd HH:mm:ss' 格式.
+     *
+     * @param time LocalDateTime
+     * @return yyyy-MM-dd HH:mm:ss
+     */
+    public static String format(LocalDateTime time) {
+        return format(time, DEFAULT_DATE_TIME_FORMATTER);
+    }
+
+    /**
+     * 格式化 LocalDateTime , 手动指定日期格式.
+     *
+     * @param time    LocalDateTime
+     * @param pattern 日期格式
+     * @return LocalDateTime with pattern
+     */
+    public static String format(LocalDateTime time, String pattern) {
+        return format(time, DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
+     * 格式化 LocalDateTime , 手动指定日期格式.
+     *
+     * @param time      LocalDateTime
+     * @param formatter 日期格式
+     * @return LocalDateTime with formatter
+     */
+    public static String format(LocalDateTime time, DateTimeFormatter formatter) {
+        return time.format(formatter);
+    }
+
+    /**
+     * Converts a string to LocalDateTime using the specified formatter
+     *
+     * @param time LocalDateTime
+     * @return LocalDateTime with default formatter
+     */
+    public static LocalDateTime parse(String time) {
+        return parse(time, DEFAULT_DATE_TIME_FORMATTER);
+    }
+
+    /**
+     * Converts a string to LocalDateTime using the specified pattern
+     *
+     * @param time    LocalDateTime
+     * @param pattern 日期格式
+     * @return LocalDateTime with pattern
+     */
+    public static LocalDateTime parse(String time, String pattern) {
+        return parse(time, DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
+     * Converts a string to LocalDateTime using the specified formatter
+     *
+     * @param time      LocalDateTime
+     * @param formatter 日期格式
+     * @return LocalDateTime with formatter
+     */
+    public static LocalDateTime parse(String time, DateTimeFormatter formatter) {
+        return LocalDateTime.parse(time, formatter);
+    }
 
     /**
      * 判断时间是否在指定时间范围内, 默认包含边界值
@@ -342,27 +411,6 @@ public class LocalDateTimeUtils {
         return time
                 .with(TemporalAdjusters.lastDayOfYear())
                 .with(LocalTime.MAX);
-    }
-
-    /**
-     * 格式化 LocalDateTime , 默认 'yyyy-MM-dd HH:mm:ss' 格式.
-     *
-     * @param time LocalDateTime
-     * @return yyyy-MM-dd HH:mm:ss
-     */
-    public static String format(LocalDateTime time) {
-        return time.format(DEFAULT_DATE_TIME_FORMATTER);
-    }
-
-    /**
-     * 格式化 LocalDateTime , 手动指定日期格式.
-     *
-     * @param time    LocalDateTime
-     * @param pattern 日期格式
-     * @return LocalDateTime with pattern
-     */
-    public static String format(LocalDateTime time, String pattern) {
-        return time.format(DateTimeFormatter.ofPattern(pattern));
     }
 
     /**

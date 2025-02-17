@@ -11,6 +11,7 @@
 
     <artifactId>common</artifactId>
     <packaging>pom</packaging>
+    <version>${revision}</version>
 
     <modules>
         <module>common-core</module>

@@ -3,7 +3,7 @@ package com.bitprogress.basemodel.filler;
 /**
  * simple filler interface specification for fill name by id
  */
-public interface NameByIdFiller extends IdByNameIFiller {
+public interface NameByIdFiller extends NameByIdIFiller {
 
     /**
      * set name
