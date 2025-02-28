@@ -44,7 +44,7 @@ public class EnumUtils {
      * @param <T>           枚举类型
      * @return 枚举
      */
-    private static  <T> T getEnum(T[] enumConstants, Predicate<T> predicate) {
+    private static <T> T getEnum(T[] enumConstants, Predicate<T> predicate) {
         if (Objects.isNull(enumConstants)) {
             return null;
         }
@@ -54,7 +54,44 @@ public class EnumUtils {
             }
         }
         return null;
+    }
 
+    /**
+     * 校验枚举值是否存在
+     *
+     * @param enumClass 枚举类
+     * @param value     枚举值
+     * @param <T>       枚举类型
+     * @return 枚举
+     */
+    public static <T extends ValueEnum> boolean checkExistByValue(Class<T> enumClass, Integer value) {
+        checkEnum(enumClass);
+        T[] enumConstants = enumClass.getEnumConstants();
+        for (T enumConstant : enumConstants) {
+            if (enumConstant.getValue().equals(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 校验枚举值是否存在
+     *
+     * @param enumClass 枚举类
+     * @param message   枚举值
+     * @param <T>       枚举类型
+     * @return 枚举
+     */
+    public static <T extends MessageEnum> boolean checkExistByMessage(Class<T> enumClass, String message) {
+        checkEnum(enumClass);
+        T[] enumConstants = enumClass.getEnumConstants();
+        for (T enumConstant : enumConstants) {
+            if (enumConstant.getMessage().equals(message)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
