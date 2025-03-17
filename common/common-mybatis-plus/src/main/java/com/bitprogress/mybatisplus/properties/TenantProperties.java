@@ -2,7 +2,6 @@ package com.bitprogress.mybatisplus.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.List;
  * mybatis plus 租户插件白名单配置
  */
 @Data
-@Component
 @ConfigurationProperties("mybatis-plus.tenant")
 public class TenantProperties {
 

@@ -1,5 +1,6 @@
 package com.bitprogress.mybatisplus.config;
 
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -9,17 +10,19 @@ import com.bitprogress.mybatisplus.handler.TenantSqlHandler;
 import com.bitprogress.mybatisplus.plugins.TenantSqlInnerInterceptor;
 import com.bitprogress.mybatisplus.properties.TenantProperties;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.Objects;
 
-@EnableAutoConfiguration
-@MapperScan("com.bitprogress.*.mapper")
+@AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
+@MapperScan("com.bitprogress.**.mapper")
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true)
+@EnableConfigurationProperties(TenantProperties.class)
 public class MybatisPlusConfig {
 
     /**
