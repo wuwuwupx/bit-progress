@@ -4,7 +4,6 @@ import com.bitprogress.basemodel.Interval;
 import com.bitprogress.basemodel.endpoint.interval.IntervalEndpoint;
 import com.bitprogress.basemodel.endpoint.interval.LeftIntervalEndpoint;
 import com.bitprogress.basemodel.endpoint.interval.RightIntervalEndpoint;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 

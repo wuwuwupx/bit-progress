@@ -54,6 +54,7 @@
         <org.redisson.version>2.15.2</org.redisson.version>
         <easyexcel.version>3.3.2</easyexcel.version>
         <jakarta.validation.api.version>3.0.2</jakarta.validation.api.version>
+        <easy.es.version>2.1.0</easy.es.version>
     </properties>
 
     <packaging>pom</packaging>
@@ -174,6 +175,13 @@
                 <groupId>jakarta.validation</groupId>
                 <artifactId>jakarta.validation-api</artifactId>
                 <version>${jakarta.validation.api.version}</version>
+            </dependency>
+
+            <!-- easy-es -->
+            <dependency>
+                <groupId>org.dromara.easy-es</groupId>
+                <artifactId>easy-es-boot-starter</artifactId>
+                <version>${easy.es.version}</version>
             </dependency>
 
         </dependencies>
