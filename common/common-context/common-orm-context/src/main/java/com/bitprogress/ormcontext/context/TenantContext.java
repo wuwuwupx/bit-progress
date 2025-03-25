@@ -112,10 +112,16 @@ public class TenantContext {
                 .orElseThrow(supplier);
     }
 
+    /**
+     * 获取租户序列化信息
+     */
     public static String getTenantInfoJson() {
-        return JsonUtils.serializeObject(getTenantInfo());
+        return JsonUtils.serializeObject(getTenantInfo(), "");
     }
 
+    /**
+     * 反序列化租户信息
+     */
     public static void setTenantInfoJson(String tenantInfoJson) {
         TENANT_INFO.set(JsonUtils.deserializeObject(tenantInfoJson, TenantInfo.class));
     }

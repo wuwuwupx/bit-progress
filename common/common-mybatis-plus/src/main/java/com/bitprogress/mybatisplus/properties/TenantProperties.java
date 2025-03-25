@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * mybatis plus 租户插件白名单配置
+ * mybatis plus 租户插件配置
  */
 @Data
 @ConfigurationProperties("mybatis-plus.tenant")

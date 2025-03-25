@@ -1,5 +1,6 @@
 package com.bitprogress.usercontext.entity;
 
+import com.bitprogress.usercontext.enums.DataScopeType;
 import com.bitprogress.usercontext.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,11 @@ public class UserInfo {
      * 用户ID
      */
     private Long userId;
+
+    /**
+     * 用户名
+     */
+    private String username;
 
     /**
      * 用户类型
@@ -46,6 +52,21 @@ public class UserInfo {
      * 可操作租户ID
      */
     private Set<Long> operateTenantIds;
+
+    /**
+     * 数据范围类型
+     */
+    private DataScopeType dataScopeType;
+
+    /**
+     * 自身数据范围
+     */
+    private String dataScope;
+
+    /**
+     * 可查询数据范围列表
+     */
+    private Set<String> dataScopes;
 
     /**
      * 附带信息

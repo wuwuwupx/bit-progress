@@ -6,8 +6,11 @@ import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.bitprogress.mybatisplus.handler.TenantSqlHandler;
+import com.bitprogress.mybatisplus.handler.DataScopeLineHandler;
+import com.bitprogress.mybatisplus.handler.DefaultDataScopeLineHandler;
+import com.bitprogress.mybatisplus.handler.TenantIdLineHandler;
 import com.bitprogress.mybatisplus.plugins.TenantSqlInnerInterceptor;
+import com.bitprogress.mybatisplus.properties.DataScopeProperties;
 import com.bitprogress.mybatisplus.properties.TenantProperties;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -22,21 +25,24 @@ import java.util.Objects;
 @MapperScan("com.bitprogress.**.mapper")
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true)
-@EnableConfigurationProperties(TenantProperties.class)
+@EnableConfigurationProperties({TenantProperties.class, DataScopeProperties.class})
 public class MybatisPlusConfig {
 
     /**
      * 分页插件
      */
     @Bean
-    public MybatisPlusInterceptor paginationInterceptor(TenantProperties tenantProperties) {
+    public MybatisPlusInterceptor paginationInterceptor(TenantProperties tenantProperties,
+                                                        DataScopeProperties dataScopeProperties) {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
 
         // 租户插件
-        if (Objects.nonNull(tenantProperties.getEnabled()) && tenantProperties.getEnabled()) {
-            TenantSqlHandler tenantSqlHandler = new TenantSqlHandler(tenantProperties);
-            TenantSqlInnerInterceptor tenantSqlInnerInterceptor = new TenantSqlInnerInterceptor(tenantSqlHandler);
-            interceptor.addInnerInterceptor(tenantSqlInnerInterceptor);
+        if (Objects.nonNull(tenantProperties.getEnabled()) && tenantProperties.getEnabled()
+                || Objects.nonNull(dataScopeProperties.getEnabled()) && dataScopeProperties.getEnabled()) {
+            TenantIdLineHandler tenantSqlHandler = new TenantIdLineHandler(tenantProperties);
+            DataScopeLineHandler dataScopeLineHandler = new DefaultDataScopeLineHandler(dataScopeProperties);
+            TenantSqlInnerInterceptor sqlInnerInterceptor = new TenantSqlInnerInterceptor(tenantSqlHandler, dataScopeLineHandler);
+            interceptor.addInnerInterceptor(sqlInnerInterceptor);
         }
 
         // 乐观锁插件

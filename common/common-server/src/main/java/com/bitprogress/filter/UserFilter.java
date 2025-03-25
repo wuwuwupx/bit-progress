@@ -2,7 +2,9 @@ package com.bitprogress.filter;
 
 import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.exception.RequestExceptionMessage;
+import com.bitprogress.ormcontext.context.DataScopeContext;
 import com.bitprogress.ormcontext.context.TenantContext;
+import com.bitprogress.ormcontext.entity.DataScopeInfo;
 import com.bitprogress.ormcontext.entity.TenantInfo;
 import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormparser.util.SqlParserUtils;
@@ -81,6 +83,8 @@ public class UserFilter implements Filter {
                         UserContext.setUserInfo(userInfo);
                         TenantInfo tenantInfo = TenantUtils.getTenantInfo(userInfo);
                         TenantContext.setTenantInfo(tenantInfo);
+                        DataScopeInfo dataScopeInfo = DataScopeUtils.getDataScopeInfo(userInfo);
+                        DataScopeContext.setDataScopeInfo(dataScopeInfo);
                     } else {
                         DispatcherContext.markAnonymousRequest();
                     }
@@ -103,6 +107,10 @@ public class UserFilter implements Filter {
                     if (StringUtils.isNotEmpty(sqlParserMsgJson)) {
                         SqlParserUtils.setSqlParserMsgJson(sqlParserMsgJson);
                     }
+                    String dataScopeInfoJson = httpRequest.getHeader(VerifyConstant.DATA_SCOPE_INFO);
+                    if (StringUtils.isNotEmpty(dataScopeInfoJson)) {
+                        DataScopeContext.setDataScopeInfoJson(dataScopeInfoJson);
+                    }
                 }
             }
             chain.doFilter(request, response);
@@ -111,6 +119,7 @@ public class UserFilter implements Filter {
             UserContext.clearUserInfo();
             TenantContext.clearTenantInfo();
             SqlParserContext.clearSqlParserMsg();
+            DataScopeContext.clearDataScopeInfo();
         }
     }
 

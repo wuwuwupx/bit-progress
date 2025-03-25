@@ -1,10 +1,10 @@
 package com.bitprogress.aspect;
 
 import com.bitprogress.exception.CommonException;
-import com.bitprogress.ormcontext.context.TenantContextUtils;
+import com.bitprogress.ormcontext.utils.TenantContextUtils;
 import com.bitprogress.servermodel.annotation.OperateTenantApi;
 import com.bitprogress.servermodel.constant.TenantConstant;
-import com.bitprogress.usercontext.context.UserContextUtils;
+import com.bitprogress.usercontext.utils.UserContextUtils;
 import com.bitprogress.util.Assert;
 import com.bitprogress.util.CollectionUtils;
 import com.bitprogress.util.StringUtils;
@@ -15,11 +15,16 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Set;
 
+/**
+ * 设置租户的类型
+ */
+@Component
 @Aspect
 public class OperateTenantAspect {
 

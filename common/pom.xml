@@ -36,6 +36,7 @@
         <module>common-request</module>
         <module>common-github</module>
         <module>common-validation</module>
+        <module>common-sharding</module>
     </modules>
 
 </project>

@@ -13,8 +13,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>common-base-model</module>
-        <module>common-dao-model</module>
+        <module>common-orm-model</module>
         <module>common-server-model</module>
+        <module>common-mybatisplus-model</module>
     </modules>
 
 </project>

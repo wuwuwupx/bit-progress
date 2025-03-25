@@ -1,6 +1,7 @@
 package com.bitprogress.util;
 
 import com.bitprogress.ormcontext.entity.TenantInfo;
+import com.bitprogress.ormmodel.enums.TenantType;
 import com.bitprogress.usercontext.entity.UserInfo;
 
 public class TenantUtils {
@@ -15,6 +16,8 @@ public class TenantUtils {
     public static TenantInfo getTenantInfo(UserInfo userInfo) {
         TenantInfo tenantInfo = new TenantInfo();
         tenantInfo.setTenantId(userInfo.getTenantId());
+        // 默认使用当前租户
+        tenantInfo.setTenantType(TenantType.CURRENT);
         return tenantInfo;
     }
 

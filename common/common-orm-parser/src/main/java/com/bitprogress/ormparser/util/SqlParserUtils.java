@@ -1,7 +1,7 @@
 package com.bitprogress.ormparser.util;
 
-import com.bitprogress.ormparser.annotation.ParserType;
-import com.bitprogress.ormparser.annotation.SqlType;
+import com.bitprogress.ormmodel.enums.ParserType;
+import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormparser.entity.SqlParserMsg;
 import com.bitprogress.util.JsonUtils;
@@ -36,6 +36,24 @@ public class SqlParserUtils {
      */
     public static Boolean ignoreProcess() {
         return ParserType.INCLUDE != SqlParserContext.getSqlParserMsg().getParserType();
+    }
+
+    /**
+     * 是否启用租户
+     *
+     * @return true：启用租户
+     */
+    public static Boolean tenantEnabled() {
+        return SqlParserContext.getSqlParserMsg().getTenantEnabled();
+    }
+
+    /**
+     * 是否启用数据范围
+     *
+     * @return true：启用数据范围
+     */
+    public static Boolean dataScopeEnabled() {
+        return SqlParserContext.getSqlParserMsg().getDataScopeEnabled();
     }
 
     /**

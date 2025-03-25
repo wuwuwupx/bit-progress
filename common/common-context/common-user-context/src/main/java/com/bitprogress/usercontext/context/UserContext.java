@@ -132,10 +132,16 @@ public class UserContext {
                 .ifPresent(consumer);
     }
 
+    /**
+     * 序列化用户信息
+     */
     public static String getUserInfoJson() {
-        return JsonUtils.serializeObject(getUserInfo());
+        return JsonUtils.serializeObject(getUserInfo(), "");
     }
 
+    /**
+     * 反序列化用户信息
+     */
     public static void setUserInfoJson(String userInfoJson) {
         USER_INFO.set(JsonUtils.deserializeObject(userInfoJson, UserInfo.class));
     }

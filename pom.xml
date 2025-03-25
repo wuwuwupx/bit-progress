@@ -55,6 +55,7 @@
         <easyexcel.version>3.3.2</easyexcel.version>
         <jakarta.validation.api.version>3.0.2</jakarta.validation.api.version>
         <easy.es.version>2.1.0</easy.es.version>
+        <sharding.jdbc.version>4.1.1</sharding.jdbc.version>
     </properties>
 
     <packaging>pom</packaging>
@@ -182,6 +183,12 @@
                 <groupId>org.dromara.easy-es</groupId>
                 <artifactId>easy-es-boot-starter</artifactId>
                 <version>${easy.es.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
+                <version>${sharding.jdbc.version}</version>
             </dependency>
 
         </dependencies>

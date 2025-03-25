@@ -62,10 +62,16 @@ public class DispatcherContext {
         return DispatcherType.USER_REQUEST != getDispatcherType();
     }
 
+    /**
+     * 获取调度类型序列化信息
+     */
     public static String getDispatcherTypeJson() {
         return getDispatcherType().getValue().toString();
     }
 
+    /**
+     * 反序列化调度类型
+     */
     public static void setDispatcherTypeJson(String dispatcherTypeJson) {
         setDispatcherType(EnumUtils.getByValue(DispatcherType.class, Integer.parseInt(dispatcherTypeJson)));
     }

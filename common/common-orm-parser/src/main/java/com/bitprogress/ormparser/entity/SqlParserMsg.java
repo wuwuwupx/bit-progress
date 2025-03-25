@@ -1,10 +1,11 @@
 package com.bitprogress.ormparser.entity;
 
 import com.bitprogress.basemodel.util.EnumUtils;
-import com.bitprogress.ormparser.annotation.ParserType;
-import com.bitprogress.ormparser.annotation.SqlParserMode;
-import com.bitprogress.ormparser.annotation.SqlType;
-import com.bitprogress.ormparser.annotation.TenantType;
+import com.bitprogress.ormmodel.enums.DataScopeType;
+import com.bitprogress.ormmodel.enums.TenantType;
+import com.bitprogress.ormmodel.enums.ParserType;
+import com.bitprogress.ormmodel.annotation.SqlParserMode;
+import com.bitprogress.ormmodel.enums.SqlType;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.AllArgsConstructor;
@@ -39,9 +40,24 @@ public class SqlParserMsg {
     private SqlType[] sqlTypes;
 
     /**
+     * 租户开启状态
+     */
+    private Boolean tenantEnabled;
+
+    /**
      * 租户类型
      */
     private TenantType tenantType;
+
+    /**
+     * 数据范围开启状态
+     */
+    private Boolean dataScopeEnabled;
+
+    /**
+     * 数据范围类型
+     */
+    private DataScopeType dataScopeType;
 
     /**
      * rpc传播
@@ -59,7 +75,10 @@ public class SqlParserMsg {
         sqlParserMsg.setEnable(true);
         sqlParserMsg.setParserType(sqlParserMode.parserType());
         sqlParserMsg.setSqlTypes(sqlParserMode.sqlTypes());
+        sqlParserMsg.setTenantEnabled(sqlParserMode.tenantEnabled());
         sqlParserMsg.setTenantType(sqlParserMode.tenantType());
+        sqlParserMsg.setDataScopeEnabled(sqlParserMode.dataScopeEnabled());
+        sqlParserMsg.setDataScopeType(sqlParserMode.dataScopeType());
         sqlParserMsg.setRpcPropagate(sqlParserMode.rpcPropagate());
         return sqlParserMsg;
     }

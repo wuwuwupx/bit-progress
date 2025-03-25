@@ -108,5 +108,6 @@ public class VerifyConstant {
     public static final String DISPATCHER_TYPE = "Dispatcher_Type";
     public static final String USER_INFO = "User_Info";
     public static final String TENANT_INFO = "Tenant_Info";
+    public static final String DATA_SCOPE_INFO = "Data_Scope_Info";
 
 }

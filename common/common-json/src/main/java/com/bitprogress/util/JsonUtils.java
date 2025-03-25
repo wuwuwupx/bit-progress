@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,11 +43,13 @@ public class JsonUtils {
         DEFAULT_MAPPER.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         DEFAULT_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         DEFAULT_MAPPER.setDateFormat(new SimpleDateFormat(STANDARD_FORMAT));
+        DEFAULT_MAPPER.registerModule(new JavaTimeModule());
 
         ALWAYS_MAPPER.setSerializationInclusion(JsonInclude.Include.ALWAYS);
         ALWAYS_MAPPER.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         ALWAYS_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         ALWAYS_MAPPER.setDateFormat(new SimpleDateFormat(STANDARD_FORMAT));
+        ALWAYS_MAPPER.registerModule(new JavaTimeModule());
     }
 
     /**
