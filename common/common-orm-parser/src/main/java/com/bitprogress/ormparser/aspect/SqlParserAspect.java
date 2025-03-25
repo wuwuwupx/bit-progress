@@ -1,7 +1,7 @@
 package com.bitprogress.ormparser.aspect;
 
 import com.bitprogress.ormmodel.enums.Propagation;
-import com.bitprogress.ormmodel.annotation.SqlParserMode;
+import com.bitprogress.ormparser.annotation.SqlParserMode;
 import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormparser.entity.SqlParserMsg;
 import lombok.SneakyThrows;

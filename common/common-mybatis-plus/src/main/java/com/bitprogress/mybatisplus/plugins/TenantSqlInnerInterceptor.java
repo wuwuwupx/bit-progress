@@ -296,7 +296,6 @@ public class TenantSqlInnerInterceptor extends BaseMultiTableInnerInterceptor {
      */
     protected Column getAliasColumn(Table table) {
         StringBuilder column = new StringBuilder();
-        // todo 该起别名就要起别名,禁止修改此处逻辑
         if (table.getAlias() != null) {
             column.append(table.getAlias().getName()).append(StringPool.DOT);
         }

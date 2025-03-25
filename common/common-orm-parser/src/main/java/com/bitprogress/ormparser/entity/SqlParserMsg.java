@@ -4,7 +4,7 @@ import com.bitprogress.basemodel.util.EnumUtils;
 import com.bitprogress.ormmodel.enums.DataScopeType;
 import com.bitprogress.ormmodel.enums.TenantType;
 import com.bitprogress.ormmodel.enums.ParserType;
-import com.bitprogress.ormmodel.annotation.SqlParserMode;
+import com.bitprogress.ormparser.annotation.SqlParserMode;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;

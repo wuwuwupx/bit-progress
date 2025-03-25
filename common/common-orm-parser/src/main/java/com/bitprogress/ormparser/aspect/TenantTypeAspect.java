@@ -1,8 +1,8 @@
 package com.bitprogress.ormparser.aspect;
 
-import com.bitprogress.ormmodel.annotation.CurrentTenant;
-import com.bitprogress.ormmodel.annotation.MarkTenantType;
-import com.bitprogress.ormmodel.annotation.OperateTenant;
+import com.bitprogress.ormparser.annotation.CurrentTenant;
+import com.bitprogress.ormparser.annotation.MarkTenantType;
+import com.bitprogress.ormparser.annotation.OperateTenant;
 import com.bitprogress.ormmodel.enums.TenantType;
 import com.bitprogress.ormcontext.utils.TenantContextUtils;
 import lombok.SneakyThrows;

@@ -1,6 +1,10 @@
-package com.bitprogress.ormmodel.annotation;
+package com.bitprogress.ormparser.annotation;
 
+import com.bitprogress.ormcontext.utils.DataScopeContextUtils;
+import com.bitprogress.ormcontext.utils.TenantContextUtils;
 import com.bitprogress.ormmodel.enums.*;
+import com.bitprogress.ormparser.context.SqlParserContext;
+import com.bitprogress.ormparser.entity.SqlParserMsg;
 
 import java.lang.annotation.*;
 

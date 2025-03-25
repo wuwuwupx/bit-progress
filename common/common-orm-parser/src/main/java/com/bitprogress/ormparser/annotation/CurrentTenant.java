@@ -1,4 +1,4 @@
-package com.bitprogress.ormmodel.annotation;
+package com.bitprogress.ormparser.annotation;
 
 import java.lang.annotation.*;
 
