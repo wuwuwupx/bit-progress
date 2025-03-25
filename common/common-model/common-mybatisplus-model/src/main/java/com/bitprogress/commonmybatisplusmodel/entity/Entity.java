@@ -1,4 +1,4 @@
-package com.bitprogress.ormmodel.entity;
+package com.bitprogress.commonmybatisplusmodel.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.bitprogress.basemodel.DO;

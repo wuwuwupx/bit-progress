@@ -1,4 +1,4 @@
-package com.bitprogress.ormmodel.entity;
+package com.bitprogress.commonmybatisplusmodel.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
