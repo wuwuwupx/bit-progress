@@ -12,12 +12,12 @@ import lombok.Getter;
 public enum TenantType implements ValueEnum {
 
     /**
-     * 当前租户，获取的值为 {@link TenantContextUtils#getTenantId()}
+     * 当前租户，获取的值为
      */
     CURRENT(0),
 
     /**
-     * 被操作租户，获取的值为 {@link TenantContextUtils#getOperateTenantId()}
+     * 被操作租户，获取的值为
      * 适用于租户将数据托管给平台操作的情况
      */
     OPERATE(1),
