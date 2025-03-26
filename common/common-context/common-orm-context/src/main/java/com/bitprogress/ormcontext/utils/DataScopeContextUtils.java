@@ -17,7 +17,7 @@ public class DataScopeContextUtils {
      * 获取数据范围类型
      */
     public static DataScopeType getDataScopeType() {
-        return getDataScopeTypeOrDefault();
+        return DataScopeContext.getFieldOrDefault(DataScopeInfo::getDataScopeType, null);
     }
 
     /**
@@ -69,6 +69,15 @@ public class DataScopeContextUtils {
      */
     public static void setDataScopeType(DataScopeType dataScopeType) {
         DataScopeInfo dataScopeInfo = DataScopeContext.getDataScopeInfoOrNew();
+        dataScopeInfo.setDataScopeType(dataScopeType);
+        DataScopeContext.setDataScopeInfo(dataScopeInfo);
+    }
+
+    /**
+     * 设置数据范围类型，未初始化则抛出异常
+     */
+    public static void setDataScopeTypeOrThrow(DataScopeType dataScopeType, String message) {
+        DataScopeInfo dataScopeInfo = DataScopeContext.getDataScopeInfoOrThrow(message);
         dataScopeInfo.setDataScopeType(dataScopeType);
         DataScopeContext.setDataScopeInfo(dataScopeInfo);
     }

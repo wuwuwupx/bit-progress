@@ -10,9 +10,12 @@ import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.schema.Table;
 
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 public class TenantIdLineHandler implements TenantLineHandler {
@@ -33,13 +36,41 @@ public class TenantIdLineHandler implements TenantLineHandler {
      *
      * @return 租户 ID 值表达式
      */
-    @Override
-    public Expression getTenantId() {
+    public Expression getInsertTenantId() {
         TenantType tenantType = SqlParserContext.getCurrentSqlTenantType();
         Long tenantId = TenantType.OPERATE.equals(tenantType)
                 ? TenantContextUtils.getOperateTenantId()
                 : TenantContextUtils.getTenantId();
         return new LongValue(tenantId);
+    }
+
+    /**
+     * 获取租户 ID
+     *
+     * @return 租户 ID 值表达式
+     */
+    @Override
+    public Expression getTenantId() {
+        TenantType tenantType = SqlParserContext.getCurrentSqlTenantType();
+        switch(tenantType) {
+            case ALL -> {
+                // 对于没有可操作租户的用户，应该不返回任何数据
+                Set<Long> operateTenantIds = TenantContextUtils.getOperateTenantIds();
+                if (CollectionUtils.isEmpty(operateTenantIds)) {
+                    return null;
+                }
+                return new ParenthesedExpressionList<>(CollectionUtils.toList(operateTenantIds, LongValue::new));
+            }
+            case CURRENT -> {
+                return new LongValue(TenantContextUtils.getTenantIdOrDefault());
+            }
+            case OPERATE -> {
+                return new LongValue(TenantContextUtils.getOperateTenantIdOrDefault());
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 
     /**

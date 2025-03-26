@@ -16,6 +16,7 @@ public class TenantUtils {
     public static TenantInfo getTenantInfo(UserInfo userInfo) {
         TenantInfo tenantInfo = new TenantInfo();
         tenantInfo.setTenantId(userInfo.getTenantId());
+        tenantInfo.setOperateTenantIds(userInfo.getOperateTenantIds());
         // 默认使用当前租户
         tenantInfo.setTenantType(TenantType.CURRENT);
         return tenantInfo;

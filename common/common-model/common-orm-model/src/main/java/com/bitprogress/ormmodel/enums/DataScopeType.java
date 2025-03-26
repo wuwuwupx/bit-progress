@@ -16,7 +16,7 @@ public enum DataScopeType implements ValueEnum {
     /**
      * 范围数据
      */
-    SCOPE(1),
+    LIMITED(1),
 
     /**
      * 自身数据

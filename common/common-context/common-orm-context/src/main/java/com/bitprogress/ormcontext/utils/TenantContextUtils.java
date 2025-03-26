@@ -6,6 +6,9 @@ import com.bitprogress.ormcontext.context.TenantContext;
 import com.bitprogress.ormcontext.entity.TenantInfo;
 import com.bitprogress.ormmodel.enums.TenantType;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * 租户上下文
  */
@@ -230,6 +233,131 @@ public class TenantContextUtils {
         TenantInfo tenantInfo = TenantContext.getTenantInfoOrThrow(exception);
         tenantInfo.setTenantType(tenantType);
         TenantContext.setTenantInfo(tenantInfo);
+    }
+
+    /**
+     * 获取 是否可以操作所有租户
+     */
+    public static Boolean getCanOperateAllTenant() {
+        return TenantContext.getFieldOrDefault(TenantInfo::getCanOperateAllTenant, false);
+    }
+
+    /**
+     * 获取 是否可以操作所有租户
+     */
+    public static Boolean getCanOperateAllTenantOrDefault() {
+        return TenantContext.getFieldOrDefault(TenantInfo::getCanOperateAllTenant, false);
+    }
+
+    /**
+     * 获取 是否可以操作所有租户
+     */
+    public static Boolean getCanOperateAllTenantOrThrow() {
+        return TenantContext.getFieldOrThrow(TenantInfo::getCanOperateAllTenant, () -> CommonException.error("是否可以操作所有租户未读取到"));
+    }
+
+    /**
+     * 获取 是否可以操作所有租户
+     */
+    public static Boolean getCanOperateAllTenantOrThrow(String message) {
+        return TenantContext.getFieldOrThrow(TenantInfo::getCanOperateAllTenant, () -> CommonException.error(message));
+    }
+
+    /**
+     * 获取 是否可以操作所有租户
+     */
+    public static Boolean getCanOperateAllTenantOrThrow(IException exception) {
+        return TenantContext.getFieldOrThrow(TenantInfo::getCanOperateAllTenant, () -> CommonException.error(exception));
+    }
+
+    /**
+     * 获取 是否可以操作所有租户
+     */
+    public static Boolean getCanOperateAllTenantOrThrow(CommonException exception) {
+        return TenantContext.getFieldOrThrow(TenantInfo::getCanOperateAllTenant, () -> exception);
+    }
+
+    /**
+     * 设置 是否可以操作所有租户
+     */
+    public void setCanOperateAllTenant(Boolean canOperateAllTenant) {
+        TenantInfo tenantInfo = TenantContext.getTenantInfoOrNew();
+        tenantInfo.setCanOperateAllTenant(canOperateAllTenant);
+        TenantContext.setTenantInfo(tenantInfo);
+    }
+
+    /**
+     * 设置 是否可以操作所有租户
+     */
+    public static void setCanOperateAllTenantOrThrow(Boolean canOperateAllTenant, String exception) {
+        TenantInfo tenantInfo = TenantContext.getTenantInfoOrThrow(exception);
+        tenantInfo.setCanOperateAllTenant(canOperateAllTenant);
+        TenantContext.setTenantInfo(tenantInfo);
+    }
+
+    /**
+     * 获取 operateTenantIds
+     */
+    public static Set<Long> getOperateTenantIds() {
+        return TenantContext.getFieldOrDefault(TenantInfo::getOperateTenantIds, null);
+    }
+
+    /**
+     * 设置 operateTenantIds
+     */
+    public static void setOperateTenantIds(Set<Long> operateTenantIds) {
+        TenantInfo tenantInfo = TenantContext.getTenantInfoOrNew();
+        tenantInfo.setOperateTenantIds(operateTenantIds);
+        TenantContext.setTenantInfo(tenantInfo);
+    }
+
+    /**
+     * 获取 operateTenantIds
+     */
+    public static Set<Long> getOperateTenantIdsOrDefault() {
+        return TenantContext.getFieldOrDefault(TenantInfo::getOperateTenantIds, new HashSet<>());
+    }
+
+    /**
+     * 获取 operateTenantIds
+     */
+    public static Set<Long> getOperateTenantIdsOrThrow() {
+        return TenantContext.getFieldOrThrow(TenantInfo::getOperateTenantIds, () -> CommonException.error("可操作租户集合未读取到"));
+    }
+
+    /**
+     * 获取 operateTenantIds
+     */
+    public static Set<Long> getOperateTenantIdsOrThrow(String message) {
+        return TenantContext.getFieldOrThrow(TenantInfo::getOperateTenantIds, () -> CommonException.error(message));
+    }
+
+    /**
+     * 获取 operateTenantIds
+     */
+    public static Set<Long> getOperateTenantIdsOrThrow(IException exception) {
+        return TenantContext.getFieldOrThrow(TenantInfo::getOperateTenantIds, () -> CommonException.error(exception));
+    }
+
+    /**
+     * 获取 operateTenantIds
+     */
+    public static Set<Long> getOperateTenantIdsOrThrow(CommonException exception) {
+        return TenantContext.getFieldOrThrow(TenantInfo::getOperateTenantIds, () -> exception);
+    }
+
+    /**
+     * 当前操作为全局模式
+     */
+    public static boolean isOperateAllTenant() {
+        return isOperateAllTenant(getTenantType());
+    }
+
+    /**
+     * 当前操作为全局模式
+     */
+    public static boolean isOperateAllTenant(TenantType tenantType) {
+        return TenantType.ALL.equals(tenantType) && Boolean.TRUE.equals(getCanOperateAllTenant());
     }
 
 }

@@ -664,6 +664,29 @@ public class CollectionUtils {
     }
 
     /**
+     * 是否是单元素集合
+     *
+     * @param collection 需要检查的集合
+     * @return true：是，false：否
+     */
+    public static <T> boolean isSingle(Collection<T> collection) {
+        return size(collection) == 1;
+    }
+
+    /**
+     * 遍历集合
+     *
+     * @param collection 需要遍历的集合
+     * @param consumer   遍历函数
+     */
+    public static <T> void forEach(Collection<T> collection, Consumer<T> consumer) {
+        if (isEmpty(collection)) {
+            return;
+        }
+        collection.forEach(consumer);
+    }
+
+    /**
      * 将 #{ts} 的元素添加到 #{targetList}
      *
      * @param targetList 被操作集合

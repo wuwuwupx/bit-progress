@@ -1,9 +1,10 @@
 package com.bitprogress.mybatisplus.handler;
 
 import com.bitprogress.mybatisplus.properties.DataScopeProperties;
-import com.bitprogress.ormmodel.enums.DataScopeType;
 import com.bitprogress.ormcontext.utils.DataScopeContextUtils;
+import com.bitprogress.ormmodel.enums.DataScopeType;
 import com.bitprogress.ormmodel.enums.SqlType;
+import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.expression.Expression;
@@ -12,7 +13,6 @@ import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.schema.Table;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -46,12 +46,22 @@ public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
      * @return 数据范围字段
      */
     @Override
-    public String getDataScopeColumn() {
-        DataScopeType dataScopeType = DataScopeContextUtils.getDataScopeType();
-        if (Objects.requireNonNull(dataScopeType) == DataScopeType.SELF) {
-            return getSelfWhereColumn();
+    public String getDataScopeColumn(String tableName) {
+        DataScopeType dataScopeType = SqlParserContext.getCurrentSqlDataScopeType();
+        if (DataScopeType.SELF.equals(dataScopeType)) {
+            return getTableSelfWhereColumn(tableName);
         }
-        return "data_scope";
+        return getTableDataScopeColumn(tableName);
+    }
+
+    /**
+     * 获取数据范围字段
+     *
+     * @return 数据范围字段
+     */
+    @Override
+    public String getTableDataScopeColumn(String tableName) {
+        return CollectionUtils.getForMap(dataScopeProperties.getDataScopeColumn(), tableName, getSourceDataScopeColumn());
     }
 
     /**
@@ -60,8 +70,8 @@ public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
      * @return 自身匹配数据条件字段
      */
     @Override
-    public String getSelfWhereColumn() {
-        return "user_id";
+    public String getTableSelfWhereColumn(String tableName) {
+        return CollectionUtils.getForMap(dataScopeProperties.getSelfWhereColumn(), tableName, getSourceSelfWhereColumn());
     }
 
     /**
@@ -71,20 +81,24 @@ public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
      */
     @Override
     public List<Expression> getDataScopes() {
-        DataScopeType dataScopeType = DataScopeContextUtils.getDataScopeType();
+        DataScopeType dataScopeType = SqlParserContext.getCurrentSqlDataScopeType();
         switch(dataScopeType) {
             case SELF -> {
                 return CollectionUtils.asList(new LongValue(DataScopeContextUtils.getUserId()));
             }
-            case SCOPE -> {
-                Set<String> dataScopes = DataScopeContextUtils.getDataScopes();
-                return CollectionUtils.toList(dataScopes, StringValue::new);
+            case LIMITED -> {
+                Set<String> dataScopes = CollectionUtils
+                        .add(DataScopeContextUtils.getDataScopes(), DataScopeContextUtils.getDataScope());
+                if (CollectionUtils.isEmpty(dataScopes)) {
+                    return null;
+                }
+                return CollectionUtils.toList(dataScopes, dataScope -> new StringValue(dataScope + "%"));
             }
             case ALL -> {
                 return List.of();
             }
         }
-        return List.of();
+        return null;
     }
 
     /**

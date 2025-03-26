@@ -335,38 +335,38 @@ public class UserContextUtils {
     /**
      * 是否可操作所有租户
      */
-    public static Boolean getOperateAllTenant() {
-        return getOperateAllTenantOrDefault();
+    public static Boolean getCanOperateAllTenant() {
+        return getCanOperateAllTenantOrDefault();
     }
 
     /**
      * 设置是否可操作所有租户
      *
-     * @param operateAllTenant 是否可操作所有租户
+     * @param canOperateAllTenant 是否可操作所有租户
      */
-    public static void setOperateAllTenant(Boolean operateAllTenant) {
-        UserContext.setField(userInfo -> userInfo.setOperateAllTenant(operateAllTenant));
+    public static void setCanOperateAllTenant(Boolean canOperateAllTenant) {
+        UserContext.setField(userInfo -> userInfo.setCanOperateAllTenant(canOperateAllTenant));
     }
 
     /**
      * 清除是否可操作所有租户
      */
-    public static void removeOperateAllTenant() {
-        UserContext.removeField(userInfo -> userInfo.setOperateAllTenant(null));
+    public static void removeCanOperateAllTenant() {
+        UserContext.removeField(userInfo -> userInfo.setCanOperateAllTenant(null));
     }
 
     /**
      * 是否可操作所有租户
      */
-    public static Boolean getOperateAllTenantOrDefault() {
-        return getOperateAllTenantOrDefault(false);
+    public static Boolean getCanOperateAllTenantOrDefault() {
+        return getCanOperateAllTenantOrDefault(false);
     }
 
     /**
      * 获取是否可操作所有租户
      */
-    public static Boolean getOperateAllTenantOrDefault(Boolean operateAllTenant) {
-        return UserContext.getFieldOrDefault(UserInfo::getOperateAllTenant, operateAllTenant);
+    public static Boolean getCanOperateAllTenantOrDefault(Boolean operateAllTenant) {
+        return UserContext.getFieldOrDefault(UserInfo::getCanOperateAllTenant, operateAllTenant);
     }
 
     /**

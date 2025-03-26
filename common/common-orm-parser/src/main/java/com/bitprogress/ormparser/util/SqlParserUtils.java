@@ -2,6 +2,7 @@ package com.bitprogress.ormparser.util;
 
 import com.bitprogress.ormmodel.enums.ParserType;
 import com.bitprogress.ormmodel.enums.SqlType;
+import com.bitprogress.ormmodel.enums.TenantType;
 import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormparser.entity.SqlParserMsg;
 import com.bitprogress.util.JsonUtils;
@@ -89,6 +90,15 @@ public class SqlParserUtils {
         if (StringUtils.isNotEmpty(sqlParserMsg)) {
             SqlParserContext.setSqlParserMsg(JsonUtils.deserializeObject(sqlParserMsg, SqlParserMsg.class));
         }
+    }
+
+    /**
+     * 获取租户类型
+     *
+     * @return 租户类型
+     */
+    public static TenantType getTenantType() {
+        return SqlParserContext.getSqlParserMsg().getTenantType();
     }
 
 }

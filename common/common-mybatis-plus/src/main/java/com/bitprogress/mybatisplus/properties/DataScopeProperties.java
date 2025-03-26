@@ -4,7 +4,9 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * mybatis plus 数据权限插件配置
@@ -30,5 +32,19 @@ public class DataScopeProperties {
      * 当启用名单不为空时，优先级高于 白名单
      */
     private List<String> enableTables = new ArrayList<>();
+
+    /**
+     * 数据权限字段
+     * key 表名
+     * value 数据权限字段
+     */
+    private Map<String, String> dataScopeColumn = new HashMap<>();
+
+    /**
+     * 匹配当前用户数据权限的字段
+     * key 表名
+     * value 数据权限字段
+     */
+    private Map<String, String> selfWhereColumn = new HashMap<>();
 
 }

@@ -35,8 +35,18 @@ public interface DataScopeLineHandler {
      *
      * @return 数据范围字段
      */
-    default String getSourceDataScopeColumn() {
+    default String getDataScopeColumn(String tableName) {
         return "data_scope";
+    }
+
+    /**
+     * 获取数据范围字段
+     * 根据表名获取
+     *
+     * @return 数据范围字段
+     */
+    default String getTableDataScopeColumn(String tableName) {
+        return getSourceDataScopeColumn();
     }
 
     /**
@@ -44,8 +54,17 @@ public interface DataScopeLineHandler {
      *
      * @return 数据范围字段
      */
-    default String getDataScopeColumn() {
+    default String getSourceDataScopeColumn() {
         return "data_scope";
+    }
+
+    /**
+     * 根据表名获取用于匹配当前用户的字段
+     *
+     * @return 用于匹配当前用户的字段名
+     */
+    default String getTableSelfWhereColumn(String tableName) {
+        return getSourceSelfWhereColumn();
     }
 
     /**
@@ -53,7 +72,7 @@ public interface DataScopeLineHandler {
      *
      * @return 自身条件字段名
      */
-    default String getSelfWhereColumn() {
+    default String getSourceSelfWhereColumn() {
         return "user_id";
     }
 

@@ -46,7 +46,7 @@ public class OperateTenantAspect {
                 log.error("operateTenantId convert error", e);
                 throw CommonException.error("获取操作租户ID失败");
             }
-            if (!UserContextUtils.getOperateAllTenant()) {
+            if (!UserContextUtils.getCanOperateAllTenant()) {
                 Set<Long> operateTenantIds = UserContextUtils.getOperateTenantIds();
                 Assert.isTrue(CollectionUtils.contains(operateTenantIds, operateTenantId), "无权限操作此租户");
             }

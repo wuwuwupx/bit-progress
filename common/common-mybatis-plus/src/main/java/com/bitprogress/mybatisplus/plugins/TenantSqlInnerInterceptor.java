@@ -1,7 +1,6 @@
 package com.bitprogress.mybatisplus.plugins;
 
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -9,16 +8,19 @@ import com.baomidou.mybatisplus.extension.plugins.inner.BaseMultiTableInnerInter
 import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.mybatisplus.handler.DataScopeLineHandler;
 import com.bitprogress.mybatisplus.handler.TenantIdLineHandler;
+import com.bitprogress.ormcontext.utils.TenantContextUtils;
 import com.bitprogress.ormmodel.enums.DataScopeType;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.ormmodel.enums.TenantType;
 import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormparser.util.SqlParserUtils;
+import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
-import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
+import net.sf.jsqlparser.expression.LongValue;
+import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
+import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
+import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.delete.Delete;
@@ -117,14 +119,14 @@ public class TenantSqlInnerInterceptor extends BaseMultiTableInnerInterceptor {
         }
         String tenantIdColumn = tenantIdLineHandler.getTenantIdColumn();
         // insert语句需要新增的是原始数据范围列
-        String sourceDataScopeColumn = dataScopeLineHandler.getSourceDataScopeColumn();
+        String tableDataScopeColumn = dataScopeLineHandler.getTableDataScopeColumn(insert.getTable().getName());
         boolean isNeedAddTenantId = tenantEnabled && !tenantIdLineHandler.ignoreInsert(columns, tenantIdColumn);
         boolean isNeedAddSourceDataScope = dataScopeEnabled
-                && !dataScopeLineHandler.ignoreInsert(columns, sourceDataScopeColumn);
+                && !dataScopeLineHandler.ignoreInsert(columns, tableDataScopeColumn);
         if (!isNeedAddTenantId && !isNeedAddSourceDataScope) {
             return;
         }
-        Expression tenantId = tenantIdLineHandler.getTenantId();
+        Expression tenantId = tenantIdLineHandler.getInsertTenantId();
         Expression dataScope = dataScopeLineHandler.getDataScope();
         if (isNeedAddTenantId) {
             List<UpdateSet> duplicateUpdateColumns = insert.getDuplicateUpdateSets();
@@ -134,10 +136,10 @@ public class TenantSqlInnerInterceptor extends BaseMultiTableInnerInterceptor {
             }
         }
         if (isNeedAddSourceDataScope) {
-            columns.add(new Column(sourceDataScopeColumn));
+            columns.add(new Column(tableDataScopeColumn));
             List<UpdateSet> duplicateUpdateColumns = insert.getDuplicateUpdateSets();
             if (CollectionUtils.isNotEmpty(duplicateUpdateColumns)) {
-                duplicateUpdateColumns.add(new UpdateSet(new Column(sourceDataScopeColumn), dataScope));
+                duplicateUpdateColumns.add(new UpdateSet(new Column(tableDataScopeColumn), dataScope));
             }
         }
 
@@ -224,7 +226,7 @@ public class TenantSqlInnerInterceptor extends BaseMultiTableInnerInterceptor {
             return;
         }
         if (selectItems.size() == 1) {
-            SelectItem item = selectItems.getFirst();
+            SelectItem<?> item = selectItems.getFirst();
             Expression expression = item.getExpression();
             if (expression instanceof AllColumns) {
                 return;
@@ -281,10 +283,82 @@ public class TenantSqlInnerInterceptor extends BaseMultiTableInnerInterceptor {
      */
     @Override
     public Expression buildTableExpression(Table table, Expression where, String whereSegment) {
-        if (tenantIdLineHandler.ignoreTable(table.getName())) {
+        TenantType tenantType = SqlParserContext.getCurrentSqlTenantType();
+        DataScopeType dataScopeType = SqlParserContext.getCurrentSqlDataScopeType();
+        boolean tenantEnabled = Objects.nonNull(tenantType) && !tenantIdLineHandler.ignoreTable(table.getName());
+        boolean dataScopeEnabled = Objects.nonNull(dataScopeType) && !dataScopeLineHandler.ignoreTable(table.getName());
+        if (!tenantEnabled && !dataScopeEnabled) {
             return null;
         }
-        return new EqualsTo(getAliasColumn(table), tenantIdLineHandler.getTenantId());
+        Expression expression = null;
+        boolean init = false;
+        if (tenantEnabled) {
+            Column tenantIdColumn = getAliasTenantIdColumn(table);
+            Expression tenantId = tenantIdLineHandler.getTenantId();
+            if (Objects.isNull(tenantId)) {
+                // 为空则表示没有可查询数据，当前表不需要再匹配
+                return new EqualsTo(new Column("1"), new LongValue(2));
+            } else {
+                expression = TenantType.ALL.equals(tenantType)
+                        ? new InExpression(tenantIdColumn, tenantId)
+                        : new EqualsTo(tenantIdColumn, tenantId);
+            }
+            init = true;
+        }
+        if (dataScopeEnabled) {
+            Column dataScopeColumn = getAliasDataScopeColumn(table);
+            List<Expression> dataScopes = dataScopeLineHandler.getDataScopes();
+            if (Objects.isNull(dataScopes)) {
+                // 为空则表示没有可查询数据，当前表不需要再匹配
+                return new EqualsTo(new Column("1"), new LongValue(2));
+            } else {
+                // 如果是 SELF 类型，本身只返回一个值，直接使用第一个
+                if (DataScopeType.SELF.equals(dataScopeType)) {
+                    Expression dataScopeExpression = new EqualsTo(dataScopeColumn, dataScopes.getFirst());
+                    return init ? new AndExpression(expression, dataScopeExpression) : dataScopeExpression;
+                }
+                // 不需要匹配
+                if (CollectionUtils.isNotEmpty(dataScopes)) {
+                    Expression dataScopeExpression = buildDataScopeExpression(dataScopes, dataScopeColumn);
+                    return init ? new AndExpression(expression, dataScopeExpression) : dataScopeExpression;
+                }
+            }
+        }
+        return expression;
+    }
+
+    /**
+     * 构建数据权限查询条件
+     *
+     * @param dataScopes      数据权限集合
+     * @param dataScopeColumn 数据权限字段
+     * @return 条件
+     */
+    private Expression buildDataScopeExpression(List<Expression> dataScopes, Expression dataScopeColumn) {
+        if (CollectionUtils.isSingle(dataScopes)) {
+            LikeExpression likeExpression = new LikeExpression();
+            likeExpression.setLeftExpression(dataScopeColumn);
+            likeExpression.setRightExpression(dataScopes.getFirst());
+            return likeExpression;
+        } else {
+            OrExpression orExpression = new OrExpression();
+            for (int i = 0; i < dataScopes.size(); i++) {
+                LikeExpression likeExpression = new LikeExpression();
+                likeExpression.setLeftExpression(dataScopeColumn);
+                likeExpression.setRightExpression(dataScopes.get(i));
+                if (i == 0) {
+                    orExpression.setLeftExpression(likeExpression);
+                } else if (i == 1) {
+                    orExpression.setRightExpression(likeExpression);
+                } else {
+                    OrExpression newOrExpression = new OrExpression();
+                    newOrExpression.setLeftExpression(orExpression);
+                    newOrExpression.setRightExpression(likeExpression);
+                    orExpression = newOrExpression;
+                }
+            }
+            return orExpression;
+        }
     }
 
     /**
@@ -294,12 +368,28 @@ public class TenantSqlInnerInterceptor extends BaseMultiTableInnerInterceptor {
      * @param table 表对象
      * @return 字段
      */
-    protected Column getAliasColumn(Table table) {
+    protected Column getAliasTenantIdColumn(Table table) {
         StringBuilder column = new StringBuilder();
         if (table.getAlias() != null) {
             column.append(table.getAlias().getName()).append(StringPool.DOT);
         }
         column.append(tenantIdLineHandler.getTenantIdColumn());
+        return new Column(column.toString());
+    }
+
+    /**
+     * 数据范围字段别名设置
+     * <p>tenantId 或 tableAlias.${dataScope}</p>
+     *
+     * @param table 表对象
+     * @return 字段
+     */
+    protected Column getAliasDataScopeColumn(Table table) {
+        StringBuilder column = new StringBuilder();
+        if (table.getAlias() != null) {
+            column.append(table.getAlias().getName()).append(StringPool.DOT);
+        }
+        column.append(dataScopeLineHandler.getDataScopeColumn(table.getName()));
         return new Column(column.toString());
     }
 
@@ -335,23 +425,41 @@ public class TenantSqlInnerInterceptor extends BaseMultiTableInnerInterceptor {
                 if (SqlParserUtils.ignoreProcess()) {
                     return;
                 }
+                // 检查是否为操作所有租户且用户可访问所有租户
+                TenantType tenantType = SqlParserUtils.getTenantType();
+                if (TenantContextUtils.isOperateAllTenant(tenantType)) {
+                    return;
+                }
+
                 compositeTenantEnabled = SqlParserUtils.tenantEnabled() && isTableTenantEnabled;
                 if (compositeTenantEnabled) {
                     // 设置当前 sql执行的租户类型
                     SqlParserContext.setCurrentSqlTenantTypeByParserMode();
                 }
-                compositeDataScopeEnabled = SqlParserUtils.dataScopeEnabled() && isTableDataScopeEnabled;
+                // 当前租户状态为 all，但是当前用户只能访问到被允许的租户，这种情况下，方法不会直接return掉，还是需要进行下一步判断
+                boolean isAllTenantType = TenantType.ALL.equals(tenantType);
+                compositeDataScopeEnabled = SqlParserUtils.dataScopeEnabled()
+                        && isTableDataScopeEnabled
+                        && !isAllTenantType;
                 if (compositeDataScopeEnabled) {
                     // 设置当前 sql执行的数据权限类型
                     SqlParserContext.setCurrentSqlDataScopeTypeByParserMode();
                 }
             } else {
                 // 非注解，使用 orm-context 中的信息
+                // 检查是否为操作所有租户且用户可访问所有租户
+                if (TenantContextUtils.isOperateAllTenant()) {
+                    return;
+                }
+
                 compositeTenantEnabled = isTenantEnabled && isTableTenantEnabled;
                 if (compositeTenantEnabled) {
                     SqlParserContext.setCurrentSqlTenantTypeByContext();
                 }
-                compositeDataScopeEnabled = isDataScopeEnabled && isTableDataScopeEnabled;
+                // 当前租户状态为 all，但是当前用户只能访问到被允许的租户，这种情况下，方法不会直接return掉，还是需要进行下一步判断
+
+                boolean isAllTenantType = TenantType.ALL.equals(TenantContextUtils.getTenantType());
+                compositeDataScopeEnabled = isDataScopeEnabled && isTableDataScopeEnabled && !isAllTenantType;
                 if (compositeDataScopeEnabled) {
                     SqlParserContext.setCurrentSqlDataScopeTypeByContext();
                 }

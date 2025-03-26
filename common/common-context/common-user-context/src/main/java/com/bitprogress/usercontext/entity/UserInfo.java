@@ -46,7 +46,7 @@ public class UserInfo {
      * 是否可操作所有租户
      * 为防止越权，默认不可操作
      */
-    private Boolean operateAllTenant;
+    private Boolean canOperateAllTenant;
 
     /**
      * 可操作租户ID
