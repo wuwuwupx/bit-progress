@@ -1,10 +1,8 @@
 package com.bitprogress.mybatisplus.plugins;
 
-import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
-import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.extension.plugins.inner.BaseMultiTableInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.mybatisplus.handler.DataScopeLineHandler;
 import com.bitprogress.mybatisplus.handler.TenantIdLineHandler;
@@ -28,15 +26,7 @@ import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
 import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.statement.update.UpdateSet;
-import org.apache.ibatis.executor.Executor;
-import org.apache.ibatis.executor.statement.StatementHandler;
-import org.apache.ibatis.mapping.BoundSql;
-import org.apache.ibatis.mapping.MappedStatement;
-import org.apache.ibatis.mapping.SqlCommandType;
-import org.apache.ibatis.session.ResultHandler;
-import org.apache.ibatis.session.RowBounds;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -45,52 +35,17 @@ import java.util.function.Consumer;
  * 先检查sql解析模式
  */
 @AllArgsConstructor
-public class TenantSqlInnerInterceptor extends BaseMultiTableInnerInterceptor {
+public class TenantSqlInnerInterceptor extends TenantLineInnerInterceptor {
 
     private final TenantIdLineHandler tenantIdLineHandler;
     private final DataScopeLineHandler dataScopeLineHandler;
-
-    @Override
-    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
-        if (InterceptorIgnoreHelper.willIgnoreTenantLine(ms.getId())) {
-            return;
-        }
-        PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
-        mpBs.sql(parserSingle(mpBs.sql(), null));
-    }
-
-    @Override
-    public void beforePrepare(StatementHandler sh, Connection connection, Integer transactionTimeout) {
-        PluginUtils.MPStatementHandler mpSh = PluginUtils.mpStatementHandler(sh);
-        MappedStatement ms = mpSh.mappedStatement();
-        SqlCommandType sct = ms.getSqlCommandType();
-        if (sct == SqlCommandType.INSERT || sct == SqlCommandType.UPDATE || sct == SqlCommandType.DELETE) {
-            if (InterceptorIgnoreHelper.willIgnoreTenantLine(ms.getId())) {
-                return;
-            }
-            PluginUtils.MPBoundSql mpBs = mpSh.mPBoundSql();
-            mpBs.sql(parserMulti(mpBs.sql(), null));
-        }
-    }
 
     /**
      * select 语句处理
      */
     @Override
     protected void processSelect(Select select, int index, String sql, Object obj) {
-        process(SqlType.SELECT, null, index, t -> processSelectSql(select, t, sql, obj));
-    }
-
-    /**
-     * select 语句处理
-     */
-    private void processSelectSql(Select select, int index, String sql, Object obj) {
-        final String whereSegment = (String) obj;
-        processSelectBody(select, whereSegment);
-        List<WithItem<?>> withItemsList = select.getWithItemsList();
-        if (!CollectionUtils.isEmpty(withItemsList)) {
-            withItemsList.forEach(withItem -> processSelectBody(withItem.getSelect(), whereSegment));
-        }
+        process(SqlType.SELECT, null, index, t -> super.processSelect(select, t, sql, obj));
     }
 
     /**
@@ -194,68 +149,11 @@ public class TenantSqlInnerInterceptor extends BaseMultiTableInnerInterceptor {
     }
 
     /**
-     * 处理 insert into select
-     * <p>
-     * 进入这里表示需要 insert 的表启用了多租户,则 select 的表都启动了
-     *
-     * @param selectBody SelectBody
-     */
-    protected void processInsertSelect(Select selectBody, final String whereSegment) {
-        if (selectBody instanceof PlainSelect plainSelect) {
-            FromItem fromItem = plainSelect.getFromItem();
-            if (fromItem instanceof Table) {
-                processPlainSelect(plainSelect, whereSegment);
-                appendSelectItem(plainSelect.getSelectItems());
-            } else if (fromItem instanceof Select subSelect) {
-                appendSelectItem(plainSelect.getSelectItems());
-                processInsertSelect(subSelect, whereSegment);
-            }
-        } else if (selectBody instanceof ParenthesedSelect parenthesedSelect) {
-            processInsertSelect(parenthesedSelect.getSelect(), whereSegment);
-
-        }
-    }
-
-    /**
-     * 追加 SelectItem
-     *
-     * @param selectItems SelectItem
-     */
-    protected void appendSelectItem(List<SelectItem<?>> selectItems) {
-        if (CollectionUtils.isEmpty(selectItems)) {
-            return;
-        }
-        if (selectItems.size() == 1) {
-            SelectItem<?> item = selectItems.getFirst();
-            Expression expression = item.getExpression();
-            if (expression instanceof AllColumns) {
-                return;
-            }
-        }
-        selectItems.add(new SelectItem<>(new Column(tenantIdLineHandler.getTenantIdColumn())));
-    }
-
-    /**
      * update 语句处理
      */
     @Override
     protected void processUpdate(Update update, int index, String sql, Object obj) {
-        process(SqlType.UPDATE, update.getTable(), index, t -> this.processUpdateSql(update, t, sql, obj));
-    }
-
-    /**
-     * update 语句处理
-     */
-    private void processUpdateSql(Update update, int index, String sql, Object obj) {
-        List<UpdateSet> sets = update.getUpdateSets();
-        if (!CollectionUtils.isEmpty(sets)) {
-            sets.forEach(us -> us.getValues().forEach(ex -> {
-                if (ex instanceof Select) {
-                    processSelectBody(((Select) ex), (String) obj);
-                }
-            }));
-        }
-        update.setWhere(this.andExpression(update.getTable(), update.getWhere(), (String) obj));
+        process(SqlType.UPDATE, update.getTable(), index, t -> super.processUpdate(update, t, sql, obj));
     }
 
     /**
@@ -263,14 +161,7 @@ public class TenantSqlInnerInterceptor extends BaseMultiTableInnerInterceptor {
      */
     @Override
     protected void processDelete(Delete delete, int index, String sql, Object obj) {
-        process(SqlType.DELETE, delete.getTable(), index, t -> this.processDeleteSql(delete, t, sql, obj));
-    }
-
-    /**
-     * delete 语句处理
-     */
-    private void processDeleteSql(Delete delete, int index, String sql, Object obj) {
-        delete.setWhere(this.andExpression(delete.getTable(), delete.getWhere(), (String) obj));
+        process(SqlType.DELETE, delete.getTable(), index, t -> super.processDelete(delete, t, sql, obj));
     }
 
     /**
