@@ -19,8 +19,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.util.Objects;
-
 @AutoConfigureAfter(MybatisPlusAutoConfiguration.class)
 @MapperScan("com.bitprogress.**.mapper")
 @Configuration
@@ -37,13 +35,10 @@ public class MybatisPlusConfig {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
 
         // 租户插件
-        if (Objects.nonNull(tenantProperties.getEnabled()) && tenantProperties.getEnabled()
-                || Objects.nonNull(dataScopeProperties.getEnabled()) && dataScopeProperties.getEnabled()) {
-            TenantIdLineHandler tenantSqlHandler = new TenantIdLineHandler(tenantProperties);
-            DataScopeLineHandler dataScopeLineHandler = new DefaultDataScopeLineHandler(dataScopeProperties);
-            TenantSqlInnerInterceptor sqlInnerInterceptor = new TenantSqlInnerInterceptor(tenantSqlHandler, dataScopeLineHandler);
-            interceptor.addInnerInterceptor(sqlInnerInterceptor);
-        }
+        TenantIdLineHandler tenantSqlHandler = new TenantIdLineHandler(tenantProperties);
+        DataScopeLineHandler dataScopeLineHandler = new DefaultDataScopeLineHandler(dataScopeProperties);
+        TenantSqlInnerInterceptor sqlInnerInterceptor = new TenantSqlInnerInterceptor(tenantSqlHandler, dataScopeLineHandler);
+        interceptor.addInnerInterceptor(sqlInnerInterceptor);
 
         // 乐观锁插件
         OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor = new OptimisticLockerInnerInterceptor();
