@@ -21,14 +21,14 @@ public interface DataScopeLineHandler {
      *
      * @return 数据范围
      */
-    Expression getDataScope();
+    Expression getCurrentDataScope();
 
     /**
      * 获取可查询数据范围列表
      *
      * @return 数据范围
      */
-    List<Expression> getDataScopes();
+    Expression getDataScope();
 
     /**
      * 获取数据范围字段

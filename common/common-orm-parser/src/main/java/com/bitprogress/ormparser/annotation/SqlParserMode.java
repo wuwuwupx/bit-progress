@@ -30,6 +30,7 @@ import java.lang.annotation.*;
  * - 默认不开启
  * <p>
  * 引入租户类型，默认当前租户
+ * - {@link TenantType#ALL} 所有租户，sql解析后设置租户ID为操作用户可操作的租户ID {@link TenantContextUtils#getOperateTenantIds()}
  * - {@link TenantType#CURRENT} 当前租户，sql解析后设置租户ID为操作用户当前的租户ID {@link TenantContextUtils#getTenantId()}
  * - {@link TenantType#OPERATE} 被操作租户，sql解析后设置租户ID为操作的租户ID {@link TenantContextUtils#getOperateTenantId()}
  * 应该在设置 {@link TenantContextUtils#setOperateTenantId(Long)} 时校验是否有权限操作该租户
@@ -44,7 +45,7 @@ import java.lang.annotation.*;
  * 引入数据范围类型
  * 默认为自身
  * - {@link DataScopeType#ALL} 全部，不需要做数据范围覆盖
- * - {@link DataScopeType#LIMITED} 数据范围，sql解析后设置数据范围为操作用户当前的数据范围 {@link DataScopeContextUtils#getDataScopes()}
+ * - {@link DataScopeType#COMPOSITE_LEVEL} 数据范围，sql解析后设置数据范围为操作用户当前的数据范围 {@link DataScopeContextUtils#getDataScopes()}
  * - {@link DataScopeType#SELF} 自身，sql解析后设置数据范围为操作用户当前的数据范围 {@link DataScopeContextUtils#getUserId()}
  * <p>
  * 可考虑将当前注解拆开为全局解析开关、租户、数据权限注解（参考mybatis-plus原有的租户和数据权限模式）

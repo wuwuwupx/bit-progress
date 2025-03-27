@@ -83,6 +83,13 @@ public class DataScopeContextUtils {
     }
 
     /**
+     * 清除数据范围类型
+     */
+    public static void clearDataScopeType() {
+        DataScopeInfo dataScopeInfo = DataScopeContext.getDataScopeInfo();
+    }
+
+    /**
      * 获取数据范围
      */
     public static String getDataScope() {

@@ -7,9 +7,10 @@ import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.LongValue;
-import net.sf.jsqlparser.expression.StringValue;
+import net.sf.jsqlparser.expression.*;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.expression.operators.relational.IsNullExpression;
+import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.schema.Table;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
      * @return 数据范围
      */
     @Override
-    public Expression getDataScope() {
+    public Expression getCurrentDataScope() {
         return new StringValue(DataScopeContextUtils.getDataScope());
     }
 
@@ -80,25 +81,55 @@ public class DefaultDataScopeLineHandler implements DataScopeLineHandler {
      * @return 数据范围
      */
     @Override
-    public List<Expression> getDataScopes() {
+    public Expression getDataScope() {
         DataScopeType dataScopeType = SqlParserContext.getCurrentSqlDataScopeType();
         switch(dataScopeType) {
             case SELF -> {
-                return CollectionUtils.asList(new LongValue(DataScopeContextUtils.getUserId()));
+                return new LongValue(DataScopeContextUtils.getUserId());
             }
-            case LIMITED -> {
+            case BELONG_LEVEL_CURRENT -> {
+                return new StringValue(DataScopeContextUtils.getDataScope());
+            }
+            case BELONG_LEVEL -> {
+                return new StringValue(DataScopeContextUtils.getDataScope() + "%");
+            }
+            case MANAGED_LEVEL_CURRENT -> {
+                Set<String> dataScopes = DataScopeContextUtils.getDataScopes();
+                if (CollectionUtils.isEmpty(dataScopes)) {
+                    return new NullValue();
+                }
+                return new ParenthesedExpressionList<>(CollectionUtils.toList(dataScopes, StringValue::new));
+            }
+            case MANAGED_LEVEL -> {
+                Set<String> dataScopes = DataScopeContextUtils.getDataScopes();
+                if (CollectionUtils.isEmpty(dataScopes)) {
+                    return new NullValue();
+                }
+                return new ExpressionList<>(CollectionUtils
+                        .toList(dataScopes, dataScope -> new StringValue(dataScope + "%")));
+            }
+            case COMPOSITE_LEVEL_CURRENT -> {
                 Set<String> dataScopes = CollectionUtils
                         .add(DataScopeContextUtils.getDataScopes(), DataScopeContextUtils.getDataScope());
                 if (CollectionUtils.isEmpty(dataScopes)) {
-                    return null;
+                    return new NullValue();
                 }
-                return CollectionUtils.toList(dataScopes, dataScope -> new StringValue(dataScope + "%"));
+                return new ParenthesedExpressionList<>(CollectionUtils.toList(dataScopes, StringValue::new));
+            }
+            case COMPOSITE_LEVEL -> {
+                Set<String> dataScopes = CollectionUtils
+                        .add(DataScopeContextUtils.getDataScopes(), DataScopeContextUtils.getDataScope());
+                if (CollectionUtils.isEmpty(dataScopes)) {
+                    return new NullValue();
+                }
+                return new ExpressionList<>(CollectionUtils
+                        .toList(dataScopes, dataScope -> new StringValue(dataScope + "%")));
             }
             case ALL -> {
-                return List.of();
+                return new AllValue();
             }
         }
-        return null;
+        return new NullValue();
     }
 
     /**
