@@ -10,7 +10,7 @@ import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
-import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.expression.NullValue;
 import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.schema.Table;
 
@@ -57,7 +57,7 @@ public class TenantIdLineHandler implements TenantLineHandler {
                 // 对于没有可操作租户的用户，应该不返回任何数据
                 Set<Long> operateTenantIds = TenantContextUtils.getOperateTenantIds();
                 if (CollectionUtils.isEmpty(operateTenantIds)) {
-                    return null;
+                    return new NullValue();
                 }
                 return new ParenthesedExpressionList<>(CollectionUtils.toList(operateTenantIds, LongValue::new));
             }
@@ -68,7 +68,7 @@ public class TenantIdLineHandler implements TenantLineHandler {
                 return new LongValue(TenantContextUtils.getOperateTenantIdOrDefault());
             }
             default -> {
-                return null;
+                return new NullValue();
             }
         }
     }

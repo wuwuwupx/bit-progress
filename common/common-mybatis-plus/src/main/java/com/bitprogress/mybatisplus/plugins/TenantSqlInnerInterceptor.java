@@ -190,7 +190,7 @@ public class TenantSqlInnerInterceptor extends TenantLineInnerInterceptor {
         if (tenantEnabled) {
             Column tenantIdColumn = getAliasTenantIdColumn(table);
             Expression tenantId = tenantIdLineHandler.getTenantId();
-            if (Objects.isNull(tenantId)) {
+            if (tenantId instanceof NullValue) {
                 // 为空则表示没有可查询数据，当前表不需要再匹配
                 return new EqualsTo(new Column("1"), new LongValue(2));
             } else {
@@ -256,7 +256,7 @@ public class TenantSqlInnerInterceptor extends TenantLineInnerInterceptor {
                     orExpression = newOrExpression;
                 }
             }
-            return orExpression;
+            return CollectionUtils.isSingle(dataScopes) ? orExpression : new ParenthesedExpressionList<>(orExpression);
         }
         throw ExceptionUtils.mpe("dataScope analysis error");
     }
