@@ -1,7 +1,7 @@
 package com.bitprogress.ormcontext.utils;
 
-import com.bitprogress.basemodel.IException;
 import com.bitprogress.exception.CommonException;
+import com.bitprogress.exception.ExceptionMessage;
 import com.bitprogress.ormcontext.context.TenantContext;
 import com.bitprogress.ormcontext.entity.TenantInfo;
 import com.bitprogress.ormmodel.enums.TenantType;
@@ -52,7 +52,7 @@ public class TenantContextUtils {
     /**
      * 获取 tenantId，为空则抛出异常
      */
-    public static Long getTenantIdOrThrow(IException exception) {
+    public static Long getTenantIdOrThrow(ExceptionMessage exception) {
         return TenantContext.getFieldOrThrow(TenantInfo::getTenantId, () -> CommonException.error(exception));
     }
 
@@ -110,7 +110,7 @@ public class TenantContextUtils {
     /**
      * 获取 tenantId，为空则抛出异常
      */
-    public static Long getOperateTenantIdOrThrow(IException exception) {
+    public static Long getOperateTenantIdOrThrow(ExceptionMessage exception) {
         return TenantContext.getFieldOrThrow(TenantInfo::getOperateTenantId, () -> CommonException.error(exception));
     }
 
@@ -151,7 +151,7 @@ public class TenantContextUtils {
     /**
      * 设置 operateTenantId
      */
-    public static void setOperateTenantIdOrThrow(Long operateTenantId, IException exception) {
+    public static void setOperateTenantIdOrThrow(Long operateTenantId, ExceptionMessage exception) {
         TenantInfo tenantInfo = TenantContext.getTenantInfoOrThrow(exception);
         tenantInfo.setOperateTenantId(operateTenantId);
         TenantContext.setTenantInfo(tenantInfo);
@@ -188,7 +188,7 @@ public class TenantContextUtils {
     /**
      * 获取 tenantType
      */
-    public static TenantType getTenantTypeOrThrow(IException exception) {
+    public static TenantType getTenantTypeOrThrow(ExceptionMessage exception) {
         return TenantContext.getFieldOrThrow(TenantInfo::getTenantType, () -> CommonException.error(exception));
     }
 
@@ -220,7 +220,7 @@ public class TenantContextUtils {
     /**
      * 设置 tenantType
      */
-    public static void setTenantTypeOrThrow(TenantType tenantType, IException exception) {
+    public static void setTenantTypeOrThrow(TenantType tenantType, ExceptionMessage exception) {
         TenantInfo tenantInfo = TenantContext.getTenantInfoOrThrow(exception);
         tenantInfo.setTenantType(tenantType);
         TenantContext.setTenantInfo(tenantInfo);
@@ -266,7 +266,7 @@ public class TenantContextUtils {
     /**
      * 获取 是否可以操作所有租户
      */
-    public static Boolean getCanOperateAllTenantOrThrow(IException exception) {
+    public static Boolean getCanOperateAllTenantOrThrow(ExceptionMessage exception) {
         return TenantContext.getFieldOrThrow(TenantInfo::getCanOperateAllTenant, () -> CommonException.error(exception));
     }
 
@@ -335,7 +335,7 @@ public class TenantContextUtils {
     /**
      * 获取 operateTenantIds
      */
-    public static Set<Long> getOperateTenantIdsOrThrow(IException exception) {
+    public static Set<Long> getOperateTenantIdsOrThrow(ExceptionMessage exception) {
         return TenantContext.getFieldOrThrow(TenantInfo::getOperateTenantIds, () -> CommonException.error(exception));
     }
 

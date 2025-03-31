@@ -1,7 +1,7 @@
 package com.bitprogress.usercontext.utils;
 
-import com.bitprogress.basemodel.IException;
 import com.bitprogress.exception.CommonException;
+import com.bitprogress.exception.ExceptionMessage;
 import com.bitprogress.usercontext.context.UserContext;
 import com.bitprogress.usercontext.entity.UserInfo;
 import com.bitprogress.usercontext.enums.DataScopeType;
@@ -68,7 +68,7 @@ public class UserContextUtils {
     /**
      * 获取用户ID
      */
-    public static Long getUserIdOrThrow(IException exception) {
+    public static Long getUserIdOrThrow(ExceptionMessage exception) {
         return UserContext.getFieldOrThrow(UserInfo::getUserId, () -> CommonException.error(exception));
     }
 
@@ -133,7 +133,7 @@ public class UserContextUtils {
     /**
      * 获取用户名称
      */
-    public static String getUsernameOrThrow(IException exception) {
+    public static String getUsernameOrThrow(ExceptionMessage exception) {
         return UserContext.getFieldOrThrow(UserInfo::getUsername, () -> CommonException.error(exception));
     }
 
@@ -191,7 +191,7 @@ public class UserContextUtils {
     /**
      * 获取用户类型
      */
-    public static UserType getUserTypeOrThrow(IException exception) {
+    public static UserType getUserTypeOrThrow(ExceptionMessage exception) {
         return UserContext.getFieldOrThrow(UserInfo::getUserType, () -> CommonException.error(exception));
     }
 
@@ -256,7 +256,7 @@ public class UserContextUtils {
     /**
      * 获取角色ID
      */
-    public static Set<Long> getRoleIdsOrThrow(IException exception) {
+    public static Set<Long> getRoleIdsOrThrow(ExceptionMessage exception) {
         return UserContext.getFieldOrThrow(UserInfo::getRoleIds, () -> CommonException.error(exception));
     }
 
@@ -321,7 +321,7 @@ public class UserContextUtils {
     /**
      * 获取租户ID
      */
-    public static Long getTenantIdOrThrow(IException exception) {
+    public static Long getTenantIdOrThrow(ExceptionMessage exception) {
         return UserContext.getFieldOrThrow(UserInfo::getTenantId, () -> CommonException.error(exception));
     }
 
@@ -423,7 +423,7 @@ public class UserContextUtils {
     /**
      * 获取可操作租户ID
      */
-    public static Set<Long> getOperateTenantIdsOrThrow(IException exception) {
+    public static Set<Long> getOperateTenantIdsOrThrow(ExceptionMessage exception) {
         return UserContext.getFieldOrThrow(UserInfo::getOperateTenantIds, () -> CommonException.error(exception));
     }
 
@@ -474,7 +474,7 @@ public class UserContextUtils {
     /**
      * 获取数据权限类型
      */
-    public static DataScopeType getDataScopeTypeOrThrow(IException exception) {
+    public static DataScopeType getDataScopeTypeOrThrow(ExceptionMessage exception) {
         return UserContext.getFieldOrThrow(UserInfo::getDataScopeType, () -> CommonException.error(exception));
     }
 
@@ -539,7 +539,7 @@ public class UserContextUtils {
     /**
      * 获取数据范围
      */
-    public static String getDataScopeOrThrow(IException exception) {
+    public static String getDataScopeOrThrow(ExceptionMessage exception) {
         return UserContext.getFieldOrThrow(UserInfo::getDataScope, () -> CommonException.error(exception));
     }
 
@@ -604,7 +604,7 @@ public class UserContextUtils {
     /**
      * 获取可查询数据范围列表
      */
-    public static Set<String> getDataScopesOrThrow(IException exception) {
+    public static Set<String> getDataScopesOrThrow(ExceptionMessage exception) {
         return UserContext.getFieldOrThrow(UserInfo::getDataScopes, () -> CommonException.error(exception));
     }
 

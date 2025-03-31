@@ -1,4 +1,4 @@
-package com.bitprogress.constant;
+package com.bitprogress.exception.constant;
 
 /**
  * 请求的返回信息

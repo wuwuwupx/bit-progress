@@ -1,7 +1,7 @@
 package com.bitprogress.usercontext.context;
 
-import com.bitprogress.basemodel.IException;
 import com.bitprogress.exception.CommonException;
+import com.bitprogress.exception.ExceptionMessage;
 import com.bitprogress.usercontext.entity.UserInfo;
 import com.bitprogress.util.JsonUtils;
 
@@ -71,7 +71,7 @@ public class UserContext {
      * 获取用户信息
      * 为空抛出异常
      */
-    public static UserInfo getUserInfoOrThrow(IException exception) {
+    public static UserInfo getUserInfoOrThrow(ExceptionMessage exception) {
         return getUserInfoOrThrow(() -> CommonException.error(exception));
     }
 

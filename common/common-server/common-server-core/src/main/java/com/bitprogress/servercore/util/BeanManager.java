@@ -1,4 +1,4 @@
-package com.bitprogress.util;
+package com.bitprogress.servercore.util;
 
 import lombok.Getter;
 import org.springframework.context.ApplicationContext;

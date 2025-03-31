@@ -1,6 +1,6 @@
 package com.bitprogress.github.exception;
 
-import com.bitprogress.basemodel.IException;
+import com.bitprogress.exception.ExceptionMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum GitHubLoginExceptionMessage implements IException {
+public enum GitHubLoginExceptionMessage implements ExceptionMessage {
 
     /**
      * GitHub登录AccessToken获取异常

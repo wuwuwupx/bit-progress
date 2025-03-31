@@ -1,15 +1,17 @@
 package com.bitprogress.response.exception;
 
-import com.bitprogress.basemodel.IException;
+import com.bitprogress.exception.ExceptionMessage;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import static com.bitprogress.response.exception.ExceptionMessage.*;
+import static com.bitprogress.response.exception.CommonExceptionMessage.*;
 
 /**
  * 请求异常信息枚举
  */
+@Getter
 @AllArgsConstructor
-public enum ExceptionEnum implements IException {
+public enum CommonExceptionEnum implements ExceptionMessage {
 
     /**
      * 请求参数错误或者参数为空
@@ -113,21 +115,5 @@ public enum ExceptionEnum implements IException {
      * 异常信息
      */
     private final String message;
-
-    /**
-     * 获取异常状态码
-     */
-    @Override
-    public Integer getCode() {
-        return this.code;
-    }
-
-    /**
-     * 获取异常信息
-     */
-    @Override
-    public String getMessage() {
-        return this.message;
-    }
 
 }

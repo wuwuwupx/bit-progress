@@ -1,7 +1,7 @@
 package com.bitprogress.ormcontext.utils;
 
-import com.bitprogress.basemodel.IException;
 import com.bitprogress.exception.CommonException;
+import com.bitprogress.exception.ExceptionMessage;
 import com.bitprogress.ormcontext.context.DataScopeContext;
 import com.bitprogress.ormcontext.entity.DataScopeInfo;
 import com.bitprogress.ormmodel.enums.DataScopeType;
@@ -53,7 +53,7 @@ public class DataScopeContextUtils {
     /**
      * 获取数据范围类型，为空则抛出异常
      */
-    public static DataScopeType getDataScopeTypeOrThrow(IException exception) {
+    public static DataScopeType getDataScopeTypeOrThrow(ExceptionMessage exception) {
         return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScopeType, () -> CommonException.error(exception));
     }
 
@@ -120,7 +120,7 @@ public class DataScopeContextUtils {
     /**
      * 获取数据范围，为空则抛出异常
      */
-    public static String getDataScopeOrThrow(IException exception) {
+    public static String getDataScopeOrThrow(ExceptionMessage exception) {
         return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScope, () -> CommonException.error(exception));
     }
 
@@ -169,7 +169,7 @@ public class DataScopeContextUtils {
     /**
      * 获取可查询数据范围列表，为空则抛出异常
      */
-    public static Set<String> getDataScopesOrThrow(IException exception) {
+    public static Set<String> getDataScopesOrThrow(ExceptionMessage exception) {
         return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScopes, () -> CommonException.error(exception));
     }
 
@@ -267,7 +267,7 @@ public class DataScopeContextUtils {
     /**
      * 获取用户ID，为空则抛出异常
      */
-    public static Long getUserIdOrThrow(IException exception) {
+    public static Long getUserIdOrThrow(ExceptionMessage exception) {
         return DataScopeContext.getFieldOrThrow(DataScopeInfo::getUserId, () -> CommonException.error(exception));
     }
 

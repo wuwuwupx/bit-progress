@@ -2,14 +2,14 @@ package com.bitprogress.response.model;
 
 import com.bitprogress.basemodel.response.RequestResponse;
 import com.bitprogress.exception.CommonException;
-import com.bitprogress.response.exception.ExceptionEnum;
+import com.bitprogress.response.exception.CommonExceptionEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
-import static com.bitprogress.constant.ResultConstants.*;
+import static com.bitprogress.exception.constant.ResultConstants.*;
 
 /**
  * 结果集响应
@@ -111,10 +111,10 @@ public class ResultResponse<T> extends RequestResponse {
     /**
      * 抛出异常
      *
-     * @param exceptionEnum 请求异常
+     * @param commonExceptionEnum 请求异常
      */
-    public static ResultResponse<Void> fail(ExceptionEnum exceptionEnum) {
-        return fail(exceptionEnum.getCode(), exceptionEnum.getMessage());
+    public static ResultResponse<Void> fail(CommonExceptionEnum commonExceptionEnum) {
+        return fail(commonExceptionEnum.getCode(), commonExceptionEnum.getMessage());
     }
 
     /**

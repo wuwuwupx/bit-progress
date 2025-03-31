@@ -1,8 +1,8 @@
 package com.bitprogress.ormcontext.context;
 
-import com.bitprogress.ormcontext.entity.TenantInfo;
 import com.bitprogress.exception.CommonException;
-import com.bitprogress.basemodel.IException;
+import com.bitprogress.exception.ExceptionMessage;
+import com.bitprogress.ormcontext.entity.TenantInfo;
 import com.bitprogress.util.JsonUtils;
 
 import java.util.Optional;
@@ -65,7 +65,7 @@ public class TenantContext {
     /**
      * 获取租户信息
      */
-    public static TenantInfo getTenantInfoOrThrow(IException exception) {
+    public static TenantInfo getTenantInfoOrThrow(ExceptionMessage exception) {
         return Optional
                 .ofNullable(TENANT_INFO.get())
                 .orElseThrow(() -> CommonException.error(exception));

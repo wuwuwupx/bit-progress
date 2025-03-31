@@ -1,17 +1,22 @@
-package com.bitprogress.filter;
+package com.bitprogress.servercore.filter;
 
 import com.bitprogress.basecontext.context.DispatcherContext;
-import com.bitprogress.exception.RequestExceptionMessage;
+import com.bitprogress.exception.util.Assert;
+import com.bitprogress.servercore.exception.RequestExceptionMessage;
 import com.bitprogress.ormcontext.context.DataScopeContext;
 import com.bitprogress.ormcontext.context.TenantContext;
 import com.bitprogress.ormcontext.entity.DataScopeInfo;
 import com.bitprogress.ormcontext.entity.TenantInfo;
 import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormparser.util.SqlParserUtils;
-import com.bitprogress.property.ApplicationTokenProperties;
+import com.bitprogress.servercore.property.ApplicationTokenProperties;
 import com.bitprogress.request.constant.VerifyConstant;
 import com.bitprogress.request.enums.RequestSource;
 import com.bitprogress.request.enums.RequestType;
+import com.bitprogress.servercore.util.DataScopeUtils;
+import com.bitprogress.servercore.util.DispatcherUtils;
+import com.bitprogress.servercore.util.TenantUtils;
+import com.bitprogress.servercore.util.UserUtils;
 import com.bitprogress.usercontext.context.UserContext;
 import com.bitprogress.usercontext.entity.UserInfo;
 import com.bitprogress.util.*;

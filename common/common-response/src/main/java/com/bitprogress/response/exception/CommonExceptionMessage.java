@@ -3,7 +3,7 @@ package com.bitprogress.response.exception;
 /**
  * @author wuwuwupx
  */
-public class ExceptionMessage {
+public class CommonExceptionMessage {
 
     public static final String REQUEST_ARGUMENT_MESSAGE = "请求参数错误或者参数为空";
     public static final String AUTH_ACCOUNT_PASSWORD_WRONG_MESSAGE = "账号或密码错误";

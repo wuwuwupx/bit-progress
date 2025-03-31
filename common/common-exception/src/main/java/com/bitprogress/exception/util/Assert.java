@@ -1,7 +1,7 @@
-package com.bitprogress.util;
+package com.bitprogress.exception.util;
 
 import com.bitprogress.exception.CommonException;
-import com.bitprogress.basemodel.IException;
+import com.bitprogress.exception.ExceptionMessage;
 
 import java.util.Collection;
 
@@ -26,7 +26,7 @@ public class Assert {
      * @param expression 表达式结果
      * @param exception  异常信息
      */
-    public static void isTrue(boolean expression, IException exception) {
+    public static void isTrue(boolean expression, ExceptionMessage exception) {
         isTrue(expression, CommonException.error(exception));
     }
 
@@ -58,7 +58,7 @@ public class Assert {
      * @param expression 表达式结果
      * @param exception  异常信息
      */
-    public static void isFalse(boolean expression, IException exception) {
+    public static void isFalse(boolean expression, ExceptionMessage exception) {
         isFalse(expression, CommonException.error(exception));
     }
 
@@ -90,7 +90,7 @@ public class Assert {
      * @param object    判断对象
      * @param exception 异常信息
      */
-    public static void isNull(Object object, IException exception) {
+    public static void isNull(Object object, ExceptionMessage exception) {
         isNull(object, CommonException.error(exception));
     }
 
@@ -122,7 +122,7 @@ public class Assert {
      * @param object    判断对象
      * @param exception 异常信息
      */
-    public static void notNull(Object object, IException exception) {
+    public static void notNull(Object object, ExceptionMessage exception) {
         notNull(object, CommonException.error(exception));
     }
 
@@ -154,7 +154,7 @@ public class Assert {
      * @param str       需判断字符串
      * @param exception 异常信息
      */
-    public static void isEmpty(String str, IException exception) {
+    public static void isEmpty(String str, ExceptionMessage exception) {
         isEmpty(str, CommonException.error(exception));
     }
 
@@ -186,7 +186,7 @@ public class Assert {
      * @param str       需判断字符串
      * @param exception 异常信息
      */
-    public static void isNotEmpty(String str, IException exception) {
+    public static void isNotEmpty(String str, ExceptionMessage exception) {
         isNotEmpty(str, CommonException.error(exception));
     }
 
@@ -208,7 +208,7 @@ public class Assert {
      * @param collection 需判断集合
      * @param exception  异常信息
      */
-    public static <T> void isEmpty(Collection<T> collection, IException exception) {
+    public static <T> void isEmpty(Collection<T> collection, ExceptionMessage exception) {
         isEmpty(collection, CommonException.error(exception));
     }
 
@@ -230,7 +230,7 @@ public class Assert {
      * @param collection 需判断集合
      * @param exception  异常信息
      */
-    public static <T> void isNotEmpty(Collection<T> collection, IException exception) {
+    public static <T> void isNotEmpty(Collection<T> collection, ExceptionMessage exception) {
         isNotEmpty(collection, CommonException.error(exception));
     }
 

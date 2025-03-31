@@ -1,4 +1,4 @@
-package com.bitprogress.util;
+package com.bitprogress.servercore.util;
 
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;

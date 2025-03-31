@@ -1,4 +1,4 @@
-package com.bitprogress.property;
+package com.bitprogress.servercore.property;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

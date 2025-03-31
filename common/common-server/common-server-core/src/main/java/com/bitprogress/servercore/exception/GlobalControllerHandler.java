@@ -1,7 +1,9 @@
-package com.bitprogress.exception;
+package com.bitprogress.servercore.exception;
 
+import com.bitprogress.exception.CommonException;
+import com.bitprogress.exception.ValidationException;
 import com.bitprogress.response.model.ResultResponse;
-import com.bitprogress.util.ErrorUtils;
+import com.bitprogress.exception.util.ErrorUtils;
 import com.bitprogress.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

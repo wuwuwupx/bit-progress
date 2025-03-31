@@ -1,7 +1,7 @@
 package com.bitprogress.exception;
 
 import com.bitprogress.basemodel.IException;
-import com.bitprogress.constant.ResultConstants;
+import com.bitprogress.exception.constant.ResultConstants;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,7 +41,7 @@ public class CommonException extends RuntimeException {
     /**
      * Constructs a exception about {@link IException}
      */
-    public CommonException(IException exception) {
+    public CommonException(ExceptionMessage exception) {
         this(exception.getCode(), exception.getMessage());
     }
 
@@ -64,7 +64,7 @@ public class CommonException extends RuntimeException {
     /**
      * Constructs a exception about Throwable and {@link IException}
      */
-    public CommonException(Throwable cause, IException exception) {
+    public CommonException(Throwable cause, ExceptionMessage exception) {
         this(cause, exception.getCode(), exception.getMessage());
     }
 
@@ -85,11 +85,11 @@ public class CommonException extends RuntimeException {
         return new CommonException(cause, message);
     }
 
-    public static CommonException error(IException exception) {
+    public static CommonException error(ExceptionMessage exception) {
         return new CommonException(exception);
     }
 
-    public static CommonException error(Throwable cause, IException exception) {
+    public static CommonException error(Throwable cause, ExceptionMessage exception) {
         return new CommonException(cause, exception);
     }
 

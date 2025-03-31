@@ -1,4 +1,4 @@
-package com.bitprogress.util;
+package com.bitprogress.servercore.util;
 
 import com.bitprogress.ormcontext.entity.TenantInfo;
 import com.bitprogress.ormmodel.enums.TenantType;

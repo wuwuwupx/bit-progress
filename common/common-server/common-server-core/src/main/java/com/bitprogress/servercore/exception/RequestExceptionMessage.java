@@ -1,12 +1,12 @@
-package com.bitprogress.exception;
+package com.bitprogress.servercore.exception;
 
-import com.bitprogress.basemodel.IException;
+import com.bitprogress.exception.ExceptionMessage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum RequestExceptionMessage implements IException {
+public enum RequestExceptionMessage implements ExceptionMessage {
 
     REQUEST_SOURCE_MISS_WRONG_EXCEPTION(400, "请求来源不能为空"),
 

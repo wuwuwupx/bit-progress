@@ -1,6 +1,7 @@
 package com.bitprogress.util;
 
 import com.bitprogress.basemodel.IJson;
+import com.bitprogress.basemodel.json.ObjectToJson;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -113,8 +114,8 @@ public class JsonUtils {
         if (o == null) {
             return defaultJson;
         }
-        if (o instanceof IJson iJson) {
-            return iJson.toJson();
+        if (o instanceof ObjectToJson objectToJson) {
+            return objectToJson.toJson();
         }
         try {
             ObjectMapper objectMapper = isAlways ? ALWAYS_MAPPER : DEFAULT_MAPPER;

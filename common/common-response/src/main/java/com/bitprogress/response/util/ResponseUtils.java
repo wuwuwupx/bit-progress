@@ -1,11 +1,11 @@
 package com.bitprogress.response.util;
 
 import com.bitprogress.exception.CommonException;
-import com.bitprogress.response.exception.ExceptionEnum;
+import com.bitprogress.response.exception.CommonExceptionEnum;
 import com.bitprogress.response.model.ResultResponse;
-import com.bitprogress.util.Assert;
+import com.bitprogress.exception.util.Assert;
 
-import static com.bitprogress.constant.ResultConstants.SUCCESS_CODE;
+import static com.bitprogress.exception.constant.ResultConstants.SUCCESS_CODE;
 
 /**
  * 响应工具类
@@ -18,9 +18,9 @@ public class ResponseUtils {
      * @param response 响应结果
      */
     public static <T> void tryAssert(ResultResponse<T> response) {
-        Assert.notNull(response, ExceptionEnum.RESPONSE_MISS_WRONG_EXCEPTION);
+        Assert.notNull(response, CommonExceptionEnum.RESPONSE_MISS_WRONG_EXCEPTION);
         Integer code = response.getCode();
-        Assert.notNull(code, ExceptionEnum.RESPONSE_CODE_MISS_WRONG_EXCEPTION);
+        Assert.notNull(code, CommonExceptionEnum.RESPONSE_CODE_MISS_WRONG_EXCEPTION);
         if (code.equals(SUCCESS_CODE)) {
             return;
         }

@@ -1,4 +1,4 @@
-package com.bitprogress.util;
+package com.bitprogress.exception.util;
 
 import com.bitprogress.exception.CommonException;
 

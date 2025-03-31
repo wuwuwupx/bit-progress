@@ -1,6 +1,7 @@
 package com.bitprogress.util;
 
-import com.bitprogress.basemodel.IMap;
+import com.bitprogress.basemodel.map.ObjectToMap;
+import com.bitprogress.exception.util.Assert;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -2740,8 +2741,8 @@ public class CollectionUtils {
         if (Objects.isNull(obj)) {
             return emptyMap();
         }
-        if (obj instanceof IMap iMap) {
-            return iMap.toMap();
+        if (obj instanceof ObjectToMap objectToMap) {
+            return objectToMap.toMap();
         }
         Field[] fields = obj.getClass().getDeclaredFields();
         Map<String, Object> map = emptyMap(fields.length);

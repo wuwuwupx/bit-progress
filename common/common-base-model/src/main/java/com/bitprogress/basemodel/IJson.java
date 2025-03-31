@@ -1,14 +1,7 @@
 package com.bitprogress.basemodel;
 
 /**
- * to json interface
- * simple to json
+ * json interface
  */
 public interface IJson {
-
-    /**
-     * return json string
-     */
-    String toJson();
-
 }

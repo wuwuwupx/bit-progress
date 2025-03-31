@@ -2,6 +2,7 @@ package com.bitprogress.ormcontext.context;
 
 import com.bitprogress.basemodel.IException;
 import com.bitprogress.exception.CommonException;
+import com.bitprogress.exception.ExceptionMessage;
 import com.bitprogress.ormcontext.entity.DataScopeInfo;
 import com.bitprogress.util.JsonUtils;
 
@@ -72,7 +73,7 @@ public class DataScopeContext {
     /**
      * 获取数据范围信息
      */
-    public static DataScopeInfo getDataScopeInfoOrThrow(IException exception) {
+    public static DataScopeInfo getDataScopeInfoOrThrow(ExceptionMessage exception) {
         return Optional
                 .ofNullable(DATA_SCOPE_INFO.get())
                 .orElseThrow(() -> CommonException.error(exception));
