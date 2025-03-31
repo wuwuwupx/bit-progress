@@ -9,14 +9,20 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>common-server</artifactId>
+    <artifactId>common-base-context</artifactId>
     <version>${revision}</version>
 
-    <packaging>pom</packaging>
-    <modules>
-        <module>common-server-model</module>
-        <module>common-server-user-context</module>
-        <module>common-server-core</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.bitprogress</groupId>
+            <artifactId>common-base-model</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bitprogress</groupId>
+            <artifactId>common-json</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

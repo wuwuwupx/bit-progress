@@ -3,24 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>common</artifactId>
+        <artifactId>common-mybatis-plus</artifactId>
         <groupId>com.bitprogress</groupId>
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>common-feign</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>common-mybatis-plus-core</artifactId>
+    <version>${revision}</version>
 
     <dependencies>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-response</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.bitprogress</groupId>
-            <artifactId>common-request</artifactId>
+            <artifactId>common-base-model</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
@@ -29,26 +24,21 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.bitprogress</groupId>
-            <artifactId>common-server-user-context</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <!-- feign -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-okhttp</artifactId>
+            <groupId>com.github.yulichang</groupId>
+            <artifactId>mybatis-plus-join-boot-starter</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
