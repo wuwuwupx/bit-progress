@@ -27,13 +27,13 @@ import java.util.Set;
 /**
  * 特殊接口初始化
  */
-public abstract class SpecialApiInitialization implements InitializingBean, ApplicationContextAware {
+public abstract class RouteInitialization implements InitializingBean, ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SpecialApiInitialization.applicationContext = applicationContext;
+        RouteInitialization.applicationContext = applicationContext;
     }
 
     /**
@@ -53,7 +53,7 @@ public abstract class SpecialApiInitialization implements InitializingBean, Appl
             Set<ApiRoute> anonymousRoutes = getApiRoutes(info, handlerMethod, AnonymousApi.class);
             Set<ApiRoute> innerRoutes = getApiRoutes(info, handlerMethod, InnerApi.class);
             Set<PermissionRoute> permissionRoutes = getPermissionRoutes(info, handlerMethod);
-            publishRoute(permissionRoutes, anonymousRoutes, innerRoutes);
+            publishRoute(anonymousRoutes, innerRoutes, permissionRoutes);
         });
     }
 
@@ -100,21 +100,21 @@ public abstract class SpecialApiInitialization implements InitializingBean, Appl
     /**
      * 发布路由
      *
-     * @param permissionRoutes 权限路由
      * @param anonymousRoutes  匿名路由
      * @param innerRoutes      内部路由
+     * @param permissionRoutes 权限路由
      */
-    protected void publishRoute(Set<PermissionRoute> permissionRoutes,
-                                Set<ApiRoute> anonymousRoutes,
-                                Set<ApiRoute> innerRoutes) {
-        if (Objects.nonNull(permissionRoutes)) {
-            RouteContext.addPermissionRoutes(permissionRoutes);
-        }
+    protected void publishRoute(Set<ApiRoute> anonymousRoutes,
+                                Set<ApiRoute> innerRoutes,
+                                Set<PermissionRoute> permissionRoutes) {
         if (Objects.nonNull(anonymousRoutes)) {
-            RouteContext.addAnonymousRoutes(anonymousRoutes);
+            RouteContext.setAnonymousRoutes(anonymousRoutes);
         }
         if (Objects.nonNull(innerRoutes)) {
-            RouteContext.addInnerRoutes(innerRoutes);
+            RouteContext.setInnerRoutes(innerRoutes);
+        }
+        if (Objects.nonNull(permissionRoutes)) {
+            RouteContext.setPermissionRoutes(permissionRoutes);
         }
     }
 

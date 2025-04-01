@@ -3,7 +3,6 @@ package com.bitprogress.securityroute.entity;
 import com.bitprogress.securityroute.annotation.Permission;
 import lombok.Data;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.method.HandlerMethod;
 
 /**
  * Permission Route
