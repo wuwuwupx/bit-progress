@@ -1,16 +1,23 @@
 package com.bitprogress.route;
 
 import com.bitprogress.util.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * @author wpx
  * Created on 2021/1/27 14:48
  * 资源对象，由方法、url和权限列表组成
+ * 路由资源
  */
+@Setter
+@Getter
 public class RouteRouse implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -52,70 +59,6 @@ public class RouteRouse implements Serializable {
      * 验证用户是否具有以下任意一个角色
      */
     private String[] anyRoleKeys;
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
-    public void setPermission(String permission) {
-        this.permission = permission;
-    }
-
-    public String getLacksPermission() {
-        return lacksPermission;
-    }
-
-    public void setLacksPermission(String lacksPermission) {
-        this.lacksPermission = lacksPermission;
-    }
-
-    public String[] getAnyPermission() {
-        return anyPermission;
-    }
-
-    public void setAnyPermission(String[] anyPermission) {
-        this.anyPermission = anyPermission;
-    }
-
-    public String getRoleKey() {
-        return roleKey;
-    }
-
-    public void setRoleKey(String roleKey) {
-        this.roleKey = roleKey;
-    }
-
-    public String getLacksRoleKey() {
-        return lacksRoleKey;
-    }
-
-    public void setLacksRoleKey(String lacksRoleKey) {
-        this.lacksRoleKey = lacksRoleKey;
-    }
-
-    public String[] getAnyRoleKeys() {
-        return anyRoleKeys;
-    }
-
-    public void setAnyRoleKeys(String[] anyRoleKeys) {
-        this.anyRoleKeys = anyRoleKeys;
-    }
 
     /**
      * 生成资源key

@@ -9,16 +9,12 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>common-server</artifactId>
+    <artifactId>common-security</artifactId>
     <version>${revision}</version>
-
     <packaging>pom</packaging>
     <modules>
-        <module>common-server-model</module>
-        <module>common-server-user-context</module>
-        <module>common-server-core</module>
-        <module>common-server-cloud</module>
-        <module>common-server-boot</module>
+        <module>common-security-route</module>
+        <module>common-security-spring</module>
     </modules>
 
 </project>

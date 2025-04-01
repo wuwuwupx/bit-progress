@@ -24,12 +24,12 @@
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>nacos-discovery</artifactId>
+            <artifactId>common-nacos-discovery</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>nacos-config</artifactId>
+            <artifactId>common-nacos-config</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

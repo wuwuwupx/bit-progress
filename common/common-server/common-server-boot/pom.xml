@@ -5,20 +5,23 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.bitprogress</groupId>
-        <artifactId>common</artifactId>
+        <artifactId>common-server</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>common-server</artifactId>
+    <artifactId>common-server-boot</artifactId>
     <version>${revision}</version>
 
-    <packaging>pom</packaging>
-    <modules>
-        <module>common-server-model</module>
-        <module>common-server-user-context</module>
-        <module>common-server-core</module>
-        <module>common-server-cloud</module>
-        <module>common-server-boot</module>
-    </modules>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.bitprogress</groupId>
+            <artifactId>common-server-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

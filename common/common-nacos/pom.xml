@@ -12,8 +12,8 @@
     <artifactId>common-nacos</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>nacos-config</module>
-        <module>nacos-discovery</module>
+        <module>common-nacos-config</module>
+        <module>common-nacos-discovery</module>
     </modules>
 
 </project>

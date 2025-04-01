@@ -37,6 +37,7 @@
         <module>common-orm</module>
         <module>common-mybatis-plus</module>
         <module>common-server</module>
+        <module>common-security</module>
     </modules>
 
 </project>
