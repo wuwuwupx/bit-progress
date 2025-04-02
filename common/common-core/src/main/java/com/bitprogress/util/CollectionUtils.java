@@ -1,5 +1,7 @@
 package com.bitprogress.util;
 
+import com.bitprogress.enums.comparable.ComparableType;
+import com.bitprogress.enums.comparable.OrderType;
 import com.bitprogress.basemodel.map.ObjectToMap;
 import com.bitprogress.exception.util.Assert;
 
@@ -28,182 +30,6 @@ public class CollectionUtils {
     private static final float DEFAULT_LOAD_FACTOR = 0.75F;
 
     private static final String DEFAULT_DELIMITER = ",";
-
-    public enum ComparableType {
-
-        /**
-         * key重复时取最小
-         */
-        MIN {
-            /**
-             * 获取收集器
-             *
-             * @param function 获取收集器的函数
-             * @return 获取最小值的收集器
-             */
-            @Override
-            public <T, R extends Comparable<R>> Collector<T, ?, Optional<T>> collector(Function<T, R> function) {
-                return minBy(Comparator.comparing(function));
-            }
-
-            /**
-             * 获取二元运算函数
-             *
-             * @return 获取最小值的二元运算函数
-             */
-            @Override
-            protected <T extends Comparable<T>> BinaryOperator<T> binaryOperator() {
-                return BinaryOperator.minBy(Comparator.naturalOrder());
-            }
-
-            /**
-             * 获取二元运算函数
-             *
-             * @param function 获取二元运算函数的函数
-             * @return 获取最小值的二元运算函数
-             */
-            @Override
-            protected <T, R extends Comparable<R>> BinaryOperator<T> binaryOperator(Function<T, R> function) {
-                return BinaryOperator.minBy(Comparator.comparing(function));
-            }
-
-        },
-
-        /**
-         * key重复时取最大
-         */
-        MAX {
-            /**
-             * 获取收集器
-             *
-             * @param function 获取收集器的函数
-             * @return 获取最大值的收集器
-             */
-            @Override
-            public <T, R extends Comparable<R>> Collector<T, ?, Optional<T>> collector(Function<T, R> function) {
-                return maxBy(Comparator.comparing(function));
-            }
-
-            /**
-             * 获取二元运算函数
-             *
-             * @return 获取最大值的二元运算函数
-             */
-            @Override
-            protected <T extends Comparable<T>> BinaryOperator<T> binaryOperator() {
-                return BinaryOperator.maxBy(Comparator.naturalOrder());
-            }
-
-            /**
-             * 获取二元运算函数
-             *
-             * @param function 获取二元运算函数的函数
-             * @return 获取最大值的二元运算函数
-             */
-            @Override
-            protected <T, R extends Comparable<R>> BinaryOperator<T> binaryOperator(Function<T, R> function) {
-                return BinaryOperator.maxBy(Comparator.comparing(function));
-            }
-        },
-
-        ;
-
-        /**
-         * 获取收集器
-         *
-         * @param function 获取收集器的函数
-         * @return 对应类型的收集器
-         */
-        public abstract <T, R extends Comparable<R>> Collector<T, ?, Optional<T>> collector(Function<T, R> function);
-
-        /**
-         * 获取二元运算函数
-         *
-         * @return 对应类型的二元运算函数
-         */
-        protected abstract <T extends Comparable<T>> BinaryOperator<T> binaryOperator();
-
-        /**
-         * 获取二元运算函数
-         *
-         * @return 对应类型的二元运算函数
-         */
-        protected abstract <T, R extends Comparable<R>> BinaryOperator<T> binaryOperator(Function<T, R> function);
-
-    }
-
-    public enum OrderType {
-
-        /**
-         * 升序排序
-         */
-        ASC {
-            /**
-             * 获取排序方法
-             *
-             * @return 升序排序方法
-             */
-            @Override
-            public <T extends Comparable<T>> Comparator<T> comparator() {
-                return Comparator.naturalOrder();
-            }
-
-            /**
-             * 根据 comparable函数获取排序方法
-             *
-             * @param comparableFunction 获取比较元素函数
-             * @return 对应的排序方法
-             */
-            @Override
-            public <T, R extends Comparable<R>> Comparator<T> comparator(Function<T, R> comparableFunction) {
-                return Comparator.comparing(comparableFunction);
-            }
-        },
-
-        /**
-         * 降序排序
-         */
-        DESC {
-            /**
-             * 获取排序方法
-             *
-             * @return 降序排序方法
-             */
-            @Override
-            public <T extends Comparable<T>> Comparator<T> comparator() {
-                return Comparator.reverseOrder();
-            }
-
-            /**
-             * 根据 comparable函数获取排序方法
-             *
-             * @param comparableFunction 获取比较元素函数
-             * @return 对应的排序方法
-             */
-            @Override
-            public <T, R extends Comparable<R>> Comparator<T> comparator(Function<T, R> comparableFunction) {
-                return Comparator.comparing(comparableFunction, Comparator.reverseOrder());
-            }
-        },
-
-        ;
-
-        /**
-         * 获取排序方法
-         *
-         * @return 对应的排序方法
-         */
-        public abstract <T extends Comparable<T>> Comparator<T> comparator();
-
-        /**
-         * 根据 comparable函数获取排序方法
-         *
-         * @param comparableFunction 获取比较元素函数
-         * @return 对应的排序方法
-         */
-        public abstract <T, R extends Comparable<R>> Comparator<T> comparator(Function<T, R> comparableFunction);
-
-    }
 
     /**
      * 返回默认容量的hashMap
@@ -501,6 +327,26 @@ public class CollectionUtils {
      */
     public static int size(Collection<?> collection) {
         return isEmpty(collection) ? 0 : collection.size();
+    }
+
+    /**
+     * 获取集合的 元素数量
+     *
+     * @param collection 集合
+     * @return 集合的元素数量
+     */
+    public static <T> int notNullSize(Collection<T> collection) {
+        return size(collection, Objects::nonNull);
+    }
+
+    /**
+     * 获取集合的 元素数量
+     *
+     * @param collection 集合
+     * @return 集合的元素数量
+     */
+    public static <T> int size(Collection<T> collection, Predicate<T> predicate) {
+        return isEmpty(collection) ? 0 : (int) filter(collection, predicate).count();
     }
 
     /**
@@ -1608,7 +1454,7 @@ public class CollectionUtils {
             return emptyList();
         }
         Map<R, List<C>> map = group(collection, groupFunction, mappingFunction);
-        return toList(map.keySet().stream().sorted(getComparator(k -> k, orderType)), map::get);
+        return toList(map.keySet().stream().sorted(orderType.comparator()), map::get);
     }
 
     /**
@@ -2657,7 +2503,7 @@ public class CollectionUtils {
      * @param stream 需要排序的集合
      * @return 排序后的list
      */
-    public static <T, C extends Comparable<C>> List<T> sortedList(Stream<T> stream, Comparator<T> comparator) {
+    public static <T> List<T> sortedList(Stream<T> stream, Comparator<T> comparator) {
         return toList(sortedStream(stream, comparator));
     }
 
@@ -2729,7 +2575,9 @@ public class CollectionUtils {
      * @return 排序后的流
      */
     public static <T> Stream<T> sortedStream(Stream<T> stream, Comparator<T> comparator) {
-        return stream.sorted(comparator);
+        return stream
+                .filter(Objects::nonNull)
+                .sorted(comparator);
     }
 
     /**
@@ -2756,20 +2604,6 @@ public class CollectionUtils {
             field.setAccessible(accessible);
         }
         return map;
-    }
-
-    /**
-     * collection转换为map
-     * key重复情况下，比较器的类型默认为MAX最大值
-     * 转换后map的value类型默认为T，即传入的list类型
-     * key重复的情况下，使用keyFunction获取比较器
-     *
-     * @param collection  传入的collection
-     * @param keyFunction 获取map的key的function <T, R> T传入的类型，R转换后map的key类型
-     * @return Map<R, T>
-     */
-    public static <T extends Comparable<T>, R> Map<R, T> toMap(Collection<T> collection, Function<T, R> keyFunction) {
-        return toMap(collection, keyFunction, Function.identity());
     }
 
     /**
@@ -2812,6 +2646,22 @@ public class CollectionUtils {
     }
 
     /**
+     * collection转换为map
+     * key重复情况下，比较器的类型默认为MAX最大值
+     * 转换后map的value类型默认为T，即传入的list类型
+     * <p>
+     * 由于在实际应用中，大部分类并未实现 Comparable 接口，而 keyFunction的结果通常为基础类型或实现 Comparable接口的类型
+     * 所以key重复的情况下，默认使用keyFunction获取比较器
+     *
+     * @param collection  传入的collection
+     * @param keyFunction 获取map的key的function <T, R> T传入的类型，R转换后map的key类型
+     * @return Map<R, T>
+     */
+    public static <T, R extends Comparable<R>> Map<R, T> toMap(Collection<T> collection, Function<T, R> keyFunction) {
+        return toMap(collection, keyFunction, keyFunction, Function.identity());
+    }
+
+    /**
      * collection 转换map
      * key重复情况下，比较器的类型默认为MAX最大值
      *
@@ -2830,6 +2680,33 @@ public class CollectionUtils {
 
     /**
      * collection 转换为map
+     * 如果 key 未重复，则直接返回
+     * key 重复，comparableValue 都为空则返回第一个
+     * key 重复，comparableValue 有一个不为空 则返回 不为空 的那个
+     * key 重复，comparableValue 有多个不为空 则返回根据 comparableFunction 比较的结果
+     * <p>
+     * 例如：
+     * {key: 1, comparable: null, value:4}
+     * {key: 1, comparable: null, value:2}
+     * {key: 1, comparable: null, value:3}
+     * return {key: 1, comparable: null, value:4}
+     * 或
+     * {key: 1, comparable: null, value:4}
+     * {key: 1, comparable: 1, value:2}
+     * {key: 1, comparable: null, value:3}
+     * return {key: 1, comparable: 1, value:2}
+     * 或
+     * {key: 1, comparable: null, value:4}
+     * {key: 1, comparable: 1, value:2}
+     * {key: 1, comparable: 2, value:3}
+     * ComparableType：{@link ComparableType#MIN}
+     * return {key: 1, comparable: 1, value:2}
+     * 或
+     * {key: 1, comparable: null, value:4}
+     * {key: 1, comparable: 1, value:2}
+     * {key: 1, comparable: 2, value:3}
+     * ComparableType：{@link ComparableType#MAX}
+     * return {key: 1, comparable: 2, value:3}
      *
      * @param collection         需要转换的collection
      * @param keyFunction        获取map的key的function <T, R> T传入的类型，R转换后map的key类型
@@ -2853,17 +2730,23 @@ public class CollectionUtils {
         }
         Map<R, U> map = new HashMap<>(size);
         Map<R, T> comparableMap = new HashMap<>(size);
-        collection.forEach(t -> {
-            if (Objects.isNull(t)) {
+        collection.forEach(currentData -> {
+            if (Objects.isNull(currentData)) {
                 return;
             }
-            R key = keyFunction.apply(t);
+            R key = keyFunction.apply(currentData);
             T data;
             if (map.containsKey(key)) {
-                T oldData = comparableMap.get(key);
-                data = operator.apply(oldData, t);
+                // 检查用于比较的值是否为空
+                C currentComparableValue = comparableFunction.apply(currentData);
+                if (Objects.isNull(currentComparableValue)) {
+                    return;
+                }
+                T existData = comparableMap.get(key);
+                C existComparableValue = comparableFunction.apply(existData);
+                data = Objects.isNull(existComparableValue) ? currentData : operator.apply(existData, currentData);
             } else {
-                data = t;
+                data = currentData;
             }
             map.put(key, valueFunction.apply(data));
             comparableMap.put(key, data);
@@ -3059,7 +2942,7 @@ public class CollectionUtils {
      * @return Optional<T>
      */
     public static <T> Optional<T> limitOne(List<T> list, long skip) {
-        if (isEmpty(list)) {
+        if (isEmpty(list) || size(list) <= skip) {
             return Optional.empty();
         }
         return list.stream().skip(skip).findFirst();
@@ -3071,7 +2954,7 @@ public class CollectionUtils {
      * 默认升序排序
      *
      * @param list     传入的集合
-     * @param function 排序元素
+     * @param function 排序函数
      * @return Optional<T>
      */
     public static <T, C extends Comparable<C>> Optional<T> limitOne(List<T> list, Function<T, C> function) {
@@ -3119,7 +3002,7 @@ public class CollectionUtils {
                                                                     Function<T, C> function,
                                                                     long skip,
                                                                     OrderType type) {
-        if (isEmpty(list)) {
+        if (isEmpty(list) || size(list) <= skip) {
             return Optional.empty();
         }
         return list.stream().sorted(getComparator(function, type)).skip(skip).findFirst();
@@ -3215,7 +3098,7 @@ public class CollectionUtils {
      * @return List<T>
      */
     public static <T> List<T> skipList(List<T> list, long skip) {
-        return toList(list.stream().skip(skip));
+        return isEmpty(list) ? emptyList() : toList(list.stream().skip(skip));
     }
 
     /**
@@ -3290,6 +3173,37 @@ public class CollectionUtils {
     }
 
     /**
+     * 对集合进行分割
+     *
+     * @param collection 需要分割的集合
+     * @param size       分割的size
+     * @param <T>        集合的元素类型
+     * @return 分割后的集合
+     */
+    public static <T> List<List<T>> cutList(Collection<T> collection, Integer size) {
+        // collection为空
+        if (isEmpty(collection)) {
+            return emptyList();
+        }
+        List<List<T>> result = emptyList();
+        int originalSize = size(collection);
+        if (originalSize <= size) {
+            result.add(toList(collection));
+            return result;
+        }
+        List<T> items = emptyList();
+        for (T item : collection) {
+            if (items.size() == size) {
+                result.add(items);
+                items = emptyList();
+            }
+            items.add(item);
+        }
+        result.add(items);
+        return result;
+    }
+
+    /**
      * 对集合进行排序再分割
      * 默认升序排序
      *
@@ -3303,8 +3217,7 @@ public class CollectionUtils {
     public static <T, R extends Comparable<R>> List<List<T>> cutList(Collection<T> collection,
                                                                      Function<T, R> function,
                                                                      Integer size) {
-        List<T> sortedList = sortedList(collection, OrderType.ASC, function);
-        return cutList(sortedList, size);
+        return cutList(collection, function, OrderType.ASC, size);
     }
 
     /**
@@ -3347,19 +3260,14 @@ public class CollectionUtils {
             return result;
         }
         List<T> items = emptyList();
-        for (int i = 0; i < originalSize; i++) {
-            // 子list的size未达到分割的size
+        for (T item : list) {
             if (items.size() == size) {
-                // 子list的size达到分割的size，将当前子list存入结果list
                 result.add(items);
                 items = emptyList();
             }
-            items.add(list.get(i));
-            // 判断是否最后元素，不是最后元素则开启新的子list继续遍历
-            if (i == originalSize - 1) {
-                result.add(items);
-            }
+            items.add(item);
         }
+        result.add(items);
         return result;
     }
 
