@@ -1,9 +1,11 @@
-package com.bitprogress.constant;
+package com.bitprogress.response.constant;
+
+import com.bitprogress.basemodel.Constant;
 
 /**
  * 请求的返回信息
  */
-public class ResultConstants {
+public class ResponseConstants implements Constant {
 
     /**
      * 请求成功的默认状态码

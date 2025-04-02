@@ -1,6 +1,6 @@
 package com.bitprogress.util;
 
-import com.bitprogress.constant.StringConstants;
+import com.bitprogress.basemodel.constant.StringConstants;
 
 import java.util.Random;
 import java.util.UUID;

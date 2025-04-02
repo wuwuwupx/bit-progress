@@ -1,9 +1,11 @@
-package com.bitprogress.constant;
+package com.bitprogress.basemodel.constant;
+
+import com.bitprogress.basemodel.Constant;
 
 /**
  *  字符常量
  */
-public class CharacterConstants {
+public class CharacterConstants implements Constant {
 
     /**
      * 空格字符

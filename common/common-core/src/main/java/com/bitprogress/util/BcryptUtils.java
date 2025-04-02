@@ -1,6 +1,6 @@
 package com.bitprogress.util;
 
-import com.bitprogress.constant.StringConstants;
+import com.bitprogress.basemodel.constant.StringConstants;
 import jakarta.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 import javax.crypto.BadPaddingException;
@@ -24,14 +24,14 @@ import java.util.Objects;
  */
 public class BcryptUtils {
 
-    private static Base64.Encoder encoder = Base64.getEncoder();
-    private static Base64.Decoder decoder = Base64.getDecoder();
+    private static final Base64.Encoder ENCODER = Base64.getEncoder();
+    private static final Base64.Decoder DECODER = Base64.getDecoder();
 
     private static Cipher cipher;
 
     private static KeyFactory keyFactory;
 
-    private static String PATH = System.getProperty("java.io.tmpdir") + File.separator + "bit-progress" + File.separator
+    private static final String PATH = System.getProperty("java.io.tmpdir") + File.separator + "bit-progress" + File.separator
             + "file" + File.separator;
 
     static {
@@ -83,19 +83,19 @@ public class BcryptUtils {
      * @param content
      * @return
      */
-    public static String decrypt(String content, String filePath) throws IOException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
+    public static String decrypt(String content, String filePath) throws IOException, InvalidKeyException {
         InputStream resourceAsStream = BcryptUtils.class.getClassLoader().getResourceAsStream(filePath);
         File file = new File(PATH);
         FileUtils.copyInputStreamToFile(resourceAsStream, file);
         RSAPrivateKey rsaPrivateKey = loadPrivateKeyByFile(file);
-        return pri_key_decode(decoder.decode(content), rsaPrivateKey);
+        return pri_key_decode(DECODER.decode(content), rsaPrivateKey);
     }
 
     /**
      * @param content
      * @return
      */
-    public static byte[] encrypt(String content, String filePath) throws IOException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
+    public static byte[] encrypt(String content, String filePath) throws IOException, InvalidKeyException {
         InputStream resourceAsStream = BcryptUtils.class.getClassLoader().getResourceAsStream(filePath);
         File file = new File(PATH);
         FileUtils.copyInputStreamToFile(resourceAsStream, file);
@@ -159,7 +159,7 @@ public class BcryptUtils {
                 sb.append(line);
             }
             String key = sb.toString();
-            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoder.decode(key));
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(DECODER.decode(key));
             return (RSAPublicKey) keyFactory.generatePublic(keySpec);
         } catch (Exception e) {
             e.printStackTrace();
@@ -179,7 +179,7 @@ public class BcryptUtils {
                 sb.append(line);
             }
             String key = sb.toString();
-            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decoder.decode(key));
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(DECODER.decode(key));
             return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
         } catch (Exception e) {
             e.printStackTrace();

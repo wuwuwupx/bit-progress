@@ -1,9 +1,11 @@
-package com.bitprogress.constant;
+package com.bitprogress.basemodel.constant;
+
+import com.bitprogress.basemodel.Constant;
 
 /**
  * 数值常量
  */
-public class NumberConstants {
+public class NumberConstants implements Constant {
 
     /**
      * long类型的0

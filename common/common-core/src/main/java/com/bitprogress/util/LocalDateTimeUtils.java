@@ -1,7 +1,7 @@
 package com.bitprogress.util;
 
-import com.bitprogress.enums.time.MomentType;
-import com.bitprogress.enums.time.WeekType;
+import com.bitprogress.basemodel.enums.time.MomentType;
+import com.bitprogress.basemodel.enums.time.WeekType;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;

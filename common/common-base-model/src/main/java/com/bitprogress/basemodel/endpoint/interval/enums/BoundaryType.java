@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum BoundaryType implements ValueEnum, MessageEnum {
+public enum BoundaryType implements IntervalEnums, ValueEnum, MessageEnum {
 
     /**
      * 开区间

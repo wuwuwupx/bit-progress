@@ -1,4 +1,4 @@
-package com.bitprogress.enums.comparable;
+package com.bitprogress.basemodel.enums.comparable;
 
 import com.bitprogress.basemodel.enums.ComparableEnum;
 

@@ -1,6 +1,6 @@
 package com.bitprogress.util;
 
-import com.bitprogress.enums.time.WeekType;
+import com.bitprogress.basemodel.enums.time.WeekType;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

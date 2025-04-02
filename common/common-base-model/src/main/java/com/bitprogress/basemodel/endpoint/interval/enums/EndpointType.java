@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum EndpointType implements ValueEnum, MessageEnum {
+public enum EndpointType implements IntervalEnums, ValueEnum, MessageEnum {
 
     /**
      * 区间开始的端点

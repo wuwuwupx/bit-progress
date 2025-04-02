@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum AxisType implements ValueEnum, MessageEnum {
+public enum AxisType implements CoordinateEnum, ValueEnum, MessageEnum {
 
     /**
      * horizontal axis

@@ -1,6 +1,6 @@
 package com.bitprogress.github.service;
 
-import com.bitprogress.constant.StringConstants;
+import com.bitprogress.basemodel.constant.StringConstants;
 import com.bitprogress.exception.CommonException;
 import com.bitprogress.github.constant.GitHubLoginUrl;
 import com.bitprogress.github.exception.GitHubLoginExceptionMessage;

@@ -1,9 +1,11 @@
-package com.bitprogress.constant;
+package com.bitprogress.basemodel.constant;
+
+import com.bitprogress.basemodel.Constant;
 
 /**
  * 字符串常量
  */
-public class StringConstants {
+public class StringConstants implements Constant {
 
     public static final String EMPTY = "";
 

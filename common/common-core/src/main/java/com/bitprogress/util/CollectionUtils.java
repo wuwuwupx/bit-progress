@@ -1,7 +1,7 @@
 package com.bitprogress.util;
 
-import com.bitprogress.enums.comparable.ComparableType;
-import com.bitprogress.enums.comparable.OrderType;
+import com.bitprogress.basemodel.enums.comparable.ComparableType;
+import com.bitprogress.basemodel.enums.comparable.OrderType;
 import com.bitprogress.basemodel.map.ObjectToMap;
 import com.bitprogress.exception.util.Assert;
 
