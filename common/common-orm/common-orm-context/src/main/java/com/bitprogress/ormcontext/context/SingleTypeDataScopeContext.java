@@ -2,7 +2,7 @@ package com.bitprogress.ormcontext.context;
 
 import com.bitprogress.exception.CommonException;
 import com.bitprogress.exception.ExceptionMessage;
-import com.bitprogress.ormcontext.entity.SingleTypeDataScopeInfo;
+import com.bitprogress.ormcontext.info.SingleTypeDataScopeInfo;
 import com.bitprogress.util.JsonUtils;
 
 import java.util.Optional;
@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class DataScopeContext {
+public class SingleTypeDataScopeContext {
 
     private static final ThreadLocal<SingleTypeDataScopeInfo> DATA_SCOPE_INFO = new ThreadLocal<>();
 
@@ -33,7 +33,7 @@ public class DataScopeContext {
      */
     public static void setDataScopeInfo(Set<String> dataScopes, Long userId) {
         SingleTypeDataScopeInfo singleTypeDataScopeInfo = new SingleTypeDataScopeInfo();
-        singleTypeDataScopeInfo.setDataScopes(dataScopes);
+        singleTypeDataScopeInfo.setManagedDataScopes(dataScopes);
         singleTypeDataScopeInfo.setUserId(userId);
         setDataScopeInfo(singleTypeDataScopeInfo);
     }

@@ -3,7 +3,7 @@ package com.bitprogress.ormcontext.utils;
 import com.bitprogress.exception.CommonException;
 import com.bitprogress.exception.ExceptionMessage;
 import com.bitprogress.ormcontext.context.TenantContext;
-import com.bitprogress.ormcontext.entity.TenantInfo;
+import com.bitprogress.ormcontext.info.TenantInfo;
 import com.bitprogress.ormmodel.enums.TenantType;
 
 import java.util.HashSet;

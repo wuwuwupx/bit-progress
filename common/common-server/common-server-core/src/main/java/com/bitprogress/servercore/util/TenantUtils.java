@@ -1,6 +1,6 @@
 package com.bitprogress.servercore.util;
 
-import com.bitprogress.ormcontext.entity.TenantInfo;
+import com.bitprogress.ormcontext.info.TenantInfo;
 import com.bitprogress.ormmodel.enums.TenantType;
 import com.bitprogress.usercontext.entity.UserInfo;
 

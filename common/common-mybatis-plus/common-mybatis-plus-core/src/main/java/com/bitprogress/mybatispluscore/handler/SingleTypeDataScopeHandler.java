@@ -2,8 +2,8 @@ package com.bitprogress.mybatispluscore.handler;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.bitprogress.mybatispluscore.properties.DataScopeProperties;
-import com.bitprogress.ormcontext.entity.SingleTypeDataScopeInfo;
-import com.bitprogress.ormcontext.service.SingleTypeDataScopeContextService;
+import com.bitprogress.ormcontext.info.SingleTypeDataScopeInfo;
+import com.bitprogress.ormcontext.service.impl.SingleTypeDataScopeContextService;
 import com.bitprogress.ormcontext.utils.DataScopeContextUtils;
 import com.bitprogress.ormmodel.enums.DataScopeType;
 import com.bitprogress.ormmodel.enums.SqlType;
@@ -26,7 +26,7 @@ import java.util.Set;
  * 单一类型的数据范围处理器
  */
 @AllArgsConstructor
-public class SingleTypeDataScopeLineHandler implements DataScopeLineHandler {
+public class SingleTypeDataScopeHandler implements DataScopeHandler {
 
     private final DataScopeProperties dataScopeProperties;
     private final SingleTypeDataScopeContextService dataScopeContextService;
@@ -113,7 +113,7 @@ public class SingleTypeDataScopeLineHandler implements DataScopeLineHandler {
                 return likeExpression;
             }
             case MANAGED_LEVEL_CURRENT -> {
-                Set<String> dataScopes = dataScopeInfo.getDataScopes();
+                Set<String> dataScopes = dataScopeInfo.getManagedDataScopes();
                 if (CollectionUtils.isEmpty(dataScopes)) {
                     return new NullValue();
                 }
@@ -122,7 +122,7 @@ public class SingleTypeDataScopeLineHandler implements DataScopeLineHandler {
                 return new InExpression(aliasDataScopeColumn, value);
             }
             case MANAGED_LEVEL -> {
-                Set<String> dataScopes = dataScopeInfo.getDataScopes();
+                Set<String> dataScopes = dataScopeInfo.getManagedDataScopes();
                 if (CollectionUtils.isEmpty(dataScopes)) {
                     return new NullValue();
                 }

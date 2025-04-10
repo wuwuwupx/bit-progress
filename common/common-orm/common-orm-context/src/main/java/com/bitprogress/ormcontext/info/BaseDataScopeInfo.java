@@ -1,17 +1,13 @@
-package com.bitprogress.ormcontext.entity;
+package com.bitprogress.ormcontext.info;
 
 import com.bitprogress.basemodel.Info;
-import com.bitprogress.ormmodel.enums.DataScopeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
- * 单一类型的数据范围信息
+ * 基础数据范围信息
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

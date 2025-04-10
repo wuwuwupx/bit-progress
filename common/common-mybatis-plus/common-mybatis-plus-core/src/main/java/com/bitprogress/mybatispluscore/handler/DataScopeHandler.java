@@ -9,7 +9,7 @@ import net.sf.jsqlparser.schema.Table;
 
 import java.util.List;
 
-public interface DataScopeLineHandler {
+public interface DataScopeHandler {
 
     /**
      * 是否启用

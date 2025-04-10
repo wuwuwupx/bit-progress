@@ -1,4 +1,4 @@
-package com.bitprogress.ormcontext.entity;
+package com.bitprogress.ormcontext.info;
 
 import com.bitprogress.ormmodel.enums.DataScopeType;
 import lombok.AllArgsConstructor;
@@ -24,9 +24,15 @@ public class SingleTypeDataScopeInfo extends BaseDataScopeInfo {
     private DataScopeType dataScopeType;
 
     /**
-     * 可查询数据范围列表
+     * 管理的数据范围列表
      * 用于 select 、 update 及 delete 的 where 条件
      */
-    private Set<String> dataScopes = new HashSet<>();
+    private Set<String> managedDataScopes = new HashSet<>();
+
+    /**
+     * 所属的数据范围列表
+     * 用于 select 、 update 及 delete 的 where 条件
+     */
+    private Set<String> belongDataScopes = new HashSet<>();
 
 }

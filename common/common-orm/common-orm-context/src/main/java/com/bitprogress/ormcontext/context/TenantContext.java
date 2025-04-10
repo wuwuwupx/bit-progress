@@ -2,7 +2,7 @@ package com.bitprogress.ormcontext.context;
 
 import com.bitprogress.exception.CommonException;
 import com.bitprogress.exception.ExceptionMessage;
-import com.bitprogress.ormcontext.entity.TenantInfo;
+import com.bitprogress.ormcontext.info.TenantInfo;
 import com.bitprogress.util.JsonUtils;
 
 import java.util.Optional;

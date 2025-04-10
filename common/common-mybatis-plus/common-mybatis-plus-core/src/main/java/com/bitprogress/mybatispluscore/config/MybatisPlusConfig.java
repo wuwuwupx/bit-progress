@@ -6,8 +6,6 @@ import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.bitprogress.mybatispluscore.handler.DataScopeLineHandler;
-import com.bitprogress.mybatispluscore.handler.SingleTypeDataScopeLineHandler;
 import com.bitprogress.mybatispluscore.handler.TenantIdLineHandler;
 import com.bitprogress.mybatispluscore.interceptor.TenantSqlInnerInterceptor;
 import com.bitprogress.mybatispluscore.properties.DataScopeProperties;

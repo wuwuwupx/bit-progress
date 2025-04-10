@@ -1,6 +1,7 @@
-package com.bitprogress.ormcontext.service;
+package com.bitprogress.ormcontext.service.impl;
 
-import com.bitprogress.ormcontext.entity.SingleTypeDataScopeInfo;
+import com.bitprogress.ormcontext.info.SingleTypeDataScopeInfo;
+import com.bitprogress.ormcontext.service.DataScopeContextService;
 import com.bitprogress.ormmodel.enums.DataScopeType;
 
 public class SingleTypeDataScopeContextService implements DataScopeContextService<SingleTypeDataScopeInfo> {

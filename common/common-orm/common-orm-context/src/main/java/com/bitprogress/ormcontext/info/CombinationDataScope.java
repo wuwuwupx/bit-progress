@@ -1,5 +1,6 @@
-package com.bitprogress.ormcontext.entity;
+package com.bitprogress.ormcontext.info;
 
+import com.bitprogress.basemodel.Info;
 import com.bitprogress.ormmodel.enums.DataScopeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,19 +10,16 @@ import lombok.NoArgsConstructor;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * 多重类型的数据范围信息
- */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MultipleTypeDataScopeInfo extends BaseDataScopeInfo {
+public class CombinationDataScope extends Info {
 
     /**
      * 数据范围类型
      */
-    private Set<DataScopeType> dataScopeType;
+    private DataScopeType dataScopeType;
 
     /**
      * 可查询数据范围列表

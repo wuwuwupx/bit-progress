@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.BaseMultiTableInnerInter
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.toolkit.PropertyMapper;
 import com.bitprogress.basecontext.context.DispatcherContext;
-import com.bitprogress.mybatispluscore.handler.DataScopeLineHandler;
+import com.bitprogress.mybatispluscore.handler.DataScopeHandler;
 import com.bitprogress.ormcontext.utils.TenantContextUtils;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.ormparser.context.SqlParserContext;
@@ -52,7 +52,7 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 public class DataScopeSqlInnerInterceptor extends BaseMultiTableInnerInterceptor implements InnerInterceptor {
 
-    private DataScopeLineHandler dataScopeLineHandler;
+    private DataScopeHandler dataScopeHandler;
 
     @Override
     public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
@@ -98,7 +98,7 @@ public class DataScopeSqlInnerInterceptor extends BaseMultiTableInnerInterceptor
 
     protected void processInsertSql(Insert insert, int index, String sql, Object obj) {
         String tableName = insert.getTable().getName();
-        if (dataScopeLineHandler.ignoreTable(tableName)) {
+        if (dataScopeHandler.ignoreTable(tableName)) {
             // 过滤退出执行
             return;
         }
@@ -107,13 +107,13 @@ public class DataScopeSqlInnerInterceptor extends BaseMultiTableInnerInterceptor
             // 针对不给列名的insert 不处理
             return;
         }
-        String dataScopeColumn = dataScopeLineHandler.getTableDataScopeColumn(tableName);
+        String dataScopeColumn = dataScopeHandler.getTableDataScopeColumn(tableName);
         // 检查是否只针对 insert 关闭
-        if (dataScopeLineHandler.ignoreInsert(tableName) || dataScopeLineHandler.ignoreInsert(columns, dataScopeColumn)) {
+        if (dataScopeHandler.ignoreInsert(tableName) || dataScopeHandler.ignoreInsert(columns, dataScopeColumn)) {
             return;
         }
         columns.add(new Column(dataScopeColumn));
-        Expression dataScope = dataScopeLineHandler.getCurrentDataScope();
+        Expression dataScope = dataScopeHandler.getCurrentDataScope();
         // fixed gitee pulls/141 duplicate update
         List<UpdateSet> duplicateUpdateColumns = insert.getDuplicateUpdateSets();
         if (CollectionUtils.isNotEmpty(duplicateUpdateColumns)) {
@@ -163,7 +163,7 @@ public class DataScopeSqlInnerInterceptor extends BaseMultiTableInnerInterceptor
      */
     protected void processUpdateSql(Update update, int index, String sql, Object obj) {
         final Table table = update.getTable();
-        if (dataScopeLineHandler.ignoreTable(table.getName())) {
+        if (dataScopeHandler.ignoreTable(table.getName())) {
             // 过滤退出执行
             return;
         }
@@ -190,7 +190,7 @@ public class DataScopeSqlInnerInterceptor extends BaseMultiTableInnerInterceptor
      * delete 语句处理
      */
     protected void processDeleteSql(Delete delete, int index, String sql, Object obj) {
-        if (dataScopeLineHandler.ignoreTable(delete.getTable().getName())) {
+        if (dataScopeHandler.ignoreTable(delete.getTable().getName())) {
             // 过滤退出执行
             return;
         }
@@ -236,13 +236,13 @@ public class DataScopeSqlInnerInterceptor extends BaseMultiTableInnerInterceptor
                 return;
             }
         }
-        selectItems.add(new SelectItem<>(new Column(dataScopeLineHandler.getTableDataScopeColumn(tableName))));
+        selectItems.add(new SelectItem<>(new Column(dataScopeHandler.getTableDataScopeColumn(tableName))));
     }
 
     @Override
     public void setProperties(Properties properties) {
         PropertyMapper.newInstance(properties).whenNotBlank("dataScopeLineHandler",
-                ClassUtils::newInstance, this::setDataScopeLineHandler);
+                ClassUtils::newInstance, this::setDataScopeHandler);
     }
 
     /**
@@ -256,7 +256,7 @@ public class DataScopeSqlInnerInterceptor extends BaseMultiTableInnerInterceptor
      */
     @Override
     public Expression buildTableExpression(final Table table, final Expression where, final String whereSegment) {
-        Expression dataScopeCondition = dataScopeLineHandler.getDataScopeCondition(table);
+        Expression dataScopeCondition = dataScopeHandler.getDataScopeCondition(table);
         if (dataScopeCondition instanceof NullValue) {
             return new EqualsTo(new Column("1"), new LongValue(2));
         } else if (dataScopeCondition instanceof AllValue) {
@@ -280,11 +280,11 @@ public class DataScopeSqlInnerInterceptor extends BaseMultiTableInnerInterceptor
             return;
         }
         // 检查是否启用了租户和数据范围
-        if (!dataScopeLineHandler.isEnabled()) {
+        if (!dataScopeHandler.isEnabled()) {
             return;
         }
         // 检查 非select语句 的表是否启用
-        if (!dataScopeLineHandler.ignoreTable(table, sqlType)) {
+        if (!dataScopeHandler.ignoreTable(table, sqlType)) {
             return;
         }
         // 检查是否使用 sql 解析模式

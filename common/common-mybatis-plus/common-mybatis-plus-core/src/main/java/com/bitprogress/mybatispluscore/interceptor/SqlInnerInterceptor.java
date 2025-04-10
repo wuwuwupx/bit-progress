@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import com.bitprogress.basecontext.context.DispatcherContext;
-import com.bitprogress.mybatispluscore.handler.DataScopeLineHandler;
+import com.bitprogress.mybatispluscore.handler.DataScopeHandler;
 import com.bitprogress.mybatispluscore.handler.TenantIdLineHandler;
 import com.bitprogress.ormcontext.utils.TenantContextUtils;
 import com.bitprogress.ormmodel.enums.DataScopeType;
@@ -44,7 +44,7 @@ import java.util.function.Consumer;
 public class SqlInnerInterceptor extends TenantLineInnerInterceptor {
 
     private final TenantIdLineHandler tenantIdLineHandler;
-    private final DataScopeLineHandler dataScopeLineHandler;
+    private final DataScopeHandler dataScopeHandler;
 
     /**
      * select 语句处理
@@ -80,15 +80,15 @@ public class SqlInnerInterceptor extends TenantLineInnerInterceptor {
         }
         String tenantIdColumn = tenantIdLineHandler.getTenantIdColumn();
         // insert语句需要新增的是原始数据范围列
-        String tableDataScopeColumn = dataScopeLineHandler.getTableDataScopeColumn(insert.getTable().getName());
+        String tableDataScopeColumn = dataScopeHandler.getTableDataScopeColumn(insert.getTable().getName());
         boolean isNeedAddTenantId = tenantEnabled && !tenantIdLineHandler.ignoreInsert(columns, tenantIdColumn);
         boolean isNeedAddSourceDataScope = dataScopeEnabled
-                && !dataScopeLineHandler.ignoreInsert(columns, tableDataScopeColumn);
+                && !dataScopeHandler.ignoreInsert(columns, tableDataScopeColumn);
         if (!isNeedAddTenantId && !isNeedAddSourceDataScope) {
             return;
         }
         Expression tenantId = tenantIdLineHandler.getInsertTenantId();
-        Expression dataScope = dataScopeLineHandler.getCurrentDataScope();
+        Expression dataScope = dataScopeHandler.getCurrentDataScope();
         if (isNeedAddTenantId) {
             List<UpdateSet> duplicateUpdateColumns = insert.getDuplicateUpdateSets();
             columns.add(new Column(tenantIdColumn));
@@ -183,7 +183,7 @@ public class SqlInnerInterceptor extends TenantLineInnerInterceptor {
         TenantType tenantType = SqlParserContext.getCurrentSqlTenantType();
         DataScopeType dataScopeType = SqlParserContext.getCurrentSqlDataScopeType();
         boolean tenantEnabled = Objects.nonNull(tenantType) && !tenantIdLineHandler.ignoreTable(table.getName());
-        boolean dataScopeEnabled = Objects.nonNull(dataScopeType) && !dataScopeLineHandler.ignoreTable(table.getName());
+        boolean dataScopeEnabled = Objects.nonNull(dataScopeType) && !dataScopeHandler.ignoreTable(table.getName());
         if (!tenantEnabled && !dataScopeEnabled) {
             return null;
         }
@@ -203,7 +203,7 @@ public class SqlInnerInterceptor extends TenantLineInnerInterceptor {
             init = true;
         }
         if (dataScopeEnabled) {
-            Expression dataScopeCondition = dataScopeLineHandler.getDataScopeCondition(table);
+            Expression dataScopeCondition = dataScopeHandler.getDataScopeCondition(table);
             if (dataScopeCondition instanceof NullValue) {
                 return new EqualsTo(new Column("1"), new LongValue(2));
             }
@@ -245,13 +245,13 @@ public class SqlInnerInterceptor extends TenantLineInnerInterceptor {
         }
         // 检查是否启用了租户和数据范围
         boolean isTenantEnabled = tenantIdLineHandler.isEnabled();
-        boolean isDataScopeEnabled = dataScopeLineHandler.isEnabled();
+        boolean isDataScopeEnabled = dataScopeHandler.isEnabled();
         if (!isTenantEnabled && !isDataScopeEnabled) {
             return;
         }
         // 检查 非select语句 的表是否启用
         boolean isTableTenantEnabled = !tenantIdLineHandler.ignoreTable(table, sqlType);
-        boolean isTableDataScopeEnabled = !dataScopeLineHandler.ignoreTable(table, sqlType);
+        boolean isTableDataScopeEnabled = !dataScopeHandler.ignoreTable(table, sqlType);
         if (!isTableTenantEnabled && !isTableDataScopeEnabled) {
             return;
         }

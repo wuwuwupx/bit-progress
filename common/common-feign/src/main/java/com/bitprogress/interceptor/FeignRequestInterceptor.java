@@ -1,7 +1,7 @@
 package com.bitprogress.interceptor;
 
 import com.bitprogress.basecontext.context.DispatcherContext;
-import com.bitprogress.ormcontext.context.DataScopeContext;
+import com.bitprogress.ormcontext.context.SingleTypeDataScopeContext;
 import com.bitprogress.ormcontext.context.TenantContext;
 import com.bitprogress.ormparser.util.SqlParserUtils;
 import com.bitprogress.request.constant.VerifyConstant;
@@ -54,7 +54,7 @@ public class FeignRequestInterceptor implements RequestInterceptor {
         if (StringUtils.isNotEmpty(sqlParserMsgJson)) {
             template.header(VerifyConstant.SQL_PARSER_MSG, sqlParserMsgJson);
         }
-        String dataScopeInfoJson = DataScopeContext.getDataScopeInfoJson();
+        String dataScopeInfoJson = SingleTypeDataScopeContext.getDataScopeInfoJson();
         if (StringUtils.isNotEmpty(dataScopeInfoJson)) {
             template.header(VerifyConstant.DATA_SCOPE_INFO, dataScopeInfoJson);
         }

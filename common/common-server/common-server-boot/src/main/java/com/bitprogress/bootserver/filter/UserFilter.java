@@ -2,10 +2,10 @@ package com.bitprogress.bootserver.filter;
 
 import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.bootserver.util.UserUtils;
-import com.bitprogress.ormcontext.context.DataScopeContext;
+import com.bitprogress.ormcontext.context.SingleTypeDataScopeContext;
 import com.bitprogress.ormcontext.context.TenantContext;
-import com.bitprogress.ormcontext.entity.SingleTypeDataScopeInfo;
-import com.bitprogress.ormcontext.entity.TenantInfo;
+import com.bitprogress.ormcontext.info.SingleTypeDataScopeInfo;
+import com.bitprogress.ormcontext.info.TenantInfo;
 import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormparser.util.SqlParserUtils;
 import com.bitprogress.request.constant.VerifyConstant;
@@ -77,7 +77,7 @@ public class UserFilter implements Filter {
                         TenantInfo tenantInfo = TenantUtils.getTenantInfo(userInfo);
                         TenantContext.setTenantInfo(tenantInfo);
                         SingleTypeDataScopeInfo singleTypeDataScopeInfo = DataScopeUtils.getDataScopeInfo(userInfo);
-                        DataScopeContext.setDataScopeInfo(singleTypeDataScopeInfo);
+                        SingleTypeDataScopeContext.setDataScopeInfo(singleTypeDataScopeInfo);
                     } else {
                         DispatcherContext.markAnonymousRequest();
                     }
@@ -102,7 +102,7 @@ public class UserFilter implements Filter {
                     }
                     String dataScopeInfoJson = httpRequest.getHeader(VerifyConstant.DATA_SCOPE_INFO);
                     if (StringUtils.isNotEmpty(dataScopeInfoJson)) {
-                        DataScopeContext.setDataScopeInfoJson(dataScopeInfoJson);
+                        SingleTypeDataScopeContext.setDataScopeInfoJson(dataScopeInfoJson);
                     }
                 }
             }
@@ -112,7 +112,7 @@ public class UserFilter implements Filter {
             UserContext.clearUserInfo();
             TenantContext.clearTenantInfo();
             SqlParserContext.clearSqlParserMsg();
-            DataScopeContext.clearDataScopeInfo();
+            SingleTypeDataScopeContext.clearDataScopeInfo();
         }
     }
 

@@ -1,6 +1,6 @@
 package com.bitprogress.servercore.util;
 
-import com.bitprogress.ormcontext.entity.SingleTypeDataScopeInfo;
+import com.bitprogress.ormcontext.info.SingleTypeDataScopeInfo;
 import com.bitprogress.ormmodel.enums.DataScopeType;
 import com.bitprogress.usercontext.entity.UserInfo;
 
@@ -22,7 +22,7 @@ public class DataScopeUtils {
         SingleTypeDataScopeInfo singleTypeDataScopeInfo = new SingleTypeDataScopeInfo();
         singleTypeDataScopeInfo.setUserId(userInfo.getUserId());
         singleTypeDataScopeInfo.setDataScope(userInfo.getDataScope());
-        singleTypeDataScopeInfo.setDataScopes(userInfo.getDataScopes());
+        singleTypeDataScopeInfo.setManagedDataScopes(userInfo.getDataScopes());
         if (Objects.nonNull(userInfo.getDataScopeType())) {
             singleTypeDataScopeInfo.setDataScopeType(DataScopeType.getByValue(userInfo.getDataScopeType().getValue()));
         } else {

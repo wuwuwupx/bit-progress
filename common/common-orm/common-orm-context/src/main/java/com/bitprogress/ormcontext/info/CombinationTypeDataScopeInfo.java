@@ -1,4 +1,4 @@
-package com.bitprogress.ormcontext.entity;
+package com.bitprogress.ormcontext.info;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
