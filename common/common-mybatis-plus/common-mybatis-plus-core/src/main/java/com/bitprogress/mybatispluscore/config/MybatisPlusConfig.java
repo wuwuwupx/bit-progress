@@ -7,9 +7,9 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.bitprogress.mybatispluscore.handler.DataScopeLineHandler;
-import com.bitprogress.mybatispluscore.handler.DefaultDataScopeLineHandler;
+import com.bitprogress.mybatispluscore.handler.SingleTypeDataScopeLineHandler;
 import com.bitprogress.mybatispluscore.handler.TenantIdLineHandler;
-import com.bitprogress.mybatispluscore.plugins.TenantSqlInnerInterceptor;
+import com.bitprogress.mybatispluscore.interceptor.TenantSqlInnerInterceptor;
 import com.bitprogress.mybatispluscore.properties.DataScopeProperties;
 import com.bitprogress.mybatispluscore.properties.TenantProperties;
 import org.mybatis.spring.annotation.MapperScan;
@@ -36,8 +36,7 @@ public class MybatisPlusConfig {
 
         // 租户插件
         TenantIdLineHandler tenantSqlHandler = new TenantIdLineHandler(tenantProperties);
-        DataScopeLineHandler dataScopeLineHandler = new DefaultDataScopeLineHandler(dataScopeProperties);
-        TenantSqlInnerInterceptor sqlInnerInterceptor = new TenantSqlInnerInterceptor(tenantSqlHandler, dataScopeLineHandler);
+        TenantSqlInnerInterceptor sqlInnerInterceptor = new TenantSqlInnerInterceptor(tenantSqlHandler);
         interceptor.addInnerInterceptor(sqlInnerInterceptor);
 
         // 乐观锁插件

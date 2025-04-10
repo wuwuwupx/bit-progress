@@ -1,5 +1,6 @@
 package com.bitprogress.mybatispluscore.properties;
 
+import com.bitprogress.ormmodel.enums.DataScopeMode;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -22,6 +23,11 @@ public class DataScopeProperties {
     private Boolean enabled = false;
 
     /**
+     * 数据权限模式
+     */
+    private DataScopeMode mode = DataScopeMode.SINGLE;
+
+    /**
      * 白名单
      */
     private List<String> ignoreTables = new ArrayList<>();
@@ -32,6 +38,18 @@ public class DataScopeProperties {
      * 当启用名单不为空时，优先级高于 白名单
      */
     private List<String> enableTables = new ArrayList<>();
+
+    /**
+     * 白名单
+     */
+    private List<String> ignoreInsertTables = new ArrayList<>();
+
+    /**
+     * 启用名单
+     * 为空表示所有的表都启用，不为空则启动配置的表
+     * 当启用名单不为空时，优先级高于 白名单
+     */
+    private List<String> enableInsertTables = new ArrayList<>();
 
     /**
      * 数据权限字段

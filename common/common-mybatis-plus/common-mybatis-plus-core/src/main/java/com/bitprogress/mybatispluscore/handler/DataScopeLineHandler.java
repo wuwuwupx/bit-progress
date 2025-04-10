@@ -1,5 +1,7 @@
 package com.bitprogress.mybatispluscore.handler;
 
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.bitprogress.ormmodel.enums.DataScopeType;
 import com.bitprogress.ormmodel.enums.SqlType;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.schema.Column;
@@ -17,25 +19,27 @@ public interface DataScopeLineHandler {
     boolean isEnabled();
 
     /**
-     * 获取数据范围
+     * 数据范围字段别名设置
+     * <p>tenantId 或 tableAlias.${dataScope}</p>
      *
-     * @return 数据范围
+     * @param table 表对象
+     * @return 字段
      */
-    Expression getCurrentDataScope();
-
-    /**
-     * 获取可查询数据范围列表
-     *
-     * @return 数据范围
-     */
-    Expression getDataScope();
+    default Column getAliasDataScopeColumn(Table table, DataScopeType dataScopeType) {
+        StringBuilder column = new StringBuilder();
+        if (table.getAlias() != null) {
+            column.append(table.getAlias().getName()).append(StringPool.DOT);
+        }
+        column.append(getDataScopeColumn(table.getName(), dataScopeType));
+        return new Column(column.toString());
+    }
 
     /**
      * 获取数据范围字段
      *
      * @return 数据范围字段
      */
-    default String getDataScopeColumn(String tableName) {
+    default String getDataScopeColumn(String tableName, DataScopeType dataScopeType) {
         return "data_scope";
     }
 
@@ -77,6 +81,20 @@ public interface DataScopeLineHandler {
     }
 
     /**
+     * 获取数据范围
+     *
+     * @return 数据范围
+     */
+    Expression getCurrentDataScope();
+
+    /**
+     * 获取数据范围条件
+     *
+     * @return 数据范围条件
+     */
+    Expression getDataScopeCondition(Table table);
+
+    /**
      * 是否忽略表，默认不忽略
      *
      * @param tableName 表名
@@ -92,6 +110,15 @@ public interface DataScopeLineHandler {
      * @return 是否忽略
      */
     default boolean ignoreTable(Table table, SqlType sqlType) {
+        return false;
+    }
+
+    /**
+     * 是否忽略表，默认不忽略
+     *
+     * @return 是否忽略
+     */
+    default boolean ignoreInsert(String tableName) {
         return false;
     }
 

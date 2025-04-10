@@ -1,41 +1,41 @@
 package com.bitprogress.ormcontext.context;
 
-import com.bitprogress.basemodel.IException;
 import com.bitprogress.exception.CommonException;
 import com.bitprogress.exception.ExceptionMessage;
-import com.bitprogress.ormcontext.entity.DataScopeInfo;
+import com.bitprogress.ormcontext.entity.SingleTypeDataScopeInfo;
 import com.bitprogress.util.JsonUtils;
 
-import java.util.*;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class DataScopeContext {
 
-    private static final ThreadLocal<DataScopeInfo> DATA_SCOPE_INFO = new ThreadLocal<>();
+    private static final ThreadLocal<SingleTypeDataScopeInfo> DATA_SCOPE_INFO = new ThreadLocal<>();
 
     /**
      * 获取数据范围信息
      */
-    public static DataScopeInfo getDataScopeInfo() {
+    public static SingleTypeDataScopeInfo getDataScopeInfo() {
         return DATA_SCOPE_INFO.get();
     }
 
     /**
      * 设置数据范围信息
      */
-    public static void setDataScopeInfo(DataScopeInfo dataScopeInfo) {
-        DATA_SCOPE_INFO.set(dataScopeInfo);
+    public static void setDataScopeInfo(SingleTypeDataScopeInfo singleTypeDataScopeInfo) {
+        DATA_SCOPE_INFO.set(singleTypeDataScopeInfo);
     }
 
     /**
      * 设置数据范围信息
      */
     public static void setDataScopeInfo(Set<String> dataScopes, Long userId) {
-        DataScopeInfo dataScopeInfo = new DataScopeInfo();
-        dataScopeInfo.setDataScopes(dataScopes);
-        dataScopeInfo.setUserId(userId);
-        setDataScopeInfo(dataScopeInfo);
+        SingleTypeDataScopeInfo singleTypeDataScopeInfo = new SingleTypeDataScopeInfo();
+        singleTypeDataScopeInfo.setDataScopes(dataScopes);
+        singleTypeDataScopeInfo.setUserId(userId);
+        setDataScopeInfo(singleTypeDataScopeInfo);
     }
 
     /**
@@ -48,23 +48,23 @@ public class DataScopeContext {
     /**
      * 获取数据范围信息
      */
-    public static DataScopeInfo getDataScopeInfoOrNew() {
+    public static SingleTypeDataScopeInfo getDataScopeInfoOrNew() {
         return Optional
                 .ofNullable(DATA_SCOPE_INFO.get())
-                .orElseGet(DataScopeInfo::new);
+                .orElseGet(SingleTypeDataScopeInfo::new);
     }
 
     /**
      * 获取数据范围信息
      */
-    public static DataScopeInfo getDataScopeInfoOrThrow() {
+    public static SingleTypeDataScopeInfo getDataScopeInfoOrThrow() {
         return getDataScopeInfoOrThrow("未读取到租户信息");
     }
 
     /**
      * 获取数据范围信息
      */
-    public static DataScopeInfo getDataScopeInfoOrThrow(String message) {
+    public static SingleTypeDataScopeInfo getDataScopeInfoOrThrow(String message) {
         return Optional
                 .ofNullable(DATA_SCOPE_INFO.get())
                 .orElseThrow(() -> CommonException.error(message));
@@ -73,7 +73,7 @@ public class DataScopeContext {
     /**
      * 获取数据范围信息
      */
-    public static DataScopeInfo getDataScopeInfoOrThrow(ExceptionMessage exception) {
+    public static SingleTypeDataScopeInfo getDataScopeInfoOrThrow(ExceptionMessage exception) {
         return Optional
                 .ofNullable(DATA_SCOPE_INFO.get())
                 .orElseThrow(() -> CommonException.error(exception));
@@ -82,7 +82,7 @@ public class DataScopeContext {
     /**
      * 获取数据范围信息
      */
-    public static DataScopeInfo getDataScopeInfoOrThrow(CommonException exception) {
+    public static SingleTypeDataScopeInfo getDataScopeInfoOrThrow(CommonException exception) {
         return Optional
                 .ofNullable(DATA_SCOPE_INFO.get())
                 .orElseThrow(() -> exception);
@@ -91,7 +91,7 @@ public class DataScopeContext {
     /**
      * 获取租户信息的某一信息
      */
-    public static <T> T getFieldOrDefault(Function<DataScopeInfo, T> fieldFunction, T defaultValue) {
+    public static <T> T getFieldOrDefault(Function<SingleTypeDataScopeInfo, T> fieldFunction, T defaultValue) {
         return Optional
                 .ofNullable(DATA_SCOPE_INFO.get())
                 .map(fieldFunction)
@@ -101,11 +101,11 @@ public class DataScopeContext {
     /**
      * 获取租户信息的某一信息
      */
-    public static <T> T getFieldOrThrow(Function<DataScopeInfo, T> fieldFunction,
+    public static <T> T getFieldOrThrow(Function<SingleTypeDataScopeInfo, T> fieldFunction,
                                         Supplier<? extends CommonException> supplier) {
-        DataScopeInfo dataScopeInfo = getDataScopeInfoOrThrow();
+        SingleTypeDataScopeInfo singleTypeDataScopeInfo = getDataScopeInfoOrThrow();
         return Optional
-                .of(dataScopeInfo)
+                .of(singleTypeDataScopeInfo)
                 .map(fieldFunction)
                 .orElseThrow(supplier);
     }
@@ -121,7 +121,7 @@ public class DataScopeContext {
      * 数据范围信息反序列化
      */
     public static void setDataScopeInfoJson(String dataScopeInfoJson) {
-        DATA_SCOPE_INFO.set(JsonUtils.deserializeObject(dataScopeInfoJson, DataScopeInfo.class));
+        DATA_SCOPE_INFO.set(JsonUtils.deserializeObject(dataScopeInfoJson, SingleTypeDataScopeInfo.class));
     }
 
 }

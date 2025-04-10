@@ -90,6 +90,7 @@ public @interface SqlParserMode {
 
     /**
      * 数据范围类型
+     * 只在{@link DataScopeMode#SINGLE} 模式下生效
      */
     DataScopeType dataScopeType() default DataScopeType.SELF;
 

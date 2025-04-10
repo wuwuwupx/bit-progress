@@ -4,7 +4,7 @@ import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.bootserver.util.UserUtils;
 import com.bitprogress.ormcontext.context.DataScopeContext;
 import com.bitprogress.ormcontext.context.TenantContext;
-import com.bitprogress.ormcontext.entity.DataScopeInfo;
+import com.bitprogress.ormcontext.entity.SingleTypeDataScopeInfo;
 import com.bitprogress.ormcontext.entity.TenantInfo;
 import com.bitprogress.ormparser.context.SqlParserContext;
 import com.bitprogress.ormparser.util.SqlParserUtils;
@@ -76,8 +76,8 @@ public class UserFilter implements Filter {
                         UserContext.setUserInfo(userInfo);
                         TenantInfo tenantInfo = TenantUtils.getTenantInfo(userInfo);
                         TenantContext.setTenantInfo(tenantInfo);
-                        DataScopeInfo dataScopeInfo = DataScopeUtils.getDataScopeInfo(userInfo);
-                        DataScopeContext.setDataScopeInfo(dataScopeInfo);
+                        SingleTypeDataScopeInfo singleTypeDataScopeInfo = DataScopeUtils.getDataScopeInfo(userInfo);
+                        DataScopeContext.setDataScopeInfo(singleTypeDataScopeInfo);
                     } else {
                         DispatcherContext.markAnonymousRequest();
                     }

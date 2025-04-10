@@ -3,7 +3,7 @@ package com.bitprogress.ormcontext.utils;
 import com.bitprogress.exception.CommonException;
 import com.bitprogress.exception.ExceptionMessage;
 import com.bitprogress.ormcontext.context.DataScopeContext;
-import com.bitprogress.ormcontext.entity.DataScopeInfo;
+import com.bitprogress.ormcontext.entity.SingleTypeDataScopeInfo;
 import com.bitprogress.ormmodel.enums.DataScopeType;
 
 import java.util.Arrays;
@@ -17,7 +17,7 @@ public class DataScopeContextUtils {
      * 获取数据范围类型
      */
     public static DataScopeType getDataScopeType() {
-        return DataScopeContext.getFieldOrDefault(DataScopeInfo::getDataScopeType, null);
+        return DataScopeContext.getFieldOrDefault(SingleTypeDataScopeInfo::getDataScopeType, null);
     }
 
     /**
@@ -25,14 +25,14 @@ public class DataScopeContextUtils {
      * 即默认只能访问自身数据
      */
     public static DataScopeType getDataScopeTypeOrDefault() {
-        return DataScopeContext.getFieldOrDefault(DataScopeInfo::getDataScopeType, DataScopeType.SELF);
+        return DataScopeContext.getFieldOrDefault(SingleTypeDataScopeInfo::getDataScopeType, DataScopeType.SELF);
     }
 
     /**
      * 获取数据范围类型，为空则返回 传入的值
      */
     public static DataScopeType getDataScopeTypeOrDefault(DataScopeType dataScopeType) {
-        return DataScopeContext.getFieldOrDefault(DataScopeInfo::getDataScopeType, dataScopeType);
+        return DataScopeContext.getFieldOrDefault(SingleTypeDataScopeInfo::getDataScopeType, dataScopeType);
     }
 
     /**
@@ -40,53 +40,53 @@ public class DataScopeContextUtils {
      */
     public static DataScopeType getDataScopeTypeOrThrow() {
         return DataScopeContext
-                .getFieldOrThrow(DataScopeInfo::getDataScopeType, () -> CommonException.error("数据范围类型未读取到"));
+                .getFieldOrThrow(SingleTypeDataScopeInfo::getDataScopeType, () -> CommonException.error("数据范围类型未读取到"));
     }
 
     /**
      * 获取数据范围类型，为空则抛出异常
      */
     public static DataScopeType getDataScopeTypeOrThrow(String message) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScopeType, () -> CommonException.error(message));
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getDataScopeType, () -> CommonException.error(message));
     }
 
     /**
      * 获取数据范围类型，为空则抛出异常
      */
     public static DataScopeType getDataScopeTypeOrThrow(ExceptionMessage exception) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScopeType, () -> CommonException.error(exception));
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getDataScopeType, () -> CommonException.error(exception));
     }
 
     /**
      * 获取数据范围类型，为空则抛出异常
      */
     public static DataScopeType getDataScopeTypeOrThrow(CommonException exception) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScopeType, () -> exception);
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getDataScopeType, () -> exception);
     }
 
     /**
      * 设置数据范围类型
      */
     public static void setDataScopeType(DataScopeType dataScopeType) {
-        DataScopeInfo dataScopeInfo = DataScopeContext.getDataScopeInfoOrNew();
-        dataScopeInfo.setDataScopeType(dataScopeType);
-        DataScopeContext.setDataScopeInfo(dataScopeInfo);
+        SingleTypeDataScopeInfo singleTypeDataScopeInfo = DataScopeContext.getDataScopeInfoOrNew();
+        singleTypeDataScopeInfo.setDataScopeType(dataScopeType);
+        DataScopeContext.setDataScopeInfo(singleTypeDataScopeInfo);
     }
 
     /**
      * 设置数据范围类型，未初始化则抛出异常
      */
     public static void setDataScopeTypeOrThrow(DataScopeType dataScopeType, String message) {
-        DataScopeInfo dataScopeInfo = DataScopeContext.getDataScopeInfoOrThrow(message);
-        dataScopeInfo.setDataScopeType(dataScopeType);
-        DataScopeContext.setDataScopeInfo(dataScopeInfo);
+        SingleTypeDataScopeInfo singleTypeDataScopeInfo = DataScopeContext.getDataScopeInfoOrThrow(message);
+        singleTypeDataScopeInfo.setDataScopeType(dataScopeType);
+        DataScopeContext.setDataScopeInfo(singleTypeDataScopeInfo);
     }
 
     /**
      * 清除数据范围类型
      */
     public static void clearDataScopeType() {
-        DataScopeInfo dataScopeInfo = DataScopeContext.getDataScopeInfo();
+        SingleTypeDataScopeInfo singleTypeDataScopeInfo = DataScopeContext.getDataScopeInfo();
     }
 
     /**
@@ -100,35 +100,35 @@ public class DataScopeContextUtils {
      * 获取数据范围，默认返回空
      */
     public static String getDataScopeOrDefault() {
-        return DataScopeContext.getFieldOrDefault(DataScopeInfo::getDataScope, "");
+        return DataScopeContext.getFieldOrDefault(SingleTypeDataScopeInfo::getDataScope, "");
     }
 
     /**
      * 获取数据范围，为空则抛出异常
      */
     public static String getDataScopeOrThrow() {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScope, () -> CommonException.error("数据范围未读取到"));
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getDataScope, () -> CommonException.error("数据范围未读取到"));
     }
 
     /**
      * 获取数据范围，为空则抛出异常
      */
     public static String getDataScopeOrThrow(String message) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScope, () -> CommonException.error(message));
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getDataScope, () -> CommonException.error(message));
     }
 
     /**
      * 获取数据范围，为空则抛出异常
      */
     public static String getDataScopeOrThrow(ExceptionMessage exception) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScope, () -> CommonException.error(exception));
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getDataScope, () -> CommonException.error(exception));
     }
 
     /**
      * 获取数据范围，为空则抛出异常
      */
     public static String getDataScopeOrThrow(CommonException exception) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScope, () -> exception);
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getDataScope, () -> exception);
     }
 
     /**
@@ -149,7 +149,7 @@ public class DataScopeContextUtils {
      * 获取可查询数据范围列表，为空则返回 传入的值
      */
     public static Set<String> getDataScopesOrDefault(Set<String> dataScopes) {
-        return DataScopeContext.getFieldOrDefault(DataScopeInfo::getDataScopes, dataScopes);
+        return DataScopeContext.getFieldOrDefault(SingleTypeDataScopeInfo::getDataScopes, dataScopes);
     }
 
     /**
@@ -163,21 +163,21 @@ public class DataScopeContextUtils {
      * 获取可查询数据范围列表，为空则抛出异常
      */
     public static Set<String> getDataScopesOrThrow(String message) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScopes, () -> CommonException.error(message));
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getDataScopes, () -> CommonException.error(message));
     }
 
     /**
      * 获取可查询数据范围列表，为空则抛出异常
      */
     public static Set<String> getDataScopesOrThrow(ExceptionMessage exception) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScopes, () -> CommonException.error(exception));
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getDataScopes, () -> CommonException.error(exception));
     }
 
     /**
      * 获取可查询数据范围列表，为空则抛出异常
      */
     public static Set<String> getDataScopesOrThrow(CommonException exception) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getDataScopes, () -> exception);
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getDataScopes, () -> exception);
     }
 
     /**
@@ -193,10 +193,10 @@ public class DataScopeContextUtils {
      * 覆盖原本的数据范围信息
      */
     public static void setDataScopes(Collection<String> dataScopes) {
-        DataScopeInfo dataScopeInfo = DataScopeContext.getDataScopeInfoOrNew();
+        SingleTypeDataScopeInfo singleTypeDataScopeInfo = DataScopeContext.getDataScopeInfoOrNew();
         Set<String> dataScopeSet = new HashSet<>(dataScopes);
-        dataScopeInfo.setDataScopes(dataScopeSet);
-        DataScopeContext.setDataScopeInfo(dataScopeInfo);
+        singleTypeDataScopeInfo.setDataScopes(dataScopeSet);
+        DataScopeContext.setDataScopeInfo(singleTypeDataScopeInfo);
     }
 
     /**
@@ -204,9 +204,9 @@ public class DataScopeContextUtils {
      * 覆盖原本的数据范围信息
      */
     public static void setDataScopes(Set<String> dataScopes) {
-        DataScopeInfo dataScopeInfo = DataScopeContext.getDataScopeInfoOrNew();
-        dataScopeInfo.setDataScopes(dataScopes);
-        DataScopeContext.setDataScopeInfo(dataScopeInfo);
+        SingleTypeDataScopeInfo singleTypeDataScopeInfo = DataScopeContext.getDataScopeInfoOrNew();
+        singleTypeDataScopeInfo.setDataScopes(dataScopes);
+        DataScopeContext.setDataScopeInfo(singleTypeDataScopeInfo);
     }
 
     /**
@@ -222,69 +222,69 @@ public class DataScopeContextUtils {
      * 不覆盖原本的数据范围信息
      */
     public static void addDataScopes(Collection<String> dataScopes) {
-        DataScopeInfo dataScopeInfo = DataScopeContext.getDataScopeInfoOrNew();
-        Set<String> dataScopeSet = dataScopeInfo.getDataScopes();
+        SingleTypeDataScopeInfo singleTypeDataScopeInfo = DataScopeContext.getDataScopeInfoOrNew();
+        Set<String> dataScopeSet = singleTypeDataScopeInfo.getDataScopes();
         dataScopeSet.addAll(dataScopes);
-        dataScopeInfo.setDataScopes(dataScopeSet);
-        DataScopeContext.setDataScopeInfo(dataScopeInfo);
+        singleTypeDataScopeInfo.setDataScopes(dataScopeSet);
+        DataScopeContext.setDataScopeInfo(singleTypeDataScopeInfo);
     }
 
     /**
      * 获取用户ID
      */
     public static Long getUserId() {
-        return DataScopeContext.getFieldOrDefault(DataScopeInfo::getUserId, null);
+        return DataScopeContext.getFieldOrDefault(SingleTypeDataScopeInfo::getUserId, null);
     }
 
     /**
      * 获取用户ID，为空则返回 0
      */
     public static Long getUserIdOrDefault() {
-        return DataScopeContext.getFieldOrDefault(DataScopeInfo::getUserId, 0L);
+        return DataScopeContext.getFieldOrDefault(SingleTypeDataScopeInfo::getUserId, 0L);
     }
 
     /**
      * 获取用户ID，为空返回 传入的值
      */
     public static Long getUserIdOrDefault(Long userId) {
-        return DataScopeContext.getFieldOrDefault(DataScopeInfo::getUserId, userId);
+        return DataScopeContext.getFieldOrDefault(SingleTypeDataScopeInfo::getUserId, userId);
     }
 
     /**
      * 获取用户ID，为空则抛出异常
      */
     public static Long getUserIdOrThrow() {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getUserId, () -> CommonException.error("用户ID未读取到"));
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getUserId, () -> CommonException.error("用户ID未读取到"));
     }
 
     /**
      * 获取用户ID，为空则抛出异常
      */
     public static Long getUserIdOrThrow(String message) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getUserId, () -> CommonException.error(message));
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getUserId, () -> CommonException.error(message));
     }
 
     /**
      * 获取用户ID，为空则抛出异常
      */
     public static Long getUserIdOrThrow(ExceptionMessage exception) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getUserId, () -> CommonException.error(exception));
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getUserId, () -> CommonException.error(exception));
     }
 
     /**
      * 获取用户ID，为空则抛出异常
      */
     public static Long getUserIdOrThrow(CommonException exception) {
-        return DataScopeContext.getFieldOrThrow(DataScopeInfo::getUserId, () -> exception);
+        return DataScopeContext.getFieldOrThrow(SingleTypeDataScopeInfo::getUserId, () -> exception);
     }
 
     /**
      * 设置用户ID
      */
     public static void setUserId(Long userId) {
-        DataScopeInfo dataScopeInfo = DataScopeContext.getDataScopeInfoOrNew();
-        dataScopeInfo.setUserId(userId);
-        DataScopeContext.setDataScopeInfo(dataScopeInfo);
+        SingleTypeDataScopeInfo singleTypeDataScopeInfo = DataScopeContext.getDataScopeInfoOrNew();
+        singleTypeDataScopeInfo.setUserId(userId);
+        DataScopeContext.setDataScopeInfo(singleTypeDataScopeInfo);
     }
 
 }

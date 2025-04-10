@@ -1,4 +1,4 @@
-package com.bitprogress.mybatispluscore.plugins;
+package com.bitprogress.mybatispluscore.interceptor;
 
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -19,8 +19,10 @@ import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.NullValue;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
-import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
-import net.sf.jsqlparser.expression.operators.relational.*;
+import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.expression.operators.relational.InExpression;
+import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.delete.Delete;
@@ -39,7 +41,7 @@ import java.util.function.Consumer;
  * 先检查sql解析模式
  */
 @AllArgsConstructor
-public class TenantSqlInnerInterceptor extends TenantLineInnerInterceptor {
+public class SqlInnerInterceptor extends TenantLineInnerInterceptor {
 
     private final TenantIdLineHandler tenantIdLineHandler;
     private final DataScopeLineHandler dataScopeLineHandler;
@@ -201,64 +203,16 @@ public class TenantSqlInnerInterceptor extends TenantLineInnerInterceptor {
             init = true;
         }
         if (dataScopeEnabled) {
-            Column dataScopeColumn = getAliasDataScopeColumn(table);
-            Expression dataScope = dataScopeLineHandler.getDataScope();
-            if (dataScope instanceof NullValue) {
-                // 为空则表示没有可查询数据，当前表不需要再匹配
+            Expression dataScopeCondition = dataScopeLineHandler.getDataScopeCondition(table);
+            if (dataScopeCondition instanceof NullValue) {
                 return new EqualsTo(new Column("1"), new LongValue(2));
-            } else if (dataScope instanceof AllValue) {
-                return expression;
-            } else {
-                Expression dataScopeExpression;
-                switch (dataScopeType) {
-                    // 自身和仅所属层级都是直接 equal 即可
-                    case SELF, BELONG_LEVEL_CURRENT -> dataScopeExpression = new EqualsTo(dataScopeColumn, dataScope);
-                    case BELONG_LEVEL -> {
-                        LikeExpression likeExpression = new LikeExpression();
-                        likeExpression.setLeftExpression(dataScopeColumn);
-                        likeExpression.setRightExpression(dataScope);
-                        dataScopeExpression = likeExpression;
-                    }
-                    case MANAGED_LEVEL_CURRENT, COMPOSITE_LEVEL_CURRENT ->
-                            dataScopeExpression = new InExpression(dataScopeColumn, dataScope);
-                    case MANAGED_LEVEL, COMPOSITE_LEVEL ->
-                            dataScopeExpression = buildLikeExpressionList(dataScope, dataScopeColumn);
-                    default -> throw ExceptionUtils.mpe("dataScope analysis error");
-                }
-                return init ? new AndExpression(expression, dataScopeExpression) : dataScopeExpression;
             }
+            if (dataScopeCondition instanceof AllValue) {
+                return expression;
+            }
+            return init ? new AndExpression(expression, dataScopeCondition) : dataScopeCondition;
         }
         return expression;
-    }
-
-    /**
-     * 构建数据权限查询条件
-     *
-     * @param dataScope       数据权限集合
-     * @param dataScopeColumn 数据权限字段
-     * @return 条件
-     */
-    private Expression buildLikeExpressionList(Expression dataScope, Expression dataScopeColumn) {
-        if (dataScope instanceof ExpressionList<?> dataScopes) {
-            OrExpression orExpression = new OrExpression();
-            for (int i = 0; i < dataScopes.size(); i++) {
-                LikeExpression likeExpression = new LikeExpression();
-                likeExpression.setLeftExpression(dataScopeColumn);
-                likeExpression.setRightExpression(dataScopes.get(i));
-                if (i == 0) {
-                    orExpression.setLeftExpression(likeExpression);
-                } else if (i == 1) {
-                    orExpression.setRightExpression(likeExpression);
-                } else {
-                    OrExpression newOrExpression = new OrExpression();
-                    newOrExpression.setLeftExpression(orExpression);
-                    newOrExpression.setRightExpression(likeExpression);
-                    orExpression = newOrExpression;
-                }
-            }
-            return CollectionUtils.isSingle(dataScopes) ? orExpression : new ParenthesedExpressionList<>(orExpression);
-        }
-        throw ExceptionUtils.mpe("dataScope analysis error");
     }
 
     /**
@@ -274,22 +228,6 @@ public class TenantSqlInnerInterceptor extends TenantLineInnerInterceptor {
             column.append(table.getAlias().getName()).append(StringPool.DOT);
         }
         column.append(tenantIdLineHandler.getTenantIdColumn());
-        return new Column(column.toString());
-    }
-
-    /**
-     * 数据范围字段别名设置
-     * <p>tenantId 或 tableAlias.${dataScope}</p>
-     *
-     * @param table 表对象
-     * @return 字段
-     */
-    protected Column getAliasDataScopeColumn(Table table) {
-        StringBuilder column = new StringBuilder();
-        if (table.getAlias() != null) {
-            column.append(table.getAlias().getName()).append(StringPool.DOT);
-        }
-        column.append(dataScopeLineHandler.getDataScopeColumn(table.getName()));
         return new Column(column.toString());
     }
 
