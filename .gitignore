@@ -78,5 +78,4 @@ buildNumber.properties
 .mvn/timing.properties
 *.log
 
-test/
 logs/
