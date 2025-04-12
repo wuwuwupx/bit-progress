@@ -9,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum SqlType implements ValueEnum {
+public enum SqlType implements OrmEnum, ValueEnum {
 
     NONE(0),
 

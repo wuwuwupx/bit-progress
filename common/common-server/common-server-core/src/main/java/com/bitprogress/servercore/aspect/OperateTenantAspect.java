@@ -1,8 +1,9 @@
 package com.bitprogress.servercore.aspect;
 
 import com.bitprogress.exception.CommonException;
-import com.bitprogress.ormcontext.utils.TenantContextUtils;
+import com.bitprogress.ormcontext.service.TenantContextService;
 import com.bitprogress.ormmodel.enums.TenantType;
+import com.bitprogress.ormmodel.info.parser.UserTenantInfo;
 import com.bitprogress.servermodel.annotation.OperateTenantApi;
 import com.bitprogress.servermodel.constant.TenantConstant;
 import com.bitprogress.usercontext.utils.UserContextUtils;
@@ -15,6 +16,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -29,6 +31,9 @@ import java.util.Set;
 public class OperateTenantAspect {
 
     private static final Logger log = LoggerFactory.getLogger(OperateTenantAspect.class);
+
+    @Autowired
+    private TenantContextService tenantContextService;
 
     @SneakyThrows
     @Before(value = "@annotation(operateTenantApi) && execution(* *(..)) && within(@org.springframework.stereotype.Controller *)")
@@ -55,8 +60,11 @@ public class OperateTenantAspect {
              * 不维护上下文
              * 同时设置租户操作类型
              */
-            TenantContextUtils.setOperateTenantIdOrThrow(operateTenantId, "未初始化租户信息，非法操作");
-            TenantContextUtils.setTenantTypeOrThrow(TenantType.OPERATE, "未初始化租户信息，非法操作");
+            UserTenantInfo userTenantInfo = tenantContextService.getUserInfo();
+            Assert.notNull(userTenantInfo, "未初始化租户信息，非法操作");
+            userTenantInfo.setOperateTenantId(operateTenantId);
+            userTenantInfo.setTenantType(TenantType.OPERATE);
+            tenantContextService.setUserInfo(userTenantInfo);
         } else {
             Assert.isTrue(!required, "未获取到操作租户ID，非法操作");
         }

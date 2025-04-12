@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum DataScopeMode implements ValueEnum {
+public enum DataScopeMode implements OrmEnum, ValueEnum {
 
     /**
      * 单类型数据范围

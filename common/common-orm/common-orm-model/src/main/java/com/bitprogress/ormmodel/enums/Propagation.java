@@ -9,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum Propagation implements ValueEnum {
+public enum Propagation implements OrmEnum, ValueEnum {
 
     /**
      * 跟随当前的解析模式，没有则创建新的解析模式

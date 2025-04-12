@@ -1,46 +1,31 @@
 package com.bitprogress.mybatispluscore.handler;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.bitprogress.ormmodel.enums.DataScopeType;
-import com.bitprogress.ormmodel.enums.SqlType;
+import com.bitprogress.util.CollectionUtils;
 import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.StringValue;
+import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
+import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import net.sf.jsqlparser.expression.operators.relational.InExpression;
+import net.sf.jsqlparser.expression.operators.relational.LikeExpression;
+import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 
 import java.util.List;
+import java.util.Set;
 
-public interface DataScopeHandler {
-
-    /**
-     * 是否启用
-     *
-     * @return 是否启用
-     */
-    boolean isEnabled();
+public interface DataScopeHandler extends InterceptorHandler<String> {
 
     /**
      * 数据范围字段别名设置
-     * <p>tenantId 或 tableAlias.${dataScope}</p>
+     * <p>dataScope 或 tableAlias.${dataScope}</p>
      *
      * @param table 表对象
      * @return 字段
      */
-    default Column getAliasDataScopeColumn(Table table, DataScopeType dataScopeType) {
-        StringBuilder column = new StringBuilder();
-        if (table.getAlias() != null) {
-            column.append(table.getAlias().getName()).append(StringPool.DOT);
-        }
-        column.append(getDataScopeColumn(table.getName(), dataScopeType));
-        return new Column(column.toString());
-    }
-
-    /**
-     * 获取数据范围字段
-     *
-     * @return 数据范围字段
-     */
-    default String getDataScopeColumn(String tableName, DataScopeType dataScopeType) {
-        return "data_scope";
+    default Column getAliasDataScopeColumn(Table table) {
+        String dataScopeColumn = getTableDataScopeColumn(table.getName());
+        return getAliasColumn(table.getAlias(), dataScopeColumn);
     }
 
     /**
@@ -63,12 +48,54 @@ public interface DataScopeHandler {
     }
 
     /**
+     * 数据范围字段别名设置
+     * <p>${owned} 或 tableAlias.${owned}</p>
+     *
+     * @param table 表对象
+     * @return 字段
+     */
+    default Column getAliasOwnedColumn(Table table) {
+        String ownedColumn = getTableOwnedColumn(table.getName());
+        return getAliasColumn(table.getAlias(), ownedColumn);
+    }
+
+    /**
      * 根据表名获取用于匹配当前用户的字段
      *
      * @return 用于匹配当前用户的字段名
      */
-    default String getTableSelfWhereColumn(String tableName) {
-        return getSourceSelfWhereColumn();
+    default String getTableOwnedColumn(String tableName) {
+        return getSourceOwnedColumn();
+    }
+
+    /**
+     * 获取拥有数据的字段
+     *
+     * @return 自身条件字段名
+     */
+    default String getSourceOwnedColumn() {
+        return "sales_id";
+    }
+
+    /**
+     * 数据范围字段别名设置
+     * <p>${self} 或 tableAlias.${self}</p>
+     *
+     * @param table 表对象
+     * @return 字段
+     */
+    default Column getAliasSelfColumn(Table table) {
+        String selfColumn = getTableSelfColumn(table.getName());
+        return getAliasColumn(table.getAlias(), selfColumn);
+    }
+
+    /**
+     * 根据表名获取用于匹配当前用户的字段
+     *
+     * @return 用于匹配当前用户的字段名
+     */
+    default String getTableSelfColumn(String tableName) {
+        return getSourceSelfColumn();
     }
 
     /**
@@ -76,7 +103,7 @@ public interface DataScopeHandler {
      *
      * @return 自身条件字段名
      */
-    default String getSourceSelfWhereColumn() {
+    default String getSourceSelfColumn() {
         return "user_id";
     }
 
@@ -85,23 +112,107 @@ public interface DataScopeHandler {
      *
      * @return 数据范围
      */
-    Expression getCurrentDataScope();
+    Expression getDataScope();
 
     /**
-     * 获取数据范围条件
+     * 获取拥有数据的字段值
      *
-     * @return 数据范围条件
+     * @return 数据范围
      */
-    Expression getDataScopeCondition(Table table);
+    Expression getOwnedData();
+
+    /**
+     * 获取自身数据的字段值
+     *
+     * @return 数据范围
+     */
+    Expression getSelfData();
+
+    /**
+     * 构建in表达式
+     *
+     * @param dataScopeColumn 数据范围字段
+     * @param dataScope       数据范围
+     * @return in表达式
+     */
+    default Expression buildEqualExpression(Column dataScopeColumn, String dataScope) {
+        return new EqualsTo(dataScopeColumn, new StringValue(dataScope));
+    }
+
+    /**
+     * 构建in表达式
+     *
+     * @param dataScopeColumn 数据范围字段
+     * @param dataScopes      数据范围
+     * @return in表达式
+     */
+    default Expression buildInExpression(Column dataScopeColumn, Set<String> dataScopes) {
+        List<StringValue> values = CollectionUtils.toList(dataScopes, StringValue::new);
+        return new InExpression(dataScopeColumn, new ParenthesedExpressionList<>(values));
+    }
+
+    /**
+     * 构建like表达式
+     *
+     * @param column     数据范围字段
+     * @param dataScopes 数据范围
+     * @return like表达式
+     */
+    default Expression buildLikeExpression(Column column, Set<String> dataScopes) {
+        if (CollectionUtils.isSingle(dataScopes)) {
+            LikeExpression likeExpression = new LikeExpression();
+            likeExpression.setLeftExpression(column);
+            likeExpression.setRightExpression(new StringValue(dataScopes.iterator().next()));
+            return likeExpression;
+        }
+        int index = 0;
+        OrExpression orExpression = new OrExpression();
+        for (String dataScope : dataScopes) {
+            LikeExpression likeExpression = new LikeExpression();
+            likeExpression.setLeftExpression(column);
+            likeExpression.setRightExpression(new StringValue(dataScope));
+            if (index == 0) {
+                orExpression.setLeftExpression(likeExpression);
+            } else if (index == 1) {
+                orExpression.setRightExpression(likeExpression);
+            } else {
+                OrExpression newOrExpression = new OrExpression();
+                newOrExpression.setLeftExpression(orExpression);
+                newOrExpression.setRightExpression(likeExpression);
+                orExpression = newOrExpression;
+            }
+            index++;
+        }
+        return orExpression;
+    }
 
     /**
      * 是否忽略表，默认不忽略
+     *
+     * @return 是否忽略
+     */
+    default boolean enableInsertDataScope(String tableName) {
+        return false;
+    }
+
+    /**
+     * 忽略查询拥有数据，默认忽略
      *
      * @param tableName 表名
      * @return 是否忽略
      */
-    default boolean ignoreTable(String tableName) {
-        return false;
+    default boolean enableInsertOwned(String tableName) {
+        return true;
+    }
+
+    /**
+     * 忽略查询自身数据，默认忽略
+     *
+     * @param tableName 插入字段
+     * @return 是否忽略
+     */
+    default boolean enableInsertSelf(String tableName) {
+        return true;
     }
 
     /**
@@ -109,28 +220,28 @@ public interface DataScopeHandler {
      *
      * @return 是否忽略
      */
-    default boolean ignoreTable(Table table, SqlType sqlType) {
+    default boolean enableQueryDataScope(String tableName) {
         return false;
     }
 
     /**
-     * 是否忽略表，默认不忽略
+     * 忽略查询拥有数据，默认忽略
      *
+     * @param tableName 表名
      * @return 是否忽略
      */
-    default boolean ignoreInsert(String tableName) {
-        return false;
+    default boolean enableQueryOwned(String tableName) {
+        return true;
     }
 
     /**
-     * 忽略插入租户字段逻辑
+     * 忽略查询自身数据，默认忽略
      *
-     * @param columns         插入字段
-     * @param dataScopeColumn 数据范围 字段
+     * @param tableName 插入字段
      * @return 是否忽略
      */
-    default boolean ignoreInsert(List<Column> columns, String dataScopeColumn) {
-        return columns.stream().map(Column::getColumnName).anyMatch(i -> i.equalsIgnoreCase(dataScopeColumn));
+    default boolean enableQuerySelf(String tableName) {
+        return true;
     }
 
 }

@@ -9,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum TenantType implements ValueEnum {
+public enum TenantType implements ConditionTypeEnum, ValueEnum {
 
     /**
      * 所有租户

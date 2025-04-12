@@ -59,6 +59,16 @@ public class UserInfo {
     private DataScopeType dataScopeType;
 
     /**
+     * 数据范围类型
+     */
+    private Set<DataScopeType> dataScopeTypes;
+
+    /**
+     * 数据范围类型
+     */
+    private Set<CombinationDataScope> combinationDataScopes;
+
+    /**
      * 自身数据范围
      */
     private String dataScope;
@@ -67,6 +77,11 @@ public class UserInfo {
      * 可查询数据范围列表
      */
     private Set<String> dataScopes;
+
+    /**
+     * 可查询数据范围列表
+     */
+    private Set<String> belongDataScopes;
 
     /**
      * 附带信息

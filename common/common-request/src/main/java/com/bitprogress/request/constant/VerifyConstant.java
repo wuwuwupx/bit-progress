@@ -58,7 +58,12 @@ public class VerifyConstant {
     /**
      * 追加 sql解析信息
      */
-    public static final String SQL_PARSER_MSG = "Sql_Parser_Msg";
+    public static final String TENANT_PARSER_INFO = "Tenant_Parser_Info";
+
+    /**
+     * 追加 sql解析信息
+     */
+    public static final String DATA_SCOPE_PARSER_INFO = "Data_Scope_Parser_Info";
 
     /**
      * 请求头header

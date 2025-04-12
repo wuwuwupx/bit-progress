@@ -1,9 +1,8 @@
 package com.bitprogress.interceptor;
 
 import com.bitprogress.basecontext.context.DispatcherContext;
-import com.bitprogress.ormcontext.context.SingleTypeDataScopeContext;
-import com.bitprogress.ormcontext.context.TenantContext;
-import com.bitprogress.ormparser.util.SqlParserUtils;
+import com.bitprogress.ormcontext.service.DataScopeContextService;
+import com.bitprogress.ormcontext.service.TenantContextService;
 import com.bitprogress.request.constant.VerifyConstant;
 import com.bitprogress.request.enums.RequestSource;
 import com.bitprogress.usercontext.context.UserContext;
@@ -24,6 +23,8 @@ import java.util.Map;
 public class FeignRequestInterceptor implements RequestInterceptor {
 
     private final ServiceInstanceChooser serviceInstanceChooser;
+    private final TenantContextService tenantContextService;
+    private final DataScopeContextService<?, ?> dataScopeContextService;
 
     /**
      * 为所有feign请求加上调用服务对应的token
@@ -46,17 +47,21 @@ public class FeignRequestInterceptor implements RequestInterceptor {
         if (StringUtils.isNotEmpty(userInfoJson)) {
             template.header(VerifyConstant.USER_INFO, userInfoJson);
         }
-        String tenantInfoJson = TenantContext.getTenantInfoJson();
+        String tenantInfoJson = tenantContextService.getUserInfoJson();
         if (StringUtils.isNotEmpty(tenantInfoJson)) {
             template.header(VerifyConstant.TENANT_INFO, tenantInfoJson);
         }
-        String sqlParserMsgJson = SqlParserUtils.getSqlParserMsgJson();
-        if (StringUtils.isNotEmpty(sqlParserMsgJson)) {
-            template.header(VerifyConstant.SQL_PARSER_MSG, sqlParserMsgJson);
+        String tenantParserInfoJson = tenantContextService.getParserInfoJson();
+        if (StringUtils.isNotEmpty(tenantParserInfoJson)) {
+            template.header(VerifyConstant.TENANT_PARSER_INFO, tenantParserInfoJson);
         }
-        String dataScopeInfoJson = SingleTypeDataScopeContext.getDataScopeInfoJson();
+        String dataScopeInfoJson = dataScopeContextService.getUserInfoJson();
         if (StringUtils.isNotEmpty(dataScopeInfoJson)) {
             template.header(VerifyConstant.DATA_SCOPE_INFO, dataScopeInfoJson);
+        }
+        String dataScopeParserInfoJson = dataScopeContextService.getParserInfoJson();
+        if (StringUtils.isNotEmpty(dataScopeParserInfoJson)) {
+            template.header(VerifyConstant.DATA_SCOPE_PARSER_INFO, dataScopeParserInfoJson);
         }
     }
 

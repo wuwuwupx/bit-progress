@@ -9,7 +9,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ParserType implements ValueEnum {
+public enum ParserType implements OrmEnum, ValueEnum {
 
     /**
      * 忽略解析

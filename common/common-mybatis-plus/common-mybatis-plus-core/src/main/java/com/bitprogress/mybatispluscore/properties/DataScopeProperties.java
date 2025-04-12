@@ -28,11 +28,6 @@ public class DataScopeProperties {
     private DataScopeMode mode = DataScopeMode.SINGLE;
 
     /**
-     * 白名单
-     */
-    private List<String> ignoreTables = new ArrayList<>();
-
-    /**
      * 启用名单
      * 为空表示所有的表都启用，不为空则启动配置的表
      * 当启用名单不为空时，优先级高于 白名单
@@ -42,14 +37,79 @@ public class DataScopeProperties {
     /**
      * 白名单
      */
-    private List<String> ignoreInsertTables = new ArrayList<>();
+    private List<String> ignoreTables = new ArrayList<>();
 
     /**
      * 启用名单
      * 为空表示所有的表都启用，不为空则启动配置的表
      * 当启用名单不为空时，优先级高于 白名单
      */
-    private List<String> enableInsertTables = new ArrayList<>();
+    private List<String> enableInsertDataScopeTables = new ArrayList<>();
+
+    /**
+     * 白名单
+     */
+    private List<String> ignoreInsertDataScopeTables = new ArrayList<>();
+
+    /**
+     * 启用名单
+     * 为空表示所有的表都启用，不为空则启动配置的表
+     * 当启用名单不为空时，优先级高于 白名单
+     */
+    private List<String> enableInsertOwnedTables = new ArrayList<>();
+
+    /**
+     * 白名单
+     */
+    private List<String> ignoreInsertOwnedTables = new ArrayList<>();
+
+    /**
+     * 启用名单
+     * 为空表示所有的表都启用，不为空则启动配置的表
+     * 当启用名单不为空时，优先级高于 白名单
+     */
+    private List<String> enableInsertSelfTables = new ArrayList<>();
+
+    /**
+     * 白名单
+     */
+    private List<String> ignoreInsertSelfTables = new ArrayList<>();
+
+    /**
+     * 启用名单
+     * 为空表示所有的表都启用，不为空则启动配置的表
+     * 当启用名单不为空时，优先级高于 白名单
+     */
+    private List<String> enableQueryDataScopeTables = new ArrayList<>();
+
+    /**
+     * 白名单
+     */
+    private List<String> ignoreQueryDataScopeTables = new ArrayList<>();
+
+    /**
+     * 启用名单
+     * 为空表示所有的表都启用，不为空则启动配置的表
+     * 当启用名单不为空时，优先级高于 白名单
+     */
+    private List<String> enableQueryOwnedTables = new ArrayList<>();
+
+    /**
+     * 白名单
+     */
+    private List<String> ignoreQueryOwnedTables = new ArrayList<>();
+
+    /**
+     * 启用名单
+     * 为空表示所有的表都启用，不为空则启动配置的表
+     * 当启用名单不为空时，优先级高于 白名单
+     */
+    private List<String> enableQuerySelfTables = new ArrayList<>();
+
+    /**
+     * 白名单
+     */
+    private List<String> ignoreQuerySelfTables = new ArrayList<>();
 
     /**
      * 数据权限字段
@@ -59,7 +119,14 @@ public class DataScopeProperties {
     private Map<String, String> dataScopeColumn = new HashMap<>();
 
     /**
-     * 匹配当前用户数据权限的字段
+     * 匹配用户拥有数据的字段
+     * key 表名
+     * value 数据权限字段
+     */
+    private Map<String, String> ownedWhereColumn = new HashMap<>();
+
+    /**
+     * 匹配当前用户自身数据的字段
      * key 表名
      * value 数据权限字段
      */

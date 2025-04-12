@@ -2,12 +2,10 @@ package com.bitprogress.bootserver.filter;
 
 import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.bootserver.util.UserUtils;
-import com.bitprogress.ormcontext.context.SingleTypeDataScopeContext;
-import com.bitprogress.ormcontext.context.TenantContext;
-import com.bitprogress.ormcontext.info.SingleTypeDataScopeInfo;
-import com.bitprogress.ormcontext.info.TenantInfo;
-import com.bitprogress.ormparser.context.SqlParserContext;
-import com.bitprogress.ormparser.util.SqlParserUtils;
+import com.bitprogress.ormcontext.service.TenantContextService;
+import com.bitprogress.ormcontext.service.impl.SingleTypeDataScopeContextService;
+import com.bitprogress.ormmodel.info.user.SingleTypeDataScopeInfo;
+import com.bitprogress.ormmodel.info.parser.UserTenantInfo;
 import com.bitprogress.request.constant.VerifyConstant;
 import com.bitprogress.request.enums.RequestSource;
 import com.bitprogress.request.enums.RequestType;
@@ -20,6 +18,7 @@ import com.bitprogress.util.StringUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
@@ -28,6 +27,11 @@ import java.io.IOException;
  */
 @WebFilter
 public class UserFilter implements Filter {
+
+    @Autowired
+    private TenantContextService tenantContextService;
+    @Autowired
+    private SingleTypeDataScopeContextService dataScopeContextService;
 
     /**
      * The <code>doFilter</code> method of the Filter is called by the container each time a request/response pair is passed
@@ -74,10 +78,10 @@ public class UserFilter implements Filter {
                         DispatcherContext.markUserRequest();
                         UserInfo userInfo = UserUtils.analysisUserInfo(httpRequest);
                         UserContext.setUserInfo(userInfo);
-                        TenantInfo tenantInfo = TenantUtils.getTenantInfo(userInfo);
-                        TenantContext.setTenantInfo(tenantInfo);
-                        SingleTypeDataScopeInfo singleTypeDataScopeInfo = DataScopeUtils.getDataScopeInfo(userInfo);
-                        SingleTypeDataScopeContext.setDataScopeInfo(singleTypeDataScopeInfo);
+                        UserTenantInfo userTenantInfo = TenantUtils.getTenantInfo(userInfo);
+                        tenantContextService.setUserInfo(userTenantInfo);
+                        SingleTypeDataScopeInfo dataScopeInfo = DataScopeUtils.getDataScopeInfo(userInfo);
+                        dataScopeContextService.setUserInfo(dataScopeInfo);
                     } else {
                         DispatcherContext.markAnonymousRequest();
                     }
@@ -94,15 +98,19 @@ public class UserFilter implements Filter {
                     }
                     String tenantInfoJson = httpRequest.getHeader(VerifyConstant.TENANT_INFO);
                     if (StringUtils.isNotEmpty(tenantInfoJson)) {
-                        TenantContext.setTenantInfoJson(tenantInfoJson);
+                        tenantContextService.setUserInfoJson(tenantInfoJson);
                     }
-                    String sqlParserMsgJson = httpRequest.getHeader(VerifyConstant.SQL_PARSER_MSG);
-                    if (StringUtils.isNotEmpty(sqlParserMsgJson)) {
-                        SqlParserUtils.setSqlParserMsgJson(sqlParserMsgJson);
+                    String tenantParserInfoJson = httpRequest.getHeader(VerifyConstant.TENANT_PARSER_INFO);
+                    if (StringUtils.isNotEmpty(tenantParserInfoJson)) {
+                        tenantContextService.setParserInfoJson(tenantParserInfoJson);
                     }
                     String dataScopeInfoJson = httpRequest.getHeader(VerifyConstant.DATA_SCOPE_INFO);
                     if (StringUtils.isNotEmpty(dataScopeInfoJson)) {
-                        SingleTypeDataScopeContext.setDataScopeInfoJson(dataScopeInfoJson);
+                        dataScopeContextService.setUserInfoJson(dataScopeInfoJson);
+                    }
+                    String dataScopeParserInfoJson = httpRequest.getHeader(VerifyConstant.DATA_SCOPE_PARSER_INFO);
+                    if (StringUtils.isNotEmpty(dataScopeParserInfoJson)) {
+                        dataScopeContextService.setParserInfoJson(dataScopeParserInfoJson);
                     }
                 }
             }
@@ -110,9 +118,10 @@ public class UserFilter implements Filter {
         } finally {
             DispatcherContext.clearDispatcherType();
             UserContext.clearUserInfo();
-            TenantContext.clearTenantInfo();
-            SqlParserContext.clearSqlParserMsg();
-            SingleTypeDataScopeContext.clearDataScopeInfo();
+            tenantContextService.clearUserInfo();
+            tenantContextService.clearParserInfo();
+            dataScopeContextService.clearUserInfo();
+            dataScopeContextService.clearParserInfo();
         }
     }
 

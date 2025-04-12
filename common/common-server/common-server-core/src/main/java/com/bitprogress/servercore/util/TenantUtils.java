@@ -1,6 +1,6 @@
 package com.bitprogress.servercore.util;
 
-import com.bitprogress.ormcontext.info.TenantInfo;
+import com.bitprogress.ormmodel.info.parser.UserTenantInfo;
 import com.bitprogress.ormmodel.enums.TenantType;
 import com.bitprogress.usercontext.entity.UserInfo;
 
@@ -13,13 +13,14 @@ public class TenantUtils {
      * @param userInfo 用户信息
      * @return 租户信息
      */
-    public static TenantInfo getTenantInfo(UserInfo userInfo) {
-        TenantInfo tenantInfo = new TenantInfo();
-        tenantInfo.setTenantId(userInfo.getTenantId());
-        tenantInfo.setOperateTenantIds(userInfo.getOperateTenantIds());
+    public static UserTenantInfo getTenantInfo(UserInfo userInfo) {
+        UserTenantInfo userTenantInfo = new UserTenantInfo();
+        userTenantInfo.setTenantId(userInfo.getTenantId());
+        userTenantInfo.setOperateTenantIds(userInfo.getOperateTenantIds());
         // 默认使用当前租户
-        tenantInfo.setTenantType(TenantType.CURRENT);
-        return tenantInfo;
+        userTenantInfo.setTenantType(TenantType.CURRENT);
+        userTenantInfo.setCanOperateAllTenant(userInfo.getCanOperateAllTenant());
+        return userTenantInfo;
     }
 
 }

@@ -1,20 +1,15 @@
 package com.bitprogress.mybatispluscore.handler;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.bitprogress.mybatispluscore.properties.DataScopeProperties;
-import com.bitprogress.ormcontext.info.SingleTypeDataScopeInfo;
-import com.bitprogress.ormcontext.service.impl.SingleTypeDataScopeContextService;
-import com.bitprogress.ormcontext.utils.DataScopeContextUtils;
-import com.bitprogress.ormmodel.enums.DataScopeType;
+import com.bitprogress.ormmodel.enums.QueryType;
 import com.bitprogress.ormmodel.enums.SqlType;
+import com.bitprogress.ormmodel.query.DataScopeQuery;
+import com.bitprogress.ormparser.Service.DataScopeOrmDataService;
 import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
-import net.sf.jsqlparser.expression.operators.relational.InExpression;
-import net.sf.jsqlparser.expression.operators.relational.LikeExpression;
-import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 
@@ -29,7 +24,7 @@ import java.util.Set;
 public class SingleTypeDataScopeHandler implements DataScopeHandler {
 
     private final DataScopeProperties dataScopeProperties;
-    private final SingleTypeDataScopeContextService dataScopeContextService;
+    private final DataScopeOrmDataService ormDataService;
 
     /**
      * 是否启用
@@ -39,19 +34,6 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
     @Override
     public boolean isEnabled() {
         return dataScopeProperties.getEnabled();
-    }
-
-    /**
-     * 获取数据范围字段
-     *
-     * @return 数据范围字段
-     */
-    @Override
-    public String getDataScopeColumn(String tableName, DataScopeType dataScopeType) {
-        if (DataScopeType.SELF.equals(dataScopeType)) {
-            return getTableSelfWhereColumn(tableName);
-        }
-        return getTableDataScopeColumn(tableName);
     }
 
     /**
@@ -70,8 +52,18 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
      * @return 自身匹配数据条件字段
      */
     @Override
-    public String getTableSelfWhereColumn(String tableName) {
-        return CollectionUtils.getForMap(dataScopeProperties.getSelfWhereColumn(), tableName, getSourceSelfWhereColumn());
+    public String getTableOwnedColumn(String tableName) {
+        return CollectionUtils.getForMap(dataScopeProperties.getOwnedWhereColumn(), tableName, getSourceOwnedColumn());
+    }
+
+    /**
+     * 获取自身匹配数据条件字段
+     *
+     * @return 自身匹配数据条件字段
+     */
+    @Override
+    public String getTableSelfColumn(String tableName) {
+        return CollectionUtils.getForMap(dataScopeProperties.getSelfWhereColumn(), tableName, getSourceSelfColumn());
     }
 
     /**
@@ -80,8 +72,28 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
      * @return 数据范围
      */
     @Override
-    public Expression getCurrentDataScope() {
-        return new StringValue(DataScopeContextUtils.getDataScope());
+    public Expression getDataScope() {
+        return new StringValue(ormDataService.getDataScope());
+    }
+
+    /**
+     * 获取拥有数据的字段值
+     *
+     * @return 数据范围
+     */
+    @Override
+    public Expression getOwnedData() {
+        return new LongValue(ormDataService.getOwnedData());
+    }
+
+    /**
+     * 获取自身数据的字段值
+     *
+     * @return 数据范围
+     */
+    @Override
+    public Expression getSelfData() {
+        return new LongValue(ormDataService.getSelfData());
     }
 
     /**
@@ -90,119 +102,66 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
      * @return 数据范围条件
      */
     @Override
-    public Expression getDataScopeCondition(Table table) {
-        DataScopeType dataScopeType = dataScopeContextService.getCurrentDataScopeType();
-        SingleTypeDataScopeInfo dataScopeInfo = dataScopeContextService.getDataScopeInfo();
-        // 开启实际却没有信息
-        if (Objects.isNull(dataScopeInfo)) {
+    public Expression getCondition(Table table) {
+        DataScopeQuery dataScopeQuery = ormDataService.getConditionQuery();
+        if (dataScopeQuery.isNotNeedQuery()) {
             return new NullValue();
         }
-        Column aliasDataScopeColumn = getAliasDataScopeColumn(table, dataScopeType);
-        switch (dataScopeType) {
-            case SELF -> {
-                return new EqualsTo(aliasDataScopeColumn, new LongValue(dataScopeInfo.getUserId()));
-            }
-            case BELONG_LEVEL_CURRENT -> {
-                return new EqualsTo(aliasDataScopeColumn, new StringValue(dataScopeInfo.getDataScope()));
-            }
-            case BELONG_LEVEL -> {
-                StringValue value = new StringValue(dataScopeInfo.getDataScope() + StringPool.PERCENT);
-                LikeExpression likeExpression = new LikeExpression();
-                likeExpression.setLeftExpression(aliasDataScopeColumn);
-                likeExpression.setRightExpression(value);
-                return likeExpression;
-            }
-            case MANAGED_LEVEL_CURRENT -> {
-                Set<String> dataScopes = dataScopeInfo.getManagedDataScopes();
-                if (CollectionUtils.isEmpty(dataScopes)) {
-                    return new NullValue();
-                }
-                List<StringValue> values = CollectionUtils.toList(dataScopes, StringValue::new);
-                ParenthesedExpressionList<StringValue> value = new ParenthesedExpressionList<>(values);
-                return new InExpression(aliasDataScopeColumn, value);
-            }
-            case MANAGED_LEVEL -> {
-                Set<String> dataScopes = dataScopeInfo.getManagedDataScopes();
-                if (CollectionUtils.isEmpty(dataScopes)) {
-                    return new NullValue();
-                }
-                if (CollectionUtils.isSingle(dataScopes)) {
-                    return buildLikeExpression(aliasDataScopeColumn, dataScopes.iterator().next());
-                }
-                int index = 0;
-                OrExpression orExpression = new OrExpression();
-                for (String dataScope : dataScopes) {
-                    LikeExpression likeExpression = buildLikeExpression(aliasDataScopeColumn, dataScope);
-                    if (index == 0) {
-                        orExpression.setLeftExpression(likeExpression);
-                    } else if (index == 1) {
-                        orExpression.setRightExpression(likeExpression);
-                    } else {
-                        OrExpression newOrExpression = new OrExpression();
-                        newOrExpression.setLeftExpression(orExpression);
-                        newOrExpression.setRightExpression(likeExpression);
-                    }
-                    index++;
-                }
-                return new ParenthesedExpressionList<>(orExpression);
-            }
-            case COMPOSITE_LEVEL_CURRENT -> {
-                Set<String> dataScopes = CollectionUtils
-                        .newSet(DataScopeContextUtils.getDataScopes(), DataScopeContextUtils.getDataScope());
-                if (CollectionUtils.isEmpty(dataScopes)) {
-                    return new NullValue();
-                }
-                List<StringValue> values = CollectionUtils.toList(dataScopes, StringValue::new);
-                ParenthesedExpressionList<StringValue> value = new ParenthesedExpressionList<>(values);
-                return new InExpression(aliasDataScopeColumn, value);
-            }
-            case COMPOSITE_LEVEL -> {
-                Set<String> dataScopes = CollectionUtils
-                        .add(DataScopeContextUtils.getDataScopes(), DataScopeContextUtils.getDataScope());
-                if (CollectionUtils.isEmpty(dataScopes)) {
-                    return new NullValue();
-                }
-                if (CollectionUtils.isSingle(dataScopes)) {
-                    return buildLikeExpression(aliasDataScopeColumn, dataScopes.iterator().next());
-                }
-                int index = 0;
-                OrExpression orExpression = new OrExpression();
-                for (String dataScope : dataScopes) {
-                    LikeExpression likeExpression = buildLikeExpression(aliasDataScopeColumn, dataScope);
-                    if (index == 0) {
-                        orExpression.setLeftExpression(likeExpression);
-                    } else if (index == 1) {
-                        orExpression.setRightExpression(likeExpression);
-                    } else {
-                        OrExpression newOrExpression = new OrExpression();
-                        newOrExpression.setLeftExpression(orExpression);
-                        newOrExpression.setRightExpression(likeExpression);
-                    }
-                    index++;
-                }
-                return new ParenthesedExpressionList<>(orExpression);
-            }
-            case ALL -> {
-                return new AllValue();
-            }
-
+        if (dataScopeQuery.isQueryAll()) {
+            return new AllValue();
         }
-        return new NullValue();
-    }
-
-    /**
-     * 构建like表达式
-     *
-     * @param aliasDataScopeColumn 别名数据范围字段
-     * @param dataScope            数据范围
-     * @return like表达式
-     */
-    private LikeExpression buildLikeExpression(Column aliasDataScopeColumn, String dataScope) {
-        LikeExpression likeExpression = new LikeExpression();
-        likeExpression.setLeftExpression(aliasDataScopeColumn);
-        StringValue value = new StringValue(dataScope + StringPool.PERCENT);
-        likeExpression.setRightExpression(value);
-        return likeExpression;
+        String tableName = table.getName();
+        Column dataScopeColumn = getAliasDataScopeColumn(table);
+        Expression expression = null;
+        if (dataScopeQuery.isQueryLimit() && enableQueryDataScope(tableName)) {
+            Set<String> dataScopes = dataScopeQuery.getDataScopes();
+            QueryType limitQueryType = dataScopeQuery.getLimitQueryType();
+            /*
+             * data_scope in (A1,A1B2)
+             * data_scope = A1
+             * data_scope like A1%
+             * data_scope like A1% or data_scope like A2%
+             */
+            expression = buildExpressionByQueryType(dataScopeColumn, dataScopes, limitQueryType);
+        }
+        if (dataScopeQuery.isQueryBelong() && enableQueryDataScope(tableName)) {
+            Set<String> dataScopes = dataScopeQuery.getBelongDataScopes();
+            QueryType belongQueryType = dataScopeQuery.getBelongQueryType();
+            /*
+             * data_scope in (A1,A1B2)
+             * data_scope = A1
+             * data_scope like A1%
+             * data_scope like A1% or data_scope like A2%
+             */
+            Expression belongExpression = buildExpressionByQueryType(dataScopeColumn, dataScopes, belongQueryType);
+            /*
+             * data_scope in (A1,A1B2) or data_scope in (A1,A1B2)
+             */
+            expression = Objects.isNull(expression) ? belongExpression : new OrExpression(expression, belongExpression);
+        }
+        if (dataScopeQuery.isQueryOwned() && enableQueryOwned(tableName)) {
+            Column aliasOwnedColumn = getAliasOwnedColumn(table);
+            /*
+             * owned = 1L
+             */
+            Expression ownedExpression = new EqualsTo(aliasOwnedColumn, new LongValue(dataScopeQuery.getOwnedData()));
+            /*
+             * data_scope in (A1,A1B2) or data_scope in (A1,A1B2) or owned = 1L
+             */
+            expression = Objects.isNull(expression) ? ownedExpression : new OrExpression(expression, ownedExpression);
+        }
+        if (dataScopeQuery.isQuerySelf() && enableQuerySelf(tableName)) {
+            Column aliasSelfColumn = getAliasSelfColumn(table);
+            /*
+             * self = 1L
+             */
+            Expression selfExpression = new EqualsTo(aliasSelfColumn, new LongValue(dataScopeQuery.getSelfData()));
+            /*
+             * data_scope in (A1,A1B2) or data_scope in (A1,A1B2) or owned = 1L or self = 1L
+             */
+            expression = Objects.isNull(expression) ? selfExpression : new OrExpression(expression, selfExpression);
+        }
+        return expression;
     }
 
     /**
@@ -239,18 +198,112 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
     }
 
     /**
-     * 忽略插入租户字段逻辑
+     * 启用插入数据范围字段逻辑
      *
      * @param tableName 表名
-     * @return 是否忽略
+     * @return 是否启用
      */
     @Override
-    public boolean ignoreInsert(String tableName) {
-        List<String> enableTables = dataScopeProperties.getEnableInsertTables();
-        List<String> ignoreTables = dataScopeProperties.getIgnoreInsertTables();
+    public boolean enableInsertDataScope(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableInsertDataScopeTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreInsertDataScopeTables();
         return CollectionUtils.isNotEmpty(enableTables)
-                ? CollectionUtils.notContains(enableTables, tableName)
-                : CollectionUtils.contains(ignoreTables, tableName);
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 启用插入拥有字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean enableInsertOwned(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableInsertOwnedTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreInsertOwnedTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 启用插入自身字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean enableInsertSelf(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableInsertSelfTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreInsertSelfTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 启用查询数据范围字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean enableQueryDataScope(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableQueryDataScopeTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreQueryDataScopeTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 启用查询拥有字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean enableQueryOwned(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableQueryOwnedTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreQueryOwnedTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 启用查询自身字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean enableQuerySelf(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableQuerySelfTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreQuerySelfTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 设置当前数据范围类型
+     *
+     * @param sqlType sql类型
+     * @return 是否设置成功
+     */
+    @Override
+    public boolean setCurrentConditionType(SqlType sqlType) {
+        return ormDataService.setCurrentConditionType(sqlType);
+    }
+
+    /**
+     * 清除当前数据范围类型
+     */
+    @Override
+    public void clearCurrentConditionType() {
+        ormDataService.clearCurrentConditionType();
     }
 
 }
