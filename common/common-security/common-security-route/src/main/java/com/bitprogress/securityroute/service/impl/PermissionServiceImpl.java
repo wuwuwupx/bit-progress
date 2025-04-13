@@ -122,7 +122,7 @@ public class PermissionServiceImpl {
      * @param userRoleKey 用户的角色字符串
      * @return 用户是否具备某角色
      */
-    public boolean hasRoleKey(Long roleKey, String userRoleKey) {
+    public boolean hasRoleKey(Long roleKey, Set<String> userRoleKey) {
         return SUPER_ADMIN.equals(userRoleKey) || userRoleKey.equals(roleKey);
     }
 
@@ -133,7 +133,7 @@ public class PermissionServiceImpl {
      * @param userRoleKey 用户的角色列表
      * @return 用户是否不具备某角色
      */
-    public boolean lacksRoleKey(Long roleKey, String userRoleKey) {
+    public boolean lacksRoleKey(Long roleKey, Set<String> userRoleKey) {
         return !hasRoleKey(roleKey, userRoleKey);
     }
 
@@ -144,7 +144,7 @@ public class PermissionServiceImpl {
      * @param userRoleKey 用户的角色列表
      * @return 用户是否具有以下任意一个角色
      */
-    public boolean hasAnyRoleKeys(long[] roleKeys, String userRoleKey) {
+    public boolean hasAnyRoleKeys(long[] roleKeys, Set<String> userRoleKey) {
         for (long roleKey : roleKeys) {
             if (hasRoleKey(roleKey, userRoleKey)) {
                 return true;
