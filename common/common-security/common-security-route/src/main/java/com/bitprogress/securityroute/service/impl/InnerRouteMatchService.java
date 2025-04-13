@@ -1,8 +1,9 @@
-package com.bitprogress.securityroute.validator;
+package com.bitprogress.securityroute.service.impl;
 
 import com.bitprogress.securityroute.context.RouteContext;
 import com.bitprogress.securityroute.entity.ApiRoute;
 import com.bitprogress.securityroute.property.InnerRouteProperties;
+import com.bitprogress.securityroute.service.RouteMatchService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpMethod;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @AllArgsConstructor
-public class InnerRouteValidator extends RouteValidator {
+public class InnerRouteMatchService implements RouteMatchService {
 
     private final InnerRouteProperties innerRouteProperties;
 
@@ -31,7 +32,7 @@ public class InnerRouteValidator extends RouteValidator {
      * @return 是否覆盖
      */
     @Override
-    Boolean isCoverByProperties() {
+    public Boolean isCoverByProperties() {
         return Objects.nonNull(innerRouteProperties.getCover()) && innerRouteProperties.getCover();
     }
 
@@ -41,7 +42,7 @@ public class InnerRouteValidator extends RouteValidator {
      * @return 路由信息
      */
     @Override
-    protected Set<ApiRoute> getRoutesByProperties() {
+    public Set<ApiRoute> getRoutesByProperties() {
         return innerRouteProperties.getRoutes();
     }
 
@@ -51,7 +52,8 @@ public class InnerRouteValidator extends RouteValidator {
      * @return 路由信息
      */
     @Override
-    protected Set<ApiRoute> getRoutesByContext() {
+    public Set<ApiRoute> getRoutesByContext() {
         return RouteContext.getAnonymousRoutes();
     }
+
 }

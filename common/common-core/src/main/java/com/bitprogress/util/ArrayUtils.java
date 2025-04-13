@@ -40,6 +40,15 @@ public class ArrayUtils {
     }
 
     /**
+     * 数组为空
+     *
+     * @param array 传入数组
+     */
+    public static boolean isEmpty(long[] array) {
+        return array == null || array.length == 0;
+    }
+
+    /**
      * 数组不为空
      *
      * @param array 传入数组
@@ -54,6 +63,15 @@ public class ArrayUtils {
      * @param array 传入数组
      */
     public static boolean isNotEmpty(byte[] array) {
+        return !isEmpty(array);
+    }
+
+    /**
+     * 数组不为空
+     *
+     * @param array 传入数组
+     */
+    public static boolean isNotEmpty(long[] array) {
         return !isEmpty(array);
     }
 

@@ -1,4 +1,4 @@
-package com.bitprogress.securityroute.validator;
+package com.bitprogress.securityroute.service;
 
 import com.bitprogress.securityroute.entity.ApiRoute;
 import com.bitprogress.util.CollectionUtils;
@@ -8,9 +8,9 @@ import org.springframework.util.AntPathMatcher;
 import java.util.Objects;
 import java.util.Set;
 
-public abstract class RouteValidator {
+public interface RouteMatchService {
 
-    private static final AntPathMatcher MATCHER = new AntPathMatcher();
+    AntPathMatcher MATCHER = new AntPathMatcher();
 
     /**
      * 判断是否匹配
@@ -19,7 +19,7 @@ public abstract class RouteValidator {
      * @param url    url
      * @return 是否匹配
      */
-    protected Boolean matchRoute(HttpMethod method, String url) {
+    default Boolean matchRoute(HttpMethod method, String url) {
         return matchByProperties(method, url) || (!isCoverByProperties() && matchRouteByContext(method, url));
     }
 
@@ -28,14 +28,14 @@ public abstract class RouteValidator {
      *
      * @return 是否覆盖
      */
-    abstract Boolean isCoverByProperties();
+    Boolean isCoverByProperties();
 
     /**
      * 从配置文件中获取路由信息
      *
      * @return 路由信息
      */
-    abstract protected Set<ApiRoute> getRoutesByProperties();
+    Set<ApiRoute> getRoutesByProperties();
 
     /**
      * 判断是否是匿名路由
@@ -44,7 +44,7 @@ public abstract class RouteValidator {
      * @param url    url
      * @return 是否是匿名路由
      */
-    protected Boolean matchByProperties(HttpMethod method, String url) {
+    default Boolean matchByProperties(HttpMethod method, String url) {
         return CollectionUtils.anyMatch(getRoutesByProperties(), apiRoute -> pathMatch(apiRoute, method, url));
     }
 
@@ -53,7 +53,7 @@ public abstract class RouteValidator {
      *
      * @return 路由信息
      */
-    abstract protected Set<ApiRoute> getRoutesByContext();
+    Set<ApiRoute> getRoutesByContext();
 
     /**
      * 判断是否是匿名路由
@@ -62,7 +62,7 @@ public abstract class RouteValidator {
      * @param url    url
      * @return 是否是匿名路由
      */
-    protected Boolean matchRouteByContext(HttpMethod method, String url) {
+    default Boolean matchRouteByContext(HttpMethod method, String url) {
         return CollectionUtils.anyMatch(getRoutesByContext(), apiRoute -> pathMatch(apiRoute, method, url));
     }
 
@@ -73,7 +73,7 @@ public abstract class RouteValidator {
      * @param method   请求方法
      * @param url      请求路径
      */
-    protected boolean pathMatch(ApiRoute apiRoute, HttpMethod method, String url) {
+    default boolean pathMatch(ApiRoute apiRoute, HttpMethod method, String url) {
         return Objects.nonNull(apiRoute)
                 && Objects.nonNull(apiRoute.getMethod())
                 && (apiRoute.getMethod().equals(method)

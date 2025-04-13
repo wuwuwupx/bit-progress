@@ -1,10 +1,13 @@
 package com.bitprogress.securityroute.validator;
 
 import com.bitprogress.securityroute.context.RouteContext;
+import com.bitprogress.securityroute.entity.ApiRoute;
 import com.bitprogress.securityroute.property.AnonymousRouteProperties;
-import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpMethod;
+
+import java.util.Objects;
+import java.util.Set;
 
 @AllArgsConstructor
 public class AnonymousRouteValidator extends RouteValidator {
@@ -19,33 +22,37 @@ public class AnonymousRouteValidator extends RouteValidator {
      * @return 是否是匿名路由
      */
     public Boolean isAnonymousRoute(HttpMethod method, String url) {
-        Boolean cover = anonymousRouteProperties.getCover();
-        Boolean anonymousRouteByProperties = isAnonymousRouteByProperties(method, url);
-        return cover ? anonymousRouteByProperties : anonymousRouteByProperties || isAnonymousRouteByContext(method, url);
+        return matchRoute(method, url);
     }
 
     /**
-     * 判断是否是匿名路由
+     * 是否被配置文件中的路由信息覆盖
      *
-     * @param method 请求方法
-     * @param url    url
-     * @return 是否是匿名路由
+     * @return 是否覆盖
      */
-    private Boolean isAnonymousRouteByProperties(HttpMethod method, String url) {
-        return CollectionUtils.anyMatch(anonymousRouteProperties.getRoutes(), apiRoute ->
-                super.pathMatch(apiRoute, method, url));
+    @Override
+    Boolean isCoverByProperties() {
+        return Objects.nonNull(anonymousRouteProperties.getCover()) && anonymousRouteProperties.getCover();
     }
 
     /**
-     * 判断是否是匿名路由
+     * 从配置文件中获取路由信息
      *
-     * @param method 请求方法
-     * @param url    url
-     * @return 是否是匿名路由
+     * @return 路由信息
      */
-    private Boolean isAnonymousRouteByContext(HttpMethod method, String url) {
-        return CollectionUtils.anyMatch(RouteContext.getAnonymousRoutes(), apiRoute ->
-                super.pathMatch(apiRoute, method, url));
+    @Override
+    protected Set<ApiRoute> getRoutesByProperties() {
+        return anonymousRouteProperties.getRoutes();
+    }
+
+    /**
+     * 从上下文中获取路由信息
+     *
+     * @return 路由信息
+     */
+    @Override
+    protected Set<ApiRoute> getRoutesByContext() {
+        return RouteContext.getAnonymousRoutes();
     }
 
 }
