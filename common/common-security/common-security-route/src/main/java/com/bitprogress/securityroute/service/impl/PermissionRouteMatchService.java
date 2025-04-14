@@ -1,9 +1,9 @@
 package com.bitprogress.securityroute.service.impl;
 
-import com.bitprogress.securityroute.entity.ApiRoute;
-import com.bitprogress.securityroute.property.InnerRouteProperties;
+import com.bitprogress.securityroute.entity.PermissionRoute;
+import com.bitprogress.securityroute.property.PermissionRouteProperties;
 import com.bitprogress.securityroute.service.RouteMatchService;
-import com.bitprogress.securityroute.service.context.impl.InnerRouteContextService;
+import com.bitprogress.securityroute.service.context.impl.PermissionRouteContextService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpMethod;
 
@@ -11,10 +11,10 @@ import java.util.Objects;
 import java.util.Set;
 
 @AllArgsConstructor
-public class InnerRouteMatchService implements RouteMatchService<ApiRoute> {
+public class PermissionRouteMatchService implements RouteMatchService<PermissionRoute> {
 
-    private final InnerRouteProperties routeProperties;
-    private final InnerRouteContextService routeContextService;
+    private final PermissionRouteProperties routeProperties;
+    private final PermissionRouteContextService routeContextService;
 
     /**
      * 判断是否是匿名路由
@@ -23,7 +23,7 @@ public class InnerRouteMatchService implements RouteMatchService<ApiRoute> {
      * @param url    url
      * @return 是否是匿名路由
      */
-    public Boolean isInnerRoute(HttpMethod method, String url) {
+    public Boolean isPermissionRoute(HttpMethod method, String url) {
         return matchRoute(method, url);
     }
 
@@ -43,7 +43,7 @@ public class InnerRouteMatchService implements RouteMatchService<ApiRoute> {
      * @return 路由信息
      */
     @Override
-    public Set<ApiRoute> getRoutesByProperties() {
+    public Set<PermissionRoute> getRoutesByProperties() {
         return routeProperties.getRoutes();
     }
 
@@ -53,7 +53,7 @@ public class InnerRouteMatchService implements RouteMatchService<ApiRoute> {
      * @return 路由信息
      */
     @Override
-    public Set<ApiRoute> getRoutesByContext() {
+    public Set<PermissionRoute> getRoutesByContext() {
         return routeContextService.getRoutes();
     }
 

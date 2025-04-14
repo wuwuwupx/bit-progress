@@ -3,10 +3,13 @@ package com.bitprogress.securityroute.config;
 import com.bitprogress.securityroute.annotation.AnonymousApi;
 import com.bitprogress.securityroute.annotation.InnerApi;
 import com.bitprogress.securityroute.annotation.Permission;
-import com.bitprogress.securityroute.context.RouteContext;
 import com.bitprogress.securityroute.entity.ApiRoute;
 import com.bitprogress.securityroute.entity.PermissionRoute;
+import com.bitprogress.securityroute.service.context.impl.AnonymousRouteContextService;
+import com.bitprogress.securityroute.service.context.impl.InnerRouteContextService;
+import com.bitprogress.securityroute.service.context.impl.PermissionRouteContextService;
 import com.bitprogress.util.CollectionUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
@@ -27,9 +30,14 @@ import java.util.Set;
 /**
  * 特殊接口初始化
  */
+@AllArgsConstructor
 public abstract class RouteInitialization implements InitializingBean, ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
+
+    private final AnonymousRouteContextService anonymousRouteContextService;
+    private final InnerRouteContextService innerRouteContextService;
+    private final PermissionRouteContextService permissionRouteContextService;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -108,13 +116,13 @@ public abstract class RouteInitialization implements InitializingBean, Applicati
                                 Set<ApiRoute> innerRoutes,
                                 Set<PermissionRoute> permissionRoutes) {
         if (Objects.nonNull(anonymousRoutes)) {
-            RouteContext.setAnonymousRoutes(anonymousRoutes);
+            anonymousRouteContextService.setRoutes(anonymousRoutes);
         }
         if (Objects.nonNull(innerRoutes)) {
-            RouteContext.setInnerRoutes(innerRoutes);
+            innerRouteContextService.setRoutes(innerRoutes);
         }
         if (Objects.nonNull(permissionRoutes)) {
-            RouteContext.setPermissionRoutes(permissionRoutes);
+            permissionRouteContextService.setRoutes(permissionRoutes);
         }
     }
 

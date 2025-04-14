@@ -1,6 +1,6 @@
 package com.bitprogress.securityroute.property;
 
-import com.bitprogress.securityroute.entity.ApiRoute;
+import com.bitprogress.securityroute.entity.PermissionRoute;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +20,6 @@ public class PermissionRouteProperties {
      */
     Boolean cover = false;
 
-    private Set<ApiRoute> routes = new HashSet<>();
+    private Set<PermissionRoute> routes = new HashSet<>();
 
 }

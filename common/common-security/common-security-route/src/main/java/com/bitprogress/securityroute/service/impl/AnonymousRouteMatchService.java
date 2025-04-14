@@ -1,9 +1,9 @@
 package com.bitprogress.securityroute.service.impl;
 
-import com.bitprogress.securityroute.context.RouteContext;
 import com.bitprogress.securityroute.entity.ApiRoute;
 import com.bitprogress.securityroute.property.AnonymousRouteProperties;
 import com.bitprogress.securityroute.service.RouteMatchService;
+import com.bitprogress.securityroute.service.context.impl.AnonymousRouteContextService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpMethod;
 
@@ -11,9 +11,10 @@ import java.util.Objects;
 import java.util.Set;
 
 @AllArgsConstructor
-public class AnonymousRouteMatchService implements RouteMatchService {
+public class AnonymousRouteMatchService implements RouteMatchService<ApiRoute> {
 
-    private final AnonymousRouteProperties anonymousRouteProperties;
+    private final AnonymousRouteProperties routeProperties;
+    private final AnonymousRouteContextService routeContextService;
 
     /**
      * 判断是否是匿名路由
@@ -33,7 +34,7 @@ public class AnonymousRouteMatchService implements RouteMatchService {
      */
     @Override
     public Boolean isCoverByProperties() {
-        return Objects.nonNull(anonymousRouteProperties.getCover()) && anonymousRouteProperties.getCover();
+        return Objects.nonNull(routeProperties.getCover()) && routeProperties.getCover();
     }
 
     /**
@@ -43,7 +44,7 @@ public class AnonymousRouteMatchService implements RouteMatchService {
      */
     @Override
     public Set<ApiRoute> getRoutesByProperties() {
-        return anonymousRouteProperties.getRoutes();
+        return routeProperties.getRoutes();
     }
 
     /**
@@ -53,7 +54,7 @@ public class AnonymousRouteMatchService implements RouteMatchService {
      */
     @Override
     public Set<ApiRoute> getRoutesByContext() {
-        return RouteContext.getAnonymousRoutes();
+        return routeContextService.getRoutes();
     }
 
 }
