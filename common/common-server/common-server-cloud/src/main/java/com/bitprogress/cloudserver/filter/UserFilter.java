@@ -2,7 +2,9 @@ package com.bitprogress.cloudserver.filter;
 
 import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.cloudserver.property.ApplicationTokenProperties;
-import com.bitprogress.cloudserver.util.UserUtils;
+import com.bitprogress.securityroute.entity.UserAuthorisationInfo;
+import com.bitprogress.securityroute.service.context.UserAuthorisationContextService;
+import com.bitprogress.servercore.util.UserUtils;
 import com.bitprogress.exception.util.Assert;
 import com.bitprogress.ormcontext.service.TenantContextService;
 import com.bitprogress.ormcontext.service.impl.SingleTypeDataScopeContextService;
@@ -12,9 +14,7 @@ import com.bitprogress.request.constant.VerifyConstant;
 import com.bitprogress.request.enums.RequestSource;
 import com.bitprogress.request.enums.RequestType;
 import com.bitprogress.servercore.exception.RequestExceptionMessage;
-import com.bitprogress.servercore.util.DataScopeUtils;
 import com.bitprogress.servercore.util.DispatcherUtils;
-import com.bitprogress.servercore.util.TenantUtils;
 import com.bitprogress.usercontext.context.UserContext;
 import com.bitprogress.usercontext.entity.UserInfo;
 import com.bitprogress.util.StringUtils;
@@ -38,6 +38,8 @@ public class UserFilter implements Filter {
     private TenantContextService tenantContextService;
     @Autowired
     private SingleTypeDataScopeContextService dataScopeContextService;
+    @Autowired
+    private UserAuthorisationContextService userAuthorisationContextService;
 
     /**
      * The <code>doFilter</code> method of the Filter is called by the container each time a request/response pair is passed
@@ -89,10 +91,12 @@ public class UserFilter implements Filter {
                         DispatcherContext.markUserRequest();
                         UserInfo userInfo = UserUtils.analysisUserInfo(httpRequest);
                         UserContext.setUserInfo(userInfo);
-                        UserTenantInfo userTenantInfo = TenantUtils.getTenantInfo(userInfo);
+                        UserTenantInfo userTenantInfo = UserUtils.getTenantInfo(userInfo);
                         tenantContextService.setUserInfo(userTenantInfo);
-                        SingleTypeDataScopeInfo singleTypeDataScopeInfo = DataScopeUtils.getDataScopeInfo(userInfo);
+                        SingleTypeDataScopeInfo singleTypeDataScopeInfo = UserUtils.getDataScopeInfo(userInfo);
                         dataScopeContextService.setUserInfo(singleTypeDataScopeInfo);
+                        UserAuthorisationInfo userAuthorisationInfo = UserUtils.getUserAuthorisationInfo(userInfo);
+                        userAuthorisationContextService.setUserInfo(userAuthorisationInfo);
                     } else {
                         DispatcherContext.markAnonymousRequest();
                     }
@@ -133,6 +137,7 @@ public class UserFilter implements Filter {
             tenantContextService.clearParserInfo();
             dataScopeContextService.clearUserInfo();
             dataScopeContextService.clearParserInfo();
+            userAuthorisationContextService.clearUserInfo();
         }
     }
 

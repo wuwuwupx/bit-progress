@@ -38,6 +38,16 @@ public class UserInfo {
     private Set<Long> roleIds;
 
     /**
+     * 角色key列表
+     */
+    private Set<String> roleKeys;
+
+    /**
+     * 角色权限列表
+     */
+    private Set<String> permissions;
+
+    /**
      * 租户ID
      */
     private Long tenantId;
