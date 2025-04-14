@@ -215,7 +215,7 @@ public class CollectionUtils {
     }
 
     /**
-     * 将传入的 元素数组中满足判断表达式的元素创建为新的 HashMap
+     * 将传入的 元素数组中满足判断表达式的元素创建为新的 HashSet
      *
      * @param predicate 判断表达式
      * @param ts        元素数组
@@ -236,7 +236,7 @@ public class CollectionUtils {
     }
 
     /**
-     * 将传入的集合和元素整合为新的 HashMap
+     * 将传入的集合和元素整合为新的 HashSet
      *
      * @param collection 传入的集合
      * @param ts         传入的元素数组
@@ -257,7 +257,7 @@ public class CollectionUtils {
     }
 
     /**
-     * 将传入的多个集合整合为新的 HashMap
+     * 将传入的多个集合整合为新的 HashSet
      *
      * @param collections 需要整合的集合数组
      * @return 整合后的 HashMap

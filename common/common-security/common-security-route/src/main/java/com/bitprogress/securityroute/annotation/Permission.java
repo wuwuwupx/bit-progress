@@ -15,12 +15,12 @@ public @interface Permission {
 
     String[] allPermission() default {};
 
-    long roleId() default  -1;
+    String roleKey() default  "";
 
-    long lacksRoleId() default  -1;
+    String lacksRoleKey() default  "";
 
-    long[] anyRoleIds() default {};
+    String[] anyRoleKeys() default {};
 
-    long[] allRoleIds() default {};
+    String[] allRoleKeys() default {};
 
 }

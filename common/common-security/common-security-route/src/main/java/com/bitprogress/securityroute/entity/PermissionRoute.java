@@ -33,22 +33,22 @@ public class PermissionRoute extends ApiRoute {
     /**
      * 判断用户是否拥有某个角色
      */
-    private Long roleId;
+    private String roleKey;
 
     /**
      * 验证用户是否不具备某角色，与 isRole逻辑相反
      */
-    private Long lacksRoleId;
+    private String lacksRoleKey;
 
     /**
      * 验证用户是否具有以下任意一个角色
      */
-    private long[] anyRoleIds;
+    private String[] anyRoleKeys;
 
     /**
      * 验证用户是否具有以下所有角色
      */
-    private long[] allRoleIds;
+    private String[] allRoleKeys;
 
     public static PermissionRoute getByPermission(Permission permission, RequestMethod method, String methodName) {
         PermissionRoute permissionRoute = new PermissionRoute();
@@ -58,10 +58,10 @@ public class PermissionRoute extends ApiRoute {
         permissionRoute.setLacksPermission(permission.lacksPermission());
         permissionRoute.setAnyPermission(permission.anyPermission());
         permissionRoute.setAllPermission(permission.allPermission());
-        permissionRoute.setRoleId(permission.roleId());
-        permissionRoute.setLacksRoleId(permission.lacksRoleId());
-        permissionRoute.setAnyRoleIds(permission.anyRoleIds());
-        permissionRoute.setAllRoleIds(permission.allRoleIds());
+        permissionRoute.setRoleKey(permission.roleKey());
+        permissionRoute.setLacksRoleKey(permission.lacksRoleKey());
+        permissionRoute.setAnyRoleKeys(permission.anyRoleKeys());
+        permissionRoute.setAllRoleKeys(permission.allRoleKeys());
         return permissionRoute;
     }
 
