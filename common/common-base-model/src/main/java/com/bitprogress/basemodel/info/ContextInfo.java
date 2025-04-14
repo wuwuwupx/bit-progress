@@ -1,4 +1,4 @@
-package com.bitprogress.basecontext.info;
+package com.bitprogress.basemodel.info;
 
 import com.bitprogress.basemodel.Info;
 

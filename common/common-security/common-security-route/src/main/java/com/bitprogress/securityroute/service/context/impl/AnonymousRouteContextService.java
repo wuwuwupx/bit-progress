@@ -15,7 +15,7 @@ public class AnonymousRouteContextService implements RouteContextService<ApiRout
      * @return 路由集合
      */
     @Override
-    public Set<ApiRoute> getRoutes() {
+    public Set<ApiRoute> getContextInfo() {
         return ROUTES.get();
     }
 
@@ -25,7 +25,7 @@ public class AnonymousRouteContextService implements RouteContextService<ApiRout
      * @param routes 路由集合
      */
     @Override
-    public void setRoutes(Set<ApiRoute> routes) {
+    public void setContextInfo(Set<ApiRoute> routes) {
         ROUTES.set(routes);
     }
 
@@ -33,8 +33,18 @@ public class AnonymousRouteContextService implements RouteContextService<ApiRout
      * 清空路由
      */
     @Override
-    public void clearRoutes() {
+    public void clearContextInfo() {
         ROUTES.remove();
+    }
+
+    /**
+     * 获取上下文信息类型
+     *
+     * @return 上下文信息类型
+     */
+    @Override
+    public Class<ApiRoute> getInfoClass() {
+        return ApiRoute.class;
     }
 
 }

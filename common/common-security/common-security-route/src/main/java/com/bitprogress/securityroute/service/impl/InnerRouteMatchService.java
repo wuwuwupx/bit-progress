@@ -54,7 +54,7 @@ public class InnerRouteMatchService implements RouteMatchService<ApiRoute> {
      */
     @Override
     public Set<ApiRoute> getRoutesByContext() {
-        return routeContextService.getRoutes();
+        return routeContextService.getContextInfo();
     }
 
 }

@@ -54,7 +54,7 @@ public class PermissionRouteMatchService implements RouteMatchService<Permission
      */
     @Override
     public Set<PermissionRoute> getRoutesByContext() {
-        return routeContextService.getRoutes();
+        return routeContextService.getContextInfo();
     }
 
 }

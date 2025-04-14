@@ -17,7 +17,7 @@ public class AuthorisationServiceImpl implements AuthorisationService {
      */
     @Override
     public UserAuthorisationInfo getUserAuthorisation() {
-        return userAuthorisationContextService.getUserInfo();
+        return userAuthorisationContextService.getContextInfo();
     }
 
 }

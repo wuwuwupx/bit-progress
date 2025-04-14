@@ -13,7 +13,7 @@ public class UserInfoContextServiceImpl implements UserAuthorisationContextServi
      * @return 用户信息
      */
     @Override
-    public UserAuthorisationInfo getUserInfo() {
+    public UserAuthorisationInfo getContextInfo() {
         return USER_INFO.get();
     }
 
@@ -23,7 +23,7 @@ public class UserInfoContextServiceImpl implements UserAuthorisationContextServi
      * @param userInfo 用户信息
      */
     @Override
-    public void setUserInfo(UserAuthorisationInfo userInfo) {
+    public void setContextInfo(UserAuthorisationInfo userInfo) {
         USER_INFO.set(userInfo);
     }
 
@@ -31,7 +31,7 @@ public class UserInfoContextServiceImpl implements UserAuthorisationContextServi
      * 清除用户信息
      */
     @Override
-    public void clearUserInfo() {
+    public void clearContextInfo() {
         USER_INFO.remove();
     }
 

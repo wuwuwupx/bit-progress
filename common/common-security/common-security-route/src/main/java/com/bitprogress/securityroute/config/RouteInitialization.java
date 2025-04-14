@@ -116,13 +116,13 @@ public abstract class RouteInitialization implements InitializingBean, Applicati
                                 Set<ApiRoute> innerRoutes,
                                 Set<PermissionRoute> permissionRoutes) {
         if (Objects.nonNull(anonymousRoutes)) {
-            anonymousRouteContextService.setRoutes(anonymousRoutes);
+            anonymousRouteContextService.setContextInfo(anonymousRoutes);
         }
         if (Objects.nonNull(innerRoutes)) {
-            innerRouteContextService.setRoutes(innerRoutes);
+            innerRouteContextService.setContextInfo(innerRoutes);
         }
         if (Objects.nonNull(permissionRoutes)) {
-            permissionRouteContextService.setRoutes(permissionRoutes);
+            permissionRouteContextService.setContextInfo(permissionRoutes);
         }
     }
 

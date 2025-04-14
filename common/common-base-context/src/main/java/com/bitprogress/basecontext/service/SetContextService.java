@@ -4,24 +4,27 @@ import com.bitprogress.basecontext.enums.DeserializeType;
 import com.bitprogress.util.JsonUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import java.lang.reflect.Type;
+import java.util.Set;
+
 /**
  * 上下文服务
  */
-public interface ContextService<T> {
+public interface SetContextService<T> {
 
     /**
      * 获取上下文信息
      *
      * @return 上下文信息
      */
-    T getContextInfo();
+    Set<T> getContextInfo();
 
     /**
      * 设置上下文信息
      *
      * @param contextInfo 上下文信息
      */
-    void setContextInfo(T contextInfo);
+    void setContextInfo(Set<T> contextInfo);
 
     /**
      * 清除上下文信息
@@ -43,20 +46,7 @@ public interface ContextService<T> {
      * @param contextInfoJson 上下文信息json
      */
     default void setContextInfoJson(String contextInfoJson) {
-        if (DeserializeType.TYPE_REFERENCE.equals(getDeserializeType())) {
-            setContextInfo(JsonUtils.deserializeObject(contextInfoJson, getInfoTypeReference()));
-        } else {
-            setContextInfo(JsonUtils.deserializeObject(contextInfoJson, getInfoClass()));
-        }
-    }
-
-    /**
-     * 获取上下文信息反序列化类型
-     *
-     * @return 上下文信息反序列化类型
-     */
-    default DeserializeType getDeserializeType() {
-        return DeserializeType.CLASS;
+        setContextInfo(JsonUtils.deserializeObject(contextInfoJson, getInfoTypeReference()));
     }
 
     /**
@@ -64,10 +54,10 @@ public interface ContextService<T> {
      *
      * @return 上下文信息类型引用
      */
-    default TypeReference<T> getInfoTypeReference() {
+    default TypeReference<Set<T>> getInfoTypeReference() {
         return new TypeReference<>() {
             @Override
-            public Class<T> getType() {
+            public Type getType() {
                 return getInfoClass();
             }
         };

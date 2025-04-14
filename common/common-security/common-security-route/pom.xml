@@ -23,6 +23,11 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
+            <groupId>com.bitprogress</groupId>
+            <artifactId>common-base-context</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>

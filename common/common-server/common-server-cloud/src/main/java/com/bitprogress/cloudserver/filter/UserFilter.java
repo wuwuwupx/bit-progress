@@ -96,7 +96,7 @@ public class UserFilter implements Filter {
                         SingleTypeDataScopeInfo singleTypeDataScopeInfo = UserUtils.getDataScopeInfo(userInfo);
                         dataScopeContextService.setUserInfo(singleTypeDataScopeInfo);
                         UserAuthorisationInfo userAuthorisationInfo = UserUtils.getUserAuthorisationInfo(userInfo);
-                        userAuthorisationContextService.setUserInfo(userAuthorisationInfo);
+                        userAuthorisationContextService.setContextInfo(userAuthorisationInfo);
                     } else {
                         DispatcherContext.markAnonymousRequest();
                     }
@@ -137,7 +137,7 @@ public class UserFilter implements Filter {
             tenantContextService.clearParserInfo();
             dataScopeContextService.clearUserInfo();
             dataScopeContextService.clearParserInfo();
-            userAuthorisationContextService.clearUserInfo();
+            userAuthorisationContextService.clearContextInfo();
         }
     }
 

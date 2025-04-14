@@ -1,6 +1,6 @@
 package com.bitprogress.securityroute.entity;
 
-import com.bitprogress.basemodel.Info;
+import com.bitprogress.basemodel.info.ContextInfo;
 
-public abstract class BaseUserInfo extends Info {
+public abstract class BaseUserInfo extends ContextInfo {
 }

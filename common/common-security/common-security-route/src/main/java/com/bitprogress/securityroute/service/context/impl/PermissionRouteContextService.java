@@ -15,7 +15,7 @@ public class PermissionRouteContextService implements RouteContextService<Permis
      * @return 路由集合
      */
     @Override
-    public Set<PermissionRoute> getRoutes() {
+    public Set<PermissionRoute> getContextInfo() {
         return ROUTES.get();
     }
 
@@ -25,7 +25,7 @@ public class PermissionRouteContextService implements RouteContextService<Permis
      * @param routes 路由集合
      */
     @Override
-    public void setRoutes(Set<PermissionRoute> routes) {
+    public void setContextInfo(Set<PermissionRoute> routes) {
         ROUTES.set(routes);
     }
 
@@ -33,8 +33,18 @@ public class PermissionRouteContextService implements RouteContextService<Permis
      * 清空路由
      */
     @Override
-    public void clearRoutes() {
+    public void clearContextInfo() {
         ROUTES.remove();
+    }
+
+    /**
+     * 获取上下文信息类型
+     *
+     * @return 上下文信息类型
+     */
+    @Override
+    public Class<PermissionRoute> getInfoClass() {
+        return PermissionRoute.class;
     }
 
 }
