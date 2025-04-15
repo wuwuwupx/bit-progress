@@ -8,7 +8,7 @@ import com.bitprogress.servercore.util.UserUtils;
 import com.bitprogress.exception.util.Assert;
 import com.bitprogress.ormcontext.service.TenantContextService;
 import com.bitprogress.ormcontext.service.impl.SingleTypeDataScopeContextService;
-import com.bitprogress.ormmodel.info.parser.UserTenantInfo;
+import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.ormmodel.info.user.SingleTypeDataScopeInfo;
 import com.bitprogress.request.constant.VerifyConstant;
 import com.bitprogress.request.enums.RequestSource;

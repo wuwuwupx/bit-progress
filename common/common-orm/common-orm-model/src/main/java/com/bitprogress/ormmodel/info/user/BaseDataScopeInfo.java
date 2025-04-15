@@ -1,6 +1,5 @@
 package com.bitprogress.ormmodel.info.user;
 
-import com.bitprogress.ormmodel.info.parser.BaseUserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

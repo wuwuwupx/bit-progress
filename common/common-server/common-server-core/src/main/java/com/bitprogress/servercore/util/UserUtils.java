@@ -2,7 +2,7 @@ package com.bitprogress.servercore.util;
 
 import com.bitprogress.ormmodel.enums.DataScopeType;
 import com.bitprogress.ormmodel.enums.TenantType;
-import com.bitprogress.ormmodel.info.parser.UserTenantInfo;
+import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.ormmodel.info.user.SingleTypeDataScopeInfo;
 import com.bitprogress.request.constant.VerifyConstant;
 import com.bitprogress.securityroute.entity.UserAuthorisationInfo;

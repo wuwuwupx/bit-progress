@@ -3,7 +3,7 @@ package com.bitprogress.servercore.aspect;
 import com.bitprogress.exception.CommonException;
 import com.bitprogress.ormcontext.service.TenantContextService;
 import com.bitprogress.ormmodel.enums.TenantType;
-import com.bitprogress.ormmodel.info.parser.UserTenantInfo;
+import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.servermodel.annotation.OperateTenantApi;
 import com.bitprogress.servermodel.constant.TenantConstant;
 import com.bitprogress.usercontext.utils.UserContextUtils;

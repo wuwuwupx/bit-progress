@@ -5,7 +5,7 @@ import com.bitprogress.ormcontext.service.TenantContextService;
 import com.bitprogress.ormmodel.enums.QueryType;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.ormmodel.enums.TenantType;
-import com.bitprogress.ormmodel.info.parser.UserTenantInfo;
+import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.ormmodel.query.TenantQuery;
 import com.bitprogress.ormparser.Service.TenantOrmDataService;
 import com.bitprogress.util.CollectionUtils;

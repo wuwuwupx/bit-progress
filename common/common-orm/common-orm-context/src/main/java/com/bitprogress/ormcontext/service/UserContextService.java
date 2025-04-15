@@ -1,6 +1,6 @@
 package com.bitprogress.ormcontext.service;
 
-import com.bitprogress.ormmodel.info.parser.BaseUserInfo;
+import com.bitprogress.ormmodel.info.user.BaseUserInfo;
 import com.bitprogress.util.JsonUtils;
 
 /**

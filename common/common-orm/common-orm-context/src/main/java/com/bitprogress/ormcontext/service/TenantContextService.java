@@ -2,7 +2,7 @@ package com.bitprogress.ormcontext.service;
 
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.ormmodel.enums.TenantType;
-import com.bitprogress.ormmodel.info.parser.UserTenantInfo;
+import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.ormmodel.info.parser.TenantParserInfo;
 
 import java.util.Objects;

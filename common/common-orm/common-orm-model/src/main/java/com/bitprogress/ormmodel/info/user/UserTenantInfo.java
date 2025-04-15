@@ -1,4 +1,4 @@
-package com.bitprogress.ormmodel.info.parser;
+package com.bitprogress.ormmodel.info.user;
 
 import com.bitprogress.ormmodel.enums.TenantType;
 import lombok.AllArgsConstructor;
