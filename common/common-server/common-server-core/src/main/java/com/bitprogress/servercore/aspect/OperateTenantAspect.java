@@ -1,13 +1,14 @@
 package com.bitprogress.servercore.aspect;
 
 import com.bitprogress.exception.CommonException;
+import com.bitprogress.exception.util.Assert;
 import com.bitprogress.ormcontext.service.TenantContextService;
 import com.bitprogress.ormmodel.enums.TenantType;
 import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.servermodel.annotation.OperateTenantApi;
 import com.bitprogress.servermodel.constant.TenantConstant;
-import com.bitprogress.usercontext.utils.UserContextUtils;
-import com.bitprogress.exception.util.Assert;
+import com.bitprogress.usercontext.entity.UserInfo;
+import com.bitprogress.usercontext.service.UserInfoContextService;
 import com.bitprogress.util.CollectionUtils;
 import com.bitprogress.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -51,8 +53,10 @@ public class OperateTenantAspect {
                 log.error("operateTenantId convert error", e);
                 throw CommonException.error("获取操作租户ID失败");
             }
-            if (!UserContextUtils.getCanOperateAllTenant()) {
-                Set<Long> operateTenantIds = UserContextUtils.getOperateTenantIds();
+            UserInfo userInfo = UserInfoContextService.getUserInfo();
+            Assert.notNull(userInfo, "获取用户信息失败");
+            if (Objects.isNull(userInfo.getCanOperateAllTenant()) || !userInfo.getCanOperateAllTenant()) {
+                Set<Long> operateTenantIds = userInfo.getOperateTenantIds();
                 Assert.isTrue(CollectionUtils.contains(operateTenantIds, operateTenantId), "无权限操作此租户");
             }
             /*
