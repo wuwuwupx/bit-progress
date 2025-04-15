@@ -1,4 +1,4 @@
-package com.bitprogress.basecontext.enums;
+package com.bitprogress.systemcontext.enums;
 
 import com.bitprogress.basemodel.enums.ValueEnum;
 import lombok.AllArgsConstructor;

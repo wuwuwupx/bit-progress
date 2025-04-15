@@ -1,9 +1,11 @@
 package com.bitprogress.usercontext.entity;
 
+import com.bitprogress.basemodel.info.ContextInfo;
 import com.bitprogress.usercontext.enums.DataScopeType;
 import com.bitprogress.usercontext.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Map;
@@ -12,10 +14,11 @@ import java.util.Set;
 /**
  * 用户信息
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo {
+public class UserInfo extends ContextInfo {
 
     /**
      * 用户ID

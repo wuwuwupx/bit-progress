@@ -1,22 +1,23 @@
 package com.bitprogress.cloudserver.filter;
 
-import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.cloudserver.property.ApplicationTokenProperties;
-import com.bitprogress.securityroute.entity.UserAuthorisationInfo;
-import com.bitprogress.securityroute.service.context.UserAuthorisationContextService;
-import com.bitprogress.servercore.util.UserUtils;
 import com.bitprogress.exception.util.Assert;
 import com.bitprogress.ormcontext.service.TenantContextService;
 import com.bitprogress.ormcontext.service.impl.SingleTypeDataScopeContextService;
-import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.ormmodel.info.user.SingleTypeDataScopeInfo;
+import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.request.constant.VerifyConstant;
 import com.bitprogress.request.enums.RequestSource;
 import com.bitprogress.request.enums.RequestType;
+import com.bitprogress.securityroute.entity.UserAuthorisationInfo;
+import com.bitprogress.securityroute.service.context.UserAuthorisationContextService;
 import com.bitprogress.servercore.exception.RequestExceptionMessage;
+import com.bitprogress.servercore.service.UserContextMaintenanceService;
 import com.bitprogress.servercore.util.DispatcherUtils;
-import com.bitprogress.usercontext.context.UserContext;
+import com.bitprogress.servercore.util.UserUtils;
+import com.bitprogress.systemcontext.service.DispatcherContextService;
 import com.bitprogress.usercontext.entity.UserInfo;
+import com.bitprogress.usercontext.service.UserInfoContextService;
 import com.bitprogress.util.StringUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -29,7 +30,7 @@ import java.io.IOException;
  * 用户信息过滤器
  */
 @WebFilter
-public class UserFilter implements Filter {
+public class UserFilter implements Filter, UserContextMaintenanceService {
 
     @Autowired
     private ApplicationTokenProperties applicationTokenProperties;
@@ -88,28 +89,22 @@ public class UserFilter implements Filter {
                     // 设置用户上下文
                     RequestType requestType = DispatcherUtils.getRequestType(httpRequest);
                     if (RequestType.USER_REQUEST.equals(requestType)) {
-                        DispatcherContext.markUserRequest();
+                        DispatcherContextService.markUserRequest();
                         UserInfo userInfo = UserUtils.analysisUserInfo(httpRequest);
-                        UserContext.setUserInfo(userInfo);
-                        UserTenantInfo userTenantInfo = UserUtils.getTenantInfo(userInfo);
-                        tenantContextService.setUserInfo(userTenantInfo);
-                        SingleTypeDataScopeInfo singleTypeDataScopeInfo = UserUtils.getDataScopeInfo(userInfo);
-                        dataScopeContextService.setUserInfo(singleTypeDataScopeInfo);
-                        UserAuthorisationInfo userAuthorisationInfo = UserUtils.getUserAuthorisationInfo(userInfo);
-                        userAuthorisationContextService.setContextInfo(userAuthorisationInfo);
+                        setContextByUserInfo(userInfo);
                     } else {
-                        DispatcherContext.markAnonymousRequest();
+                        DispatcherContextService.markAnonymousRequest();
                     }
                 }
                 case FEIGN -> {
                     // 设置上下文信息
                     String dispatcherTypeJson = httpRequest.getHeader(VerifyConstant.DISPATCHER_TYPE);
                     if (StringUtils.isNotEmpty(dispatcherTypeJson)) {
-                        DispatcherContext.setDispatcherTypeJson(dispatcherTypeJson);
+                        DispatcherContextService.setDispatcherTypeJson(dispatcherTypeJson);
                     }
                     String userInfoJson = httpRequest.getHeader(VerifyConstant.USER_INFO);
                     if (StringUtils.isNotEmpty(userInfoJson)) {
-                        UserContext.setUserInfoJson(userInfoJson);
+                        UserInfoContextService.setUserInfoJson(userInfoJson);
                     }
                     String tenantInfoJson = httpRequest.getHeader(VerifyConstant.TENANT_INFO);
                     if (StringUtils.isNotEmpty(tenantInfoJson)) {
@@ -131,14 +126,38 @@ public class UserFilter implements Filter {
             }
             chain.doFilter(request, response);
         } finally {
-            DispatcherContext.clearDispatcherType();
-            UserContext.clearUserInfo();
-            tenantContextService.clearUserInfo();
-            tenantContextService.clearParserInfo();
-            dataScopeContextService.clearUserInfo();
-            dataScopeContextService.clearParserInfo();
-            userAuthorisationContextService.clearContextInfo();
+            clearContext();
+            DispatcherContextService.clearDispatcherType();
         }
+    }
+
+    /**
+     * 设置用户上下文
+     *
+     * @param userInfo 用户信息
+     */
+    @Override
+    public void setContextByUserInfo(UserInfo userInfo) {
+        UserInfoContextService.setUserInfo(userInfo);
+        UserTenantInfo userTenantInfo = UserUtils.getTenantInfo(userInfo);
+        tenantContextService.setUserInfo(userTenantInfo);
+        SingleTypeDataScopeInfo singleTypeDataScopeInfo = UserUtils.getDataScopeInfo(userInfo);
+        dataScopeContextService.setUserInfo(singleTypeDataScopeInfo);
+        UserAuthorisationInfo userAuthorisationInfo = UserUtils.getUserAuthorisationInfo(userInfo);
+        userAuthorisationContextService.setContextInfo(userAuthorisationInfo);
+    }
+
+    /**
+     * 清除用户上下文
+     */
+    @Override
+    public void clearContext() {
+        UserInfoContextService.clearUserInfo();
+        tenantContextService.clearUserInfo();
+        tenantContextService.clearParserInfo();
+        dataScopeContextService.clearUserInfo();
+        dataScopeContextService.clearParserInfo();
+        userAuthorisationContextService.clearContextInfo();
     }
 
 }

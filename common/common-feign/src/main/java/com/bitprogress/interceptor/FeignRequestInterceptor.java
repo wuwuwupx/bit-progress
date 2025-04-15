@@ -1,11 +1,11 @@
 package com.bitprogress.interceptor;
 
-import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.ormcontext.service.DataScopeContextService;
 import com.bitprogress.ormcontext.service.TenantContextService;
 import com.bitprogress.request.constant.VerifyConstant;
 import com.bitprogress.request.enums.RequestSource;
-import com.bitprogress.usercontext.context.UserContext;
+import com.bitprogress.systemcontext.service.DispatcherContextService;
+import com.bitprogress.usercontext.service.UserInfoContextService;
 import com.bitprogress.util.CollectionUtils;
 import com.bitprogress.util.StringUtils;
 import feign.RequestInterceptor;
@@ -39,11 +39,11 @@ public class FeignRequestInterceptor implements RequestInterceptor {
         String routeToken = CollectionUtils.getForMap(metadata, VerifyConstant.ROUTE_TOKEN);
         template.header(VerifyConstant.ROUTE_TOKEN, routeToken);
         // 上下文信息
-        String dispatcherTypeJson = DispatcherContext.getDispatcherTypeJson();
+        String dispatcherTypeJson = DispatcherContextService.getDispatcherTypeJson();
         if (StringUtils.isNotEmpty(dispatcherTypeJson)) {
             template.header(VerifyConstant.DISPATCHER_TYPE, dispatcherTypeJson);
         }
-        String userInfoJson = UserContext.getUserInfoJson();
+        String userInfoJson = UserInfoContextService.getUserInfoJson();
         if (StringUtils.isNotEmpty(userInfoJson)) {
             template.header(VerifyConstant.USER_INFO, userInfoJson);
         }

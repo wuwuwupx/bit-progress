@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.toolkit.ClassUtils;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
 import com.baomidou.mybatisplus.extension.plugins.inner.BaseMultiTableInnerInterceptor;
 import com.baomidou.mybatisplus.extension.toolkit.PropertyMapper;
-import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.mybatispluscore.handler.TenantHandler;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.util.CollectionUtils;

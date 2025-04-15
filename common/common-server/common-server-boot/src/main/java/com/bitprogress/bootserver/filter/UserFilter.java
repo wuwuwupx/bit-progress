@@ -1,20 +1,18 @@
 package com.bitprogress.bootserver.filter;
 
-import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.ormcontext.service.TenantContextService;
 import com.bitprogress.ormcontext.service.impl.SingleTypeDataScopeContextService;
-import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.ormmodel.info.user.SingleTypeDataScopeInfo;
-import com.bitprogress.request.constant.VerifyConstant;
-import com.bitprogress.request.enums.RequestSource;
+import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.request.enums.RequestType;
 import com.bitprogress.securityroute.entity.UserAuthorisationInfo;
 import com.bitprogress.securityroute.service.context.UserAuthorisationContextService;
+import com.bitprogress.servercore.service.UserContextMaintenanceService;
 import com.bitprogress.servercore.util.DispatcherUtils;
 import com.bitprogress.servercore.util.UserUtils;
-import com.bitprogress.usercontext.context.UserContext;
+import com.bitprogress.systemcontext.service.DispatcherContextService;
 import com.bitprogress.usercontext.entity.UserInfo;
-import com.bitprogress.util.StringUtils;
+import com.bitprogress.usercontext.service.UserInfoContextService;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +24,7 @@ import java.io.IOException;
  * 用户信息过滤器
  */
 @WebFilter
-public class UserFilter implements Filter {
+public class UserFilter implements Filter, UserContextMaintenanceService {
 
     @Autowired
     private TenantContextService tenantContextService;
@@ -68,66 +66,49 @@ public class UserFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         try {
-
-            // 获取请求来源
-            RequestSource requestSource = DispatcherUtils.getRequestSource(httpRequest);
-
-            switch (requestSource) {
-                case GATEWAY_ROUTE -> {
-                    // 设置用户上下文
-                    RequestType requestType = DispatcherUtils.getRequestType(httpRequest);
-                    if (RequestType.USER_REQUEST.equals(requestType)) {
-                        DispatcherContext.markUserRequest();
-                        UserInfo userInfo = UserUtils.analysisUserInfo(httpRequest);
-                        UserContext.setUserInfo(userInfo);
-                        UserTenantInfo userTenantInfo = UserUtils.getTenantInfo(userInfo);
-                        tenantContextService.setUserInfo(userTenantInfo);
-                        SingleTypeDataScopeInfo dataScopeInfo = UserUtils.getDataScopeInfo(userInfo);
-                        dataScopeContextService.setUserInfo(dataScopeInfo);
-                        UserAuthorisationInfo userAuthorisationInfo = UserUtils.getUserAuthorisationInfo(userInfo);
-                        userAuthorisationContextService.setContextInfo(userAuthorisationInfo);
-                    } else {
-                        DispatcherContext.markAnonymousRequest();
-                    }
-                }
-                case FEIGN -> {
-                    // 设置上下文信息
-                    String dispatcherTypeJson = httpRequest.getHeader(VerifyConstant.DISPATCHER_TYPE);
-                    if (StringUtils.isNotEmpty(dispatcherTypeJson)) {
-                        DispatcherContext.setDispatcherTypeJson(dispatcherTypeJson);
-                    }
-                    String userInfoJson = httpRequest.getHeader(VerifyConstant.USER_INFO);
-                    if (StringUtils.isNotEmpty(userInfoJson)) {
-                        UserContext.setUserInfoJson(userInfoJson);
-                    }
-                    String tenantInfoJson = httpRequest.getHeader(VerifyConstant.TENANT_INFO);
-                    if (StringUtils.isNotEmpty(tenantInfoJson)) {
-                        tenantContextService.setUserInfoJson(tenantInfoJson);
-                    }
-                    String tenantParserInfoJson = httpRequest.getHeader(VerifyConstant.TENANT_PARSER_INFO);
-                    if (StringUtils.isNotEmpty(tenantParserInfoJson)) {
-                        tenantContextService.setParserInfoJson(tenantParserInfoJson);
-                    }
-                    String dataScopeInfoJson = httpRequest.getHeader(VerifyConstant.DATA_SCOPE_INFO);
-                    if (StringUtils.isNotEmpty(dataScopeInfoJson)) {
-                        dataScopeContextService.setUserInfoJson(dataScopeInfoJson);
-                    }
-                    String dataScopeParserInfoJson = httpRequest.getHeader(VerifyConstant.DATA_SCOPE_PARSER_INFO);
-                    if (StringUtils.isNotEmpty(dataScopeParserInfoJson)) {
-                        dataScopeContextService.setParserInfoJson(dataScopeParserInfoJson);
-                    }
-                }
+            // 实际应该在token解析的时候获取
+            RequestType requestType = DispatcherUtils.getRequestType(httpRequest);
+            if (RequestType.USER_REQUEST.equals(requestType)) {
+                DispatcherContextService.markUserRequest();
+                UserInfo userInfo = UserUtils.analysisUserInfo(httpRequest);
+                setContextByUserInfo(userInfo);
+            } else {
+                DispatcherContextService.markAnonymousRequest();
             }
             chain.doFilter(request, response);
         } finally {
-            DispatcherContext.clearDispatcherType();
-            UserContext.clearUserInfo();
-            tenantContextService.clearUserInfo();
-            tenantContextService.clearParserInfo();
-            dataScopeContextService.clearUserInfo();
-            dataScopeContextService.clearParserInfo();
-            userAuthorisationContextService.clearContextInfo();
+            DispatcherContextService.clearDispatcherType();
+            clearContext();
         }
+    }
+
+    /**
+     * 设置用户上下文
+     *
+     * @param userInfo 用户信息
+     */
+    @Override
+    public void setContextByUserInfo(UserInfo userInfo) {
+        UserInfoContextService.setUserInfo(userInfo);
+        UserTenantInfo userTenantInfo = UserUtils.getTenantInfo(userInfo);
+        tenantContextService.setUserInfo(userTenantInfo);
+        SingleTypeDataScopeInfo dataScopeInfo = UserUtils.getDataScopeInfo(userInfo);
+        dataScopeContextService.setUserInfo(dataScopeInfo);
+        UserAuthorisationInfo userAuthorisationInfo = UserUtils.getUserAuthorisationInfo(userInfo);
+        userAuthorisationContextService.setContextInfo(userAuthorisationInfo);
+    }
+
+    /**
+     * 清除用户上下文
+     */
+    @Override
+    public void clearContext() {
+        UserInfoContextService.clearUserInfo();
+        tenantContextService.clearUserInfo();
+        tenantContextService.clearParserInfo();
+        dataScopeContextService.clearUserInfo();
+        dataScopeContextService.clearParserInfo();
+        userAuthorisationContextService.clearContextInfo();
     }
 
 }

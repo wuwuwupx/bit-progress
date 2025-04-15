@@ -3,9 +3,9 @@ package com.bitprogress.mybatispluscore.interceptor;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.extension.plugins.inner.BaseMultiTableInnerInterceptor;
-import com.bitprogress.basecontext.context.DispatcherContext;
 import com.bitprogress.mybatispluscore.handler.InterceptorHandler;
 import com.bitprogress.ormmodel.enums.SqlType;
+import com.bitprogress.systemcontext.service.DispatcherContextService;
 import com.bitprogress.util.CollectionUtils;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.delete.Delete;
@@ -111,7 +111,7 @@ public abstract class SqlInnerInterceptor extends BaseMultiTableInnerInterceptor
                            Consumer<Integer> consumer,
                            InterceptorHandler<?> interceptorHandler) {
         // 检查是否无状态调度，无状态调度线程没有上下文信息，不进行sql处理
-        if (DispatcherContext.isNoneStatusDispatch()) {
+        if (DispatcherContextService.isNoneStatusDispatch()) {
             return;
         }
         // 检查是否启用了租户和数据范围
