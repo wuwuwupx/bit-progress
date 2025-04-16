@@ -2,7 +2,6 @@ package com.bitprogress.ormparser.Service.impl;
 
 import com.bitprogress.exception.util.Assert;
 import com.bitprogress.ormcontext.service.TenantContextService;
-import com.bitprogress.ormmodel.enums.SqlOperatorType;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.ormmodel.enums.TenantType;
 import com.bitprogress.ormmodel.info.user.UserTenantInfo;
@@ -75,7 +74,6 @@ public class TenantOrmDataServiceImpl implements TenantOrmDataService {
             query.setIsQueryAll(false);
             query.setIsNotNeedQuery(!hasTenant);
             if (hasTenant) {
-                query.setSqlOperatorType(SqlOperatorType.EQUAL);
                 query.setTenantIds(CollectionUtils.asSet(tenantId));
             }
             return query;
@@ -87,7 +85,6 @@ public class TenantOrmDataServiceImpl implements TenantOrmDataService {
                 query.setIsQueryAll(false);
                 query.setIsNotNeedQuery(!hasOperateTenant);
                 if (hasOperateTenant) {
-                    query.setSqlOperatorType(SqlOperatorType.EQUAL);
                     query.setTenantIds(CollectionUtils.asSet(operateTenantId));
                 }
             }
@@ -102,7 +99,6 @@ public class TenantOrmDataServiceImpl implements TenantOrmDataService {
                     query.setIsNotNeedQuery(!hasTenant && !hasOperateTenant);
                     if (hasTenant || hasOperateTenant) {
                         query.setTenantIds(CollectionUtils.newSet(operateTenantIds, tenantId));
-                        query.setSqlOperatorType(SqlOperatorType.IN);
                     }
                 }
             }
@@ -110,7 +106,6 @@ public class TenantOrmDataServiceImpl implements TenantOrmDataService {
                 query.setIsQueryAll(false);
                 query.setIsNotNeedQuery(!hasTenant);
                 if (hasTenant) {
-                    query.setSqlOperatorType(SqlOperatorType.EQUAL);
                     query.setTenantIds(CollectionUtils.asSet(tenantId));
                 }
             }

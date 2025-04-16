@@ -1,7 +1,6 @@
 package com.bitprogress.mybatispluscore.handler;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.bitprogress.ormmodel.enums.SqlOperatorType;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.util.CollectionUtils;
 import net.sf.jsqlparser.expression.Alias;
@@ -47,25 +46,27 @@ public interface InterceptorHandler<T> {
     Expression getCondition(Table table);
 
     /**
-     * 根据查询类型构建表达式
+     * 构建范围查询的表达式
      *
      * @param column  字段
      * @param dataSet 数据
-     * @return in表达式
+     * @return 范围查询表达式
      */
-    default Expression buildExpressionBySqlOperatorType(Column column, Set<T> dataSet, SqlOperatorType sqlOperatorType) {
-        switch (sqlOperatorType) {
-            case EQUAL -> {
-                return buildEqualExpression(column, dataSet);
-            }
-            case IN -> {
-                return buildInExpression(column, dataSet);
-            }
-            case LIKE -> {
-                return buildLikeExpression(column, dataSet);
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + sqlOperatorType);
-        }
+    default Expression buildRangeExpression(Column column, Set<T> dataSet) {
+        return buildLikeExpression(column, dataSet);
+    }
+
+    /**
+     * 构建精准匹配的表达式
+     *
+     * @param column  字段
+     * @param dataSet 数据
+     * @return = 或 in 表达式
+     */
+    default Expression buildExactExpression(Column column, Set<T> dataSet) {
+        return CollectionUtils.isSingle(dataSet)
+                ? buildEqualExpression(column, dataSet)
+                : buildInExpression(column, dataSet);
     }
 
     /**

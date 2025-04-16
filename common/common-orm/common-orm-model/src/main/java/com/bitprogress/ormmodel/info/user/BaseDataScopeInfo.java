@@ -18,6 +18,11 @@ import java.util.Set;
 public class BaseDataScopeInfo extends BaseUserInfo {
 
     /**
+     * 基础数据权限，即租户或系统的基础数据权限
+     */
+    private String baseDataScope;
+
+    /**
      * 自身数据范围
      * 用于 insert 填充
      */

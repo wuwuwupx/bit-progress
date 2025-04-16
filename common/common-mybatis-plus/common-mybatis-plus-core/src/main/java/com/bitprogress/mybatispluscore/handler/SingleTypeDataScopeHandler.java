@@ -1,11 +1,12 @@
 package com.bitprogress.mybatispluscore.handler;
 
 import com.bitprogress.mybatispluscore.properties.DataScopeProperties;
-import com.bitprogress.ormmodel.enums.SqlOperatorType;
+import com.bitprogress.ormmodel.enums.QueryMode;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.ormmodel.query.DataScopeQuery;
 import com.bitprogress.ormparser.Service.DataScopeOrmDataService;
 import com.bitprogress.util.CollectionUtils;
+import com.bitprogress.util.DataScopeUtils;
 import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
@@ -112,25 +113,33 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
         }
         String tableName = table.getName();
         Column dataScopeColumn = getAliasDataScopeColumn(table);
+        QueryMode queryMode = Objects.nonNull(dataScopeQuery.getQueryMode())
+                ? dataScopeQuery.getQueryMode()
+                : QueryMode.DOWNSTREAM_CHAIN;
+        String baseDataScope = dataScopeQuery.getBaseDataScope();
         Expression expression = null;
         if (dataScopeQuery.hasRangeQuery() && enableQueryDataScope(tableName)) {
             Set<String> dataScopes = dataScopeQuery.getRangeDataScopes();
             /*
-             * data_scope in (A1,A1B2)
-             * data_scope = A1
-             * data_scope like A1%
-             * data_scope like A1% or data_scope like A2%
+             * data_scope like ${baseDataScope}A1%
+             * data_scope like ${baseDataScope}A1% or data_scope like ${baseDataScope}A2%
+             * dataScope in (${baseDataScope}, ${baseDataScope}A1) or data_scope like ${baseDataScope}A1%
              */
-            expression = buildLikeExpression(dataScopeColumn, dataScopes);
+            expression = buildExpressionByQueryMode(dataScopeColumn, baseDataScope, dataScopes, queryMode);
         }
         if (dataScopeQuery.hasExactQuery() && enableQueryDataScope(tableName)) {
             Set<String> dataScopes = dataScopeQuery.getExactDataScopes();
-            SqlOperatorType operatorType = dataScopeQuery.getExactSqlOperatorType();
             /*
              * data_scope in (A1,A1B2)
              * data_scope = A1
              */
-            Expression exactExpression = buildExpressionBySqlOperatorType(dataScopeColumn, dataScopes, operatorType);
+            // 不能直接使用 buildExpressionByQueryMode，精确查询不能使用查询下游
+            if (QueryMode.FULL_CHAIN.equals(queryMode) || QueryMode.UPSTREAM_CHAIN.equals(queryMode)) {
+                Set<String> upstreamDataScopes = DataScopeUtils.splitDataScope(baseDataScope, dataScopes);
+                // 把切割的上游数据范围加入到精确查询的数据范围中
+                dataScopes.addAll(upstreamDataScopes);
+            }
+            Expression exactExpression = buildExactExpression(dataScopeColumn, dataScopes);
             /*
              * data_scope in (A1,A1B2) or data_scope in (A1,A1B2)
              */

@@ -82,6 +82,11 @@ public class UserInfo extends ContextInfo {
     private Set<CombinationDataScope> combinationDataScopes;
 
     /**
+     * 基础数据权限，即租户或系统的基础数据权限
+     */
+    private String baseDataScope;
+
+    /**
      * 自身数据范围
      */
     private String dataScope;

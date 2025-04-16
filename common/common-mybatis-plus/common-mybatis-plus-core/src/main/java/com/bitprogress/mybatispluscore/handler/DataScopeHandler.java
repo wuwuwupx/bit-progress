@@ -1,6 +1,8 @@
 package com.bitprogress.mybatispluscore.handler;
 
+import com.bitprogress.ormmodel.enums.QueryMode;
 import com.bitprogress.util.CollectionUtils;
+import com.bitprogress.util.DataScopeUtils;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.StringValue;
@@ -128,6 +130,60 @@ public interface DataScopeHandler extends InterceptorHandler<String> {
      * @return 数据范围
      */
     Expression getSelfData();
+
+    /**
+     * 根据查询类型构建表达式
+     *
+     * @param column     字段
+     * @param dataScopes 数据
+     * @return in表达式
+     */
+    default Expression buildExpressionByQueryMode(Column column,
+                                                  String baseDataScope,
+                                                  Set<String> dataScopes,
+                                                  QueryMode queryMode) {
+        switch (queryMode) {
+            case FULL_CHAIN -> {
+                Expression upstreamExpression = buildUpstreamExpression(column, baseDataScope, dataScopes);
+                Expression downstreamExpression = buildDownstreamExpression(column, dataScopes);
+                return new OrExpression(upstreamExpression, downstreamExpression);
+            }
+            case UPSTREAM_CHAIN -> {
+                return buildUpstreamExpression(column, baseDataScope, dataScopes);
+            }
+            case DOWNSTREAM_CHAIN -> {
+                return buildDownstreamExpression(column, dataScopes);
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + queryMode);
+        }
+    }
+
+    /**
+     * 构建 upstream 表达式
+     *
+     * @param column        字段
+     * @param baseDataScope 基础数据范围
+     * @param dataScopes    需要查询的数据范围集合
+     * @return upstream 表达式
+     */
+    default Expression buildUpstreamExpression(Column column, String baseDataScope, Set<String> dataScopes) {
+        // 切割出上游数据权限
+        Set<String> upstreamDataScopes = DataScopeUtils.splitDataScope(baseDataScope, dataScopes);
+        return buildInExpression(column, upstreamDataScopes);
+    }
+
+    /**
+     * 构建 downstream 表达式
+     *
+     * @param column     字段
+     * @param dataScopes 数据范围
+     * @return downstream 表达式
+     */
+    default Expression buildDownstreamExpression(Column column, Set<String> dataScopes) {
+        // 对数据范围进行压缩
+        Set<String> compressDataScopes = DataScopeUtils.compressDataScopes(dataScopes);
+        return buildRangeExpression(column, compressDataScopes);
+    }
 
     /**
      * 构建 = 表达式

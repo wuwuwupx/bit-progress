@@ -1,6 +1,6 @@
 package com.bitprogress.ormmodel.query;
 
-import com.bitprogress.ormmodel.enums.SqlOperatorType;
+import com.bitprogress.ormmodel.enums.QueryMode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,14 +15,14 @@ import java.util.Set;
 public class DataScopeQuery extends ConditionQuery {
 
     /**
-     * 所属数据范围列表
+     * 基础数据权限，即租户或者系统的数据权限
      */
-    private Set<String> managedDataScopes;
+    private String baseDataScope;
 
     /**
-     * 所属数据范围列表
+     * 查询模式
      */
-    private Set<String> belongDataScopes;
+    private QueryMode queryMode;
 
     /**
      * 是否范围查询，即 {@link #getRangeDataScopes()} 是否应用
@@ -38,11 +38,6 @@ public class DataScopeQuery extends ConditionQuery {
      * 是否精准查询数据范围，即 {@link #getExactDataScopes()} 是否应用
      */
     private Boolean hasExactQuery;
-
-    /**
-     * 所属范围操作模式
-     */
-    private SqlOperatorType exactSqlOperatorType;
 
     /**
      * 精准查询数据范围列表

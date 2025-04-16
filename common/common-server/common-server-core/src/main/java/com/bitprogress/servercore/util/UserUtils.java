@@ -68,6 +68,7 @@ public class UserUtils {
     public static SingleTypeDataScopeInfo getDataScopeInfo(UserInfo userInfo) {
         SingleTypeDataScopeInfo dataScopeInfo = new SingleTypeDataScopeInfo();
         dataScopeInfo.setSelfData(userInfo.getUserId());
+        dataScopeInfo.setBaseDataScope(userInfo.getBaseDataScope());
         dataScopeInfo.setDataScope(userInfo.getDataScope());
         dataScopeInfo.setManagedDataScopes(userInfo.getDataScopes());
         dataScopeInfo.setBelongDataScopes(userInfo.getBelongDataScopes());

@@ -2,13 +2,12 @@ package com.bitprogress.ormparser.Service.impl;
 
 import com.bitprogress.ormcontext.service.impl.SingleTypeDataScopeContextService;
 import com.bitprogress.ormmodel.enums.DataScopeType;
-import com.bitprogress.ormmodel.enums.SqlOperatorType;
+import com.bitprogress.ormmodel.enums.QueryMode;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.ormmodel.info.user.SingleTypeDataScopeInfo;
 import com.bitprogress.ormmodel.query.DataScopeQuery;
 import com.bitprogress.ormparser.Service.DataScopeOrmDataService;
 import com.bitprogress.util.CollectionUtils;
-import com.bitprogress.util.DataScopeUtils;
 import lombok.AllArgsConstructor;
 
 import java.util.Objects;
@@ -95,15 +94,13 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
             query.setIsQueryAll(true);
             return query;
         }
+        QueryMode queryMode = dataScopeContextService.getCurrentSqlQueryMode();
+        query.setQueryMode(queryMode);
         query.setIsQueryAll(false);
         Set<String> managedDataScopes = dataScopeInfo.getManagedDataScopes();
         Set<String> belongDataScopes = dataScopeInfo.getBelongDataScopes();
         boolean hasManaged = CollectionUtils.isNotEmpty(managedDataScopes);
         boolean hasBelong = CollectionUtils.isNotEmpty(belongDataScopes);
-
-        // 设置原始的所属和所管数据范围
-        query.setManagedDataScopes(managedDataScopes);
-        query.setBelongDataScopes(belongDataScopes);
 
         boolean isNotNeedQuery;
         boolean hasRangeQuery;
@@ -118,10 +115,6 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
                 isNotNeedQuery = !hasExactQuery && !hasOwned && !hasSelf;
                 if (hasExactQuery) {
                     query.setExactDataScopes(dataScopes);
-                    SqlOperatorType sqlOperatorType = CollectionUtils.isSingle(dataScopes)
-                            ? SqlOperatorType.EQUAL
-                            : SqlOperatorType.IN;
-                    query.setExactSqlOperatorType(sqlOperatorType);
                 }
             }
             case BELONG_LEVEL, MANAGED_LEVEL, COMPOSITE_LEVEL -> {
@@ -132,7 +125,7 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
                 hasRangeQuery = CollectionUtils.isNotEmpty(dataScopes);
                 isNotNeedQuery = !hasRangeQuery && !hasOwned && !hasSelf;
                 if (hasRangeQuery) {
-                    query.setRangeDataScopes(DataScopeUtils.compressDataScopes(dataScopes));
+                    query.setRangeDataScopes(dataScopes);
                 }
             }
             case BELONG_LEVEL_MANAGED_CURRENT -> {
@@ -140,15 +133,10 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
                 hasRangeQuery = hasBelong;
                 hasExactQuery = hasManaged;
                 if (hasManaged) {
-                    SqlOperatorType sqlOperatorType = CollectionUtils.isSingle(managedDataScopes)
-                            ? SqlOperatorType.EQUAL
-                            : SqlOperatorType.IN;
-                    query.setExactSqlOperatorType(sqlOperatorType);
                     query.setExactDataScopes(managedDataScopes);
                 }
                 if (hasBelong) {
-                    Set<String> dataScopes = DataScopeUtils.compressDataScopes(belongDataScopes);
-                    query.setRangeDataScopes(dataScopes);
+                    query.setRangeDataScopes(belongDataScopes);
                 }
             }
             case MANAGED_LEVEL_BELONG_CURRENT -> {
@@ -156,14 +144,9 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
                 hasRangeQuery = hasManaged;
                 hasExactQuery = hasBelong;
                 if (hasManaged) {
-                    Set<String> dataScopes = DataScopeUtils.compressDataScopes(managedDataScopes);
-                    query.setRangeDataScopes(dataScopes);
+                    query.setRangeDataScopes(managedDataScopes);
                 }
                 if (hasBelong) {
-                    SqlOperatorType sqlOperatorType = CollectionUtils.isSingle(belongDataScopes)
-                            ? SqlOperatorType.EQUAL
-                            : SqlOperatorType.IN;
-                    query.setExactSqlOperatorType(sqlOperatorType);
                     query.setExactDataScopes(belongDataScopes);
                 }
             }

@@ -57,17 +57,6 @@ public interface TenantHandler extends InterceptorHandler<Long> {
      * 构建in表达式
      *
      * @param column    字段
-     * @param tenantIds 数据范围
-     * @return in表达式
-     */
-    default Expression buildEqualExpression(Column column, Set<Long> tenantIds) {
-        return buildEqualExpression(column, tenantIds.iterator().next());
-    }
-
-    /**
-     * 构建in表达式
-     *
-     * @param column    字段
      * @param tenantIds 租户ID
      * @return in表达式
      */
