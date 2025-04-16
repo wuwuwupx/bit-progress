@@ -42,9 +42,10 @@ public abstract class SqlInnerInterceptor extends BaseMultiTableInnerInterceptor
 
     @Override
     public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
-        if (InterceptorIgnoreHelper.willIgnoreTenantLine(ms.getId())) {
-            return;
-        }
+        // 原有的过滤逻辑不能自由定制，不采用
+//        if (InterceptorIgnoreHelper.willIgnoreTenantLine(ms.getId())) {
+//            return;
+//        }
         PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
         mpBs.sql(parserSingle(mpBs.sql(), null));
     }
