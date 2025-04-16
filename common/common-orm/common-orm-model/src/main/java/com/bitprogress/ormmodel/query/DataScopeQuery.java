@@ -15,29 +15,9 @@ import java.util.Set;
 public class DataScopeQuery extends ConditionQuery {
 
     /**
-     * 是否范围查询，即 {@link #getDataScopes()} 是否应用
+     * 所属数据范围列表
      */
-    private Boolean isQueryLimit;
-
-    /**
-     * 范围查询模式
-     */
-    private SqlOperatorType limitSqlOperatorType;
-
-    /**
-     * 数据范围列表
-     */
-    private Set<String> dataScopes;
-
-    /**
-     * 是否查询所属数据范围，即 {@link #getBelongDataScopes()} 是否应用
-     */
-    private Boolean isQueryBelong;
-
-    /**
-     * 所属范围查询模式
-     */
-    private SqlOperatorType belongSqlOperatorType;
+    private Set<String> managedDataScopes;
 
     /**
      * 所属数据范围列表
@@ -45,9 +25,34 @@ public class DataScopeQuery extends ConditionQuery {
     private Set<String> belongDataScopes;
 
     /**
+     * 是否范围查询，即 {@link #getRangeDataScopes()} 是否应用
+     */
+    private Boolean hasRangeQuery;
+
+    /**
+     * 范围查询数据范围列表
+     */
+    private Set<String> rangeDataScopes;
+
+    /**
+     * 是否精准查询数据范围，即 {@link #getExactDataScopes()} 是否应用
+     */
+    private Boolean hasExactQuery;
+
+    /**
+     * 所属范围操作模式
+     */
+    private SqlOperatorType exactSqlOperatorType;
+
+    /**
+     * 精准查询数据范围列表
+     */
+    private Set<String> exactDataScopes;
+
+    /**
      * 是否查询拥有数据
      */
-    private Boolean isQueryOwned;
+    private Boolean hasOwnedQuery;
 
     /**
      * 用于匹配拥有数据的值
@@ -57,27 +62,27 @@ public class DataScopeQuery extends ConditionQuery {
     /**
      * 是否查询自身数据
      */
-    private Boolean isQuerySelf;
+    private Boolean hasSelfQuery;
 
     /**
      * 自身数据
      */
     private Long selfData;
 
-    public boolean isQueryLimit() {
-        return Objects.nonNull(isQueryLimit) && isQueryLimit;
+    public boolean hasRangeQuery() {
+        return Objects.nonNull(hasRangeQuery) && hasRangeQuery;
     }
 
-    public boolean isQueryBelong() {
-        return Objects.nonNull(isQueryBelong) && isQueryBelong;
+    public boolean hasExactQuery() {
+        return Objects.nonNull(hasExactQuery) && hasExactQuery;
     }
 
-    public boolean isQueryOwned() {
-        return Objects.nonNull(isQueryOwned) && isQueryOwned;
+    public boolean hasOwnedQuery() {
+        return Objects.nonNull(hasOwnedQuery) && hasOwnedQuery;
     }
 
-    public boolean isQuerySelf() {
-        return Objects.nonNull(isQuerySelf) && isQuerySelf;
+    public boolean hasSelfQuery() {
+        return Objects.nonNull(hasSelfQuery) && hasSelfQuery;
     }
 
 }

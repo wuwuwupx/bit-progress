@@ -9,7 +9,6 @@ import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
@@ -114,49 +113,44 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
         String tableName = table.getName();
         Column dataScopeColumn = getAliasDataScopeColumn(table);
         Expression expression = null;
-        if (dataScopeQuery.isQueryLimit() && enableQueryDataScope(tableName)) {
-            Set<String> dataScopes = dataScopeQuery.getDataScopes();
-            SqlOperatorType limitSqlOperatorType = dataScopeQuery.getLimitSqlOperatorType();
+        if (dataScopeQuery.hasRangeQuery() && enableQueryDataScope(tableName)) {
+            Set<String> dataScopes = dataScopeQuery.getRangeDataScopes();
             /*
              * data_scope in (A1,A1B2)
              * data_scope = A1
              * data_scope like A1%
              * data_scope like A1% or data_scope like A2%
              */
-            expression = buildExpressionBySqlOperatorType(dataScopeColumn, dataScopes, limitSqlOperatorType);
+            expression = buildLikeExpression(dataScopeColumn, dataScopes);
         }
-        if (dataScopeQuery.isQueryBelong() && enableQueryDataScope(tableName)) {
-            Set<String> dataScopes = dataScopeQuery.getBelongDataScopes();
-            SqlOperatorType operatorType = dataScopeQuery.getBelongSqlOperatorType();
+        if (dataScopeQuery.hasExactQuery() && enableQueryDataScope(tableName)) {
+            Set<String> dataScopes = dataScopeQuery.getExactDataScopes();
+            SqlOperatorType operatorType = dataScopeQuery.getExactSqlOperatorType();
             /*
              * data_scope in (A1,A1B2)
              * data_scope = A1
-             * data_scope like A1%
-             * data_scope like A1% or data_scope like A2%
              */
-            Expression belongExpression = buildExpressionBySqlOperatorType(dataScopeColumn, dataScopes, operatorType);
+            Expression exactExpression = buildExpressionBySqlOperatorType(dataScopeColumn, dataScopes, operatorType);
             /*
              * data_scope in (A1,A1B2) or data_scope in (A1,A1B2)
              */
-            expression = Objects.isNull(expression) ? belongExpression : new OrExpression(expression, belongExpression);
+            expression = Objects.isNull(expression) ? exactExpression : new OrExpression(expression, exactExpression);
         }
-        if (dataScopeQuery.isQueryOwned() && enableQueryOwned(tableName)) {
-            Column aliasOwnedColumn = getAliasOwnedColumn(table);
+        if (dataScopeQuery.hasOwnedQuery() && enableQueryOwned(tableName)) {
             /*
              * owned = 1L
              */
-            Expression ownedExpression = new EqualsTo(aliasOwnedColumn, new LongValue(dataScopeQuery.getOwnedData()));
+            Expression ownedExpression = buildOwnedExpression(table, dataScopeQuery.getOwnedData());
             /*
              * data_scope in (A1,A1B2) or data_scope in (A1,A1B2) or owned = 1L
              */
             expression = Objects.isNull(expression) ? ownedExpression : new OrExpression(expression, ownedExpression);
         }
-        if (dataScopeQuery.isQuerySelf() && enableQuerySelf(tableName)) {
-            Column aliasSelfColumn = getAliasSelfColumn(table);
+        if (dataScopeQuery.hasSelfQuery() && enableQuerySelf(tableName)) {
             /*
              * self = 1L
              */
-            Expression selfExpression = new EqualsTo(aliasSelfColumn, new LongValue(dataScopeQuery.getSelfData()));
+            Expression selfExpression = buildSelfExpression(table, dataScopeQuery.getSelfData());
             /*
              * data_scope in (A1,A1B2) or data_scope in (A1,A1B2) or owned = 1L or self = 1L
              */

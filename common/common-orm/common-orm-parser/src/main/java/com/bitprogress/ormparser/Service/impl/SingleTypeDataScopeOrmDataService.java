@@ -1,10 +1,10 @@
 package com.bitprogress.ormparser.Service.impl;
 
 import com.bitprogress.ormcontext.service.impl.SingleTypeDataScopeContextService;
-import com.bitprogress.ormmodel.info.user.SingleTypeDataScopeInfo;
 import com.bitprogress.ormmodel.enums.DataScopeType;
 import com.bitprogress.ormmodel.enums.SqlOperatorType;
 import com.bitprogress.ormmodel.enums.SqlType;
+import com.bitprogress.ormmodel.info.user.SingleTypeDataScopeInfo;
 import com.bitprogress.ormmodel.query.DataScopeQuery;
 import com.bitprogress.ormparser.Service.DataScopeOrmDataService;
 import com.bitprogress.util.CollectionUtils;
@@ -74,8 +74,8 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
         boolean hasSelf = Objects.nonNull(selfData);
         boolean hasOwned = Objects.nonNull(ownedData);
         // 设置拥有数据和自身数据
-        query.setIsQueryOwned(hasOwned);
-        query.setIsQuerySelf(hasSelf);
+        query.setHasOwnedQuery(hasOwned);
+        query.setHasSelfQuery(hasSelf);
         if (hasOwned) {
             query.setOwnedData(ownedData);
         }
@@ -86,8 +86,8 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
         if (Objects.isNull(dataScopeType) || DataScopeType.SELF.equals(dataScopeType)) {
             query.setIsNotNeedQuery(!hasOwned && !hasSelf);
             query.setIsQueryAll(false);
-            query.setIsQueryLimit(false);
-            query.setIsQueryBelong(false);
+            query.setHasRangeQuery(false);
+            query.setHasExactQuery(false);
             return query;
         }
         if (DataScopeType.ALL.equals(dataScopeType)) {
@@ -100,86 +100,83 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
         Set<String> belongDataScopes = dataScopeInfo.getBelongDataScopes();
         boolean hasManaged = CollectionUtils.isNotEmpty(managedDataScopes);
         boolean hasBelong = CollectionUtils.isNotEmpty(belongDataScopes);
+
+        // 设置原始的所属和所管数据范围
+        query.setManagedDataScopes(managedDataScopes);
+        query.setBelongDataScopes(belongDataScopes);
+
+        boolean isNotNeedQuery;
+        boolean hasRangeQuery;
+        boolean hasExactQuery;
         switch (dataScopeType) {
-            case BELONG_LEVEL_CURRENT, BELONG_LEVEL -> {
-                query.setIsNotNeedQuery(!hasBelong && !hasOwned && !hasSelf);
-                query.setIsQueryLimit(false);
-                query.setIsQueryBelong(hasBelong);
-                if (hasBelong) {
-                    Set<String> finalBelongDataScopes = DataScopeType.BELONG_LEVEL.equals(dataScopeType)
-                            ? DataScopeUtils.compressDataScopes(belongDataScopes)
-                            : belongDataScopes;
-                    SqlOperatorType sqlOperatorType = DataScopeType.BELONG_LEVEL.equals(dataScopeType)
-                            ? SqlOperatorType.LIKE
-                            : CollectionUtils.isSingle(belongDataScopes) ? SqlOperatorType.EQUAL : SqlOperatorType.IN;
-                    query.setBelongSqlOperatorType(sqlOperatorType);
-                    query.setBelongDataScopes(finalBelongDataScopes);
+            case BELONG_LEVEL_CURRENT, MANAGED_LEVEL_CURRENT, COMPOSITE_LEVEL_CURRENT -> {
+                hasRangeQuery = false;
+                Set<String> dataScopes = DataScopeType.COMPOSITE_LEVEL_CURRENT.equals(dataScopeType)
+                        ? CollectionUtils.newSet(managedDataScopes, belongDataScopes)
+                        : DataScopeType.BELONG_LEVEL_CURRENT.equals(dataScopeType) ? belongDataScopes : managedDataScopes;
+                hasExactQuery = CollectionUtils.isNotEmpty(dataScopes);
+                isNotNeedQuery = !hasExactQuery && !hasOwned && !hasSelf;
+                if (hasExactQuery) {
+                    query.setExactDataScopes(dataScopes);
+                    SqlOperatorType sqlOperatorType = CollectionUtils.isSingle(dataScopes)
+                            ? SqlOperatorType.EQUAL
+                            : SqlOperatorType.IN;
+                    query.setExactSqlOperatorType(sqlOperatorType);
                 }
             }
-            case MANAGED_LEVEL_CURRENT, MANAGED_LEVEL -> {
-                query.setIsNotNeedQuery(!hasManaged && !hasOwned && !hasSelf);
-                query.setIsQueryLimit(hasManaged);
-                query.setIsQueryBelong(false);
-                if (hasManaged) {
-                    Set<String> finalManagedDataScopes = DataScopeType.MANAGED_LEVEL.equals(dataScopeType)
-                            ? DataScopeUtils.compressDataScopes(managedDataScopes)
-                            : managedDataScopes;
-                    SqlOperatorType sqlOperatorType = DataScopeType.MANAGED_LEVEL.equals(dataScopeType)
-                            ? SqlOperatorType.LIKE
-                            : CollectionUtils.isSingle(managedDataScopes) ? SqlOperatorType.EQUAL : SqlOperatorType.IN;
-                    query.setLimitSqlOperatorType(sqlOperatorType);
-                    query.setDataScopes(finalManagedDataScopes);
+            case BELONG_LEVEL, MANAGED_LEVEL, COMPOSITE_LEVEL -> {
+                hasExactQuery = false;
+                Set<String> dataScopes = DataScopeType.COMPOSITE_LEVEL.equals(dataScopeType)
+                        ? CollectionUtils.newSet(managedDataScopes, belongDataScopes)
+                        : DataScopeType.BELONG_LEVEL.equals(dataScopeType) ? belongDataScopes : managedDataScopes;
+                hasRangeQuery = CollectionUtils.isNotEmpty(dataScopes);
+                isNotNeedQuery = !hasRangeQuery && !hasOwned && !hasSelf;
+                if (hasRangeQuery) {
+                    query.setRangeDataScopes(DataScopeUtils.compressDataScopes(dataScopes));
                 }
             }
-            case BELONG_LEVEL_MANAGED_CURRENT, MANAGED_LEVEL_BELONG_CURRENT -> {
-                query.setIsNotNeedQuery(!hasManaged && !hasBelong && !hasOwned && !hasSelf);
-                query.setIsQueryLimit(hasManaged);
-                query.setIsQueryBelong(hasBelong);
+            case BELONG_LEVEL_MANAGED_CURRENT -> {
+                isNotNeedQuery = !hasManaged && !hasBelong && !hasOwned && !hasSelf;
+                hasRangeQuery = hasBelong;
+                hasExactQuery = hasManaged;
                 if (hasManaged) {
-                    SqlOperatorType sqlOperatorType = DataScopeType.MANAGED_LEVEL_BELONG_CURRENT.equals(dataScopeType)
-                            ? SqlOperatorType.LIKE
-                            : CollectionUtils.isSingle(managedDataScopes) ? SqlOperatorType.EQUAL : SqlOperatorType.IN;
-                    Set<String> dataScopes = DataScopeType.MANAGED_LEVEL_BELONG_CURRENT.equals(dataScopeType)
-                            ? DataScopeUtils.compressDataScopes(managedDataScopes)
-                            : managedDataScopes;
-                    query.setLimitSqlOperatorType(sqlOperatorType);
-                    query.setDataScopes(dataScopes);
+                    SqlOperatorType sqlOperatorType = CollectionUtils.isSingle(managedDataScopes)
+                            ? SqlOperatorType.EQUAL
+                            : SqlOperatorType.IN;
+                    query.setExactSqlOperatorType(sqlOperatorType);
+                    query.setExactDataScopes(managedDataScopes);
                 }
                 if (hasBelong) {
-                    SqlOperatorType sqlOperatorType = DataScopeType.BELONG_LEVEL_MANAGED_CURRENT.equals(dataScopeType)
-                            ? SqlOperatorType.LIKE
-                            : CollectionUtils.isSingle(managedDataScopes) ? SqlOperatorType.EQUAL : SqlOperatorType.IN;
-                    Set<String> dataScopes = DataScopeType.BELONG_LEVEL_MANAGED_CURRENT.equals(dataScopeType)
-                            ? DataScopeUtils.compressDataScopes(managedDataScopes)
-                            : managedDataScopes;
-                    query.setBelongSqlOperatorType(sqlOperatorType);
-                    query.setBelongDataScopes(dataScopes);
+                    Set<String> dataScopes = DataScopeUtils.compressDataScopes(belongDataScopes);
+                    query.setRangeDataScopes(dataScopes);
                 }
             }
-            case COMPOSITE_LEVEL_CURRENT, COMPOSITE_LEVEL -> {
-                boolean hasComposite = hasManaged || hasBelong;
-                query.setIsNotNeedQuery(!hasComposite && !hasOwned && !hasSelf);
-                query.setIsQueryLimit(hasComposite);
-                query.setIsQueryBelong(false);
-                if (hasComposite) {
-                    Set<String> compositeDataScopes = DataScopeType.COMPOSITE_LEVEL.equals(dataScopeType)
-                            ? DataScopeUtils.compressDataScopes(managedDataScopes, belongDataScopes)
-                            : CollectionUtils.newSet(managedDataScopes, belongDataScopes);
-                    SqlOperatorType sqlOperatorType = DataScopeType.COMPOSITE_LEVEL.equals(dataScopeType)
-                            ? SqlOperatorType.LIKE
-                            : CollectionUtils.isSingle(compositeDataScopes) ? SqlOperatorType.EQUAL : SqlOperatorType.IN;
-                    query.setLimitSqlOperatorType(sqlOperatorType);
-                    query.setDataScopes(compositeDataScopes);
+            case MANAGED_LEVEL_BELONG_CURRENT -> {
+                isNotNeedQuery = !hasManaged && !hasBelong && !hasOwned && !hasSelf;
+                hasRangeQuery = hasManaged;
+                hasExactQuery = hasBelong;
+                if (hasManaged) {
+                    Set<String> dataScopes = DataScopeUtils.compressDataScopes(managedDataScopes);
+                    query.setRangeDataScopes(dataScopes);
+                }
+                if (hasBelong) {
+                    SqlOperatorType sqlOperatorType = CollectionUtils.isSingle(belongDataScopes)
+                            ? SqlOperatorType.EQUAL
+                            : SqlOperatorType.IN;
+                    query.setExactSqlOperatorType(sqlOperatorType);
+                    query.setExactDataScopes(belongDataScopes);
                 }
             }
             // 默认情况，仅匹配自身数据
             default -> {
-                query.setIsNotNeedQuery(!hasOwned && !hasSelf);
-                query.setIsQueryLimit(false);
-                query.setIsQueryBelong(false);
-                return query;
+                isNotNeedQuery = !hasOwned && !hasSelf;
+                hasRangeQuery = false;
+                hasExactQuery = false;
             }
         }
+        query.setIsNotNeedQuery(isNotNeedQuery);
+        query.setHasRangeQuery(hasRangeQuery);
+        query.setHasExactQuery(hasExactQuery);
         return query;
     }
 

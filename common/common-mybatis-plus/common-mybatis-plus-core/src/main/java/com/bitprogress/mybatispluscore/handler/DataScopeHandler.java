@@ -2,6 +2,7 @@ package com.bitprogress.mybatispluscore.handler;
 
 import com.bitprogress.util.CollectionUtils;
 import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
@@ -129,11 +130,11 @@ public interface DataScopeHandler extends InterceptorHandler<String> {
     Expression getSelfData();
 
     /**
-     * 构建in表达式
+     * 构建 = 表达式
      *
      * @param dataScopeColumn 数据范围字段
      * @param dataScope       数据范围
-     * @return in表达式
+     * @return = 表达式
      */
     default Expression buildEqualExpression(Column dataScopeColumn, String dataScope) {
         return new EqualsTo(dataScopeColumn, new StringValue(dataScope));
@@ -184,6 +185,28 @@ public interface DataScopeHandler extends InterceptorHandler<String> {
             index++;
         }
         return orExpression;
+    }
+
+    /**
+     * 构建拥有数据表达式
+     *
+     * @param table     表对象
+     * @param ownedData 拥有数据
+     * @return 表达式
+     */
+    default Expression buildOwnedExpression(Table table, Long ownedData) {
+        return new EqualsTo(getAliasOwnedColumn(table), new LongValue(ownedData));
+    }
+
+    /**
+     * 构建自身数据表达式
+     *
+     * @param table    表对象
+     * @param selfData 自身数据
+     * @return 表达式
+     */
+    default Expression buildSelfExpression(Table table, Long selfData) {
+        return new EqualsTo(getAliasSelfColumn(table), new LongValue(selfData));
     }
 
     /**
