@@ -122,14 +122,16 @@ public abstract class SqlInnerInterceptor extends BaseMultiTableInnerInterceptor
         if (interceptorHandler.ignoreTable(table, sqlType)) {
             return;
         }
-        // 检查是否使用 sql 解析模式
+        // 处理上下文
+        interceptorHandler.cachePreSqlContext();
         try {
-            if (!interceptorHandler.setCurrentConditionType(sqlType)) {
+            if (interceptorHandler.setCurrentSqlContextBySqlType(sqlType)) {
                 consumer.accept(index);
             }
         } finally {
             // 清除信息
-            interceptorHandler.clearCurrentConditionType();
+            interceptorHandler.clearCurrentSqlContext();
+            interceptorHandler.restorePreSqlContext();
         }
     }
 

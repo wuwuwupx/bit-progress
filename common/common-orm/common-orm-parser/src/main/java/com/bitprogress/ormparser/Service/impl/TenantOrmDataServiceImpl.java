@@ -20,22 +20,38 @@ public class TenantOrmDataServiceImpl implements TenantOrmDataService {
     private TenantContextService tenantContextService;
 
     /**
-     * 设置当前数据范围类型
+     * 缓存前一sql上下文
+     */
+    @Override
+    public void cachePreSqlContext() {
+        tenantContextService.cachePreSqlContext();
+    }
+
+    /**
+     * 设置当前sql上下文
      *
      * @param sqlType sql类型
      * @return 是否设置成功
      */
     @Override
-    public Boolean setCurrentConditionType(SqlType sqlType) {
-        return tenantContextService.setCurrentConditionTypeBySqlType(sqlType);
+    public boolean setCurrentSqlContextBySqlType(SqlType sqlType) {
+        return tenantContextService.setCurrentSqlContextBySqlType(sqlType);
     }
 
     /**
-     * 清除当前数据范围类型
+     * 清除sql上下文
      */
     @Override
-    public void clearCurrentConditionType() {
-        tenantContextService.clearCurrentConditionType();
+    public void clearCurrentSqlContext() {
+        tenantContextService.clearCurrentSqlContext();
+    }
+
+    /**
+     * 恢复前一sql上下文
+     */
+    @Override
+    public void restorePreSqlContext() {
+        tenantContextService.restorePreSqlContext();
     }
 
     /**
@@ -52,7 +68,7 @@ public class TenantOrmDataServiceImpl implements TenantOrmDataService {
             query.setIsNotNeedQuery(true);
             return query;
         }
-        TenantType conditionType = tenantContextService.getCurrentConditionType();
+        TenantType conditionType = tenantContextService.getCurrentSqlTenantType();
         Long tenantId = userTenantInfo.getTenantId();
         boolean hasTenant = Objects.nonNull(tenantId);
         if (Objects.isNull(conditionType) || TenantType.CURRENT.equals(conditionType)) {
@@ -111,7 +127,7 @@ public class TenantOrmDataServiceImpl implements TenantOrmDataService {
     public Long getTenantId() {
         UserTenantInfo userInfo = tenantContextService.getUserInfo();
         Assert.notNull(userInfo, "获取用户租户信息失败");
-        TenantType conditionType = tenantContextService.getCurrentConditionType();
+        TenantType conditionType = tenantContextService.getCurrentSqlTenantType();
         return TenantType.OPERATE.equals(conditionType) ? userInfo.getOperateTenantId() : userInfo.getTenantId();
     }
 

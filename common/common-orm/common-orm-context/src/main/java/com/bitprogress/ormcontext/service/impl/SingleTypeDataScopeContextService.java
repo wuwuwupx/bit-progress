@@ -16,6 +16,12 @@ public class SingleTypeDataScopeContextService
     private static final ThreadLocal<SingleTypeDataScopeInfo> DATA_SCOPE_INFO = new ThreadLocal<>();
 
     /**
+     * 前一层 sql 的数据范围类型
+     * 作用域为一次 sql执行，当前sql执行后会被恢复
+     */
+    private static final ThreadLocal<DataScopeType> PRE_SQL_DATA_SCOPE_Type = new ThreadLocal<>();
+
+    /**
      * 当前执行 sql 的数据范围类型
      * 作用域为一次 sql执行
      */
@@ -58,20 +64,50 @@ public class SingleTypeDataScopeContextService
     }
 
     /**
-     * 获取当前数据范围类型
+     * 获取前一sql数据范围类型
+     *
+     * @return 数据范围类型
      */
     @Override
-    public DataScopeType getCurrentConditionType() {
+    public DataScopeType getPreSqlDataScopeType() {
+        return PRE_SQL_DATA_SCOPE_Type.get();
+    }
+
+    /**
+     * 设置前一sql数据范围类型
+     *
+     * @param dataScopeType 数据范围类型
+     */
+    @Override
+    public void setPreSqlDataScopeType(DataScopeType dataScopeType) {
+        PRE_SQL_DATA_SCOPE_Type.set(dataScopeType);
+    }
+
+    /**
+     * 清除前一sql数据范围类型
+     */
+    @Override
+    public void clearPreSqlDataScopeType() {
+        PRE_SQL_DATA_SCOPE_Type.remove();
+    }
+
+    /**
+     * 获取当前数据范围类型
+     *
+     * @return 数据范围类型
+     */
+    @Override
+    public DataScopeType getCurrentSqlDataScopeType() {
         return CURRENT_SQL_DATA_SCOPE_Type.get();
     }
 
     /**
      * 设置当前数据范围类型
      *
-     * @param dataScopeType 当前数据范围类型
+     * @param dataScopeType 数据范围类型
      */
     @Override
-    public void setCurrentConditionType(DataScopeType dataScopeType) {
+    public void setCurrentSqlDataScopeType(DataScopeType dataScopeType) {
         CURRENT_SQL_DATA_SCOPE_Type.set(dataScopeType);
     }
 
@@ -79,7 +115,7 @@ public class SingleTypeDataScopeContextService
      * 清除当前数据范围类型
      */
     @Override
-    public void clearCurrentConditionType() {
+    public void clearCurrentSqlDataScopeType() {
         CURRENT_SQL_DATA_SCOPE_Type.remove();
     }
 

@@ -20,22 +20,38 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
     private final SingleTypeDataScopeContextService dataScopeContextService;
 
     /**
-     * 设置当前数据范围类型
+     * 缓存前一sql上下文
+     */
+    @Override
+    public void cachePreSqlContext() {
+        dataScopeContextService.cachePreSqlContext();
+    }
+
+    /**
+     * 设置当前sql上下文
      *
      * @param sqlType sql类型
      * @return 是否设置成功
      */
     @Override
-    public Boolean setCurrentConditionType(SqlType sqlType) {
-        return dataScopeContextService.setCurrentConditionTypeBySqlType(sqlType);
+    public boolean setCurrentSqlContextBySqlType(SqlType sqlType) {
+        return dataScopeContextService.setCurrentSqlContextBySqlType(sqlType);
     }
 
     /**
-     * 清除当前数据范围类型
+     * 清除sql上下文
      */
     @Override
-    public void clearCurrentConditionType() {
-        dataScopeContextService.clearCurrentConditionType();
+    public void clearCurrentSqlContext() {
+        dataScopeContextService.clearCurrentSqlContext();
+    }
+
+    /**
+     * 恢复前一sql上下文
+     */
+    @Override
+    public void restorePreSqlContext() {
+        dataScopeContextService.restorePreSqlContext();
     }
 
     /**
@@ -47,7 +63,7 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
     @Override
     public DataScopeQuery getConditionQuery() {
         DataScopeQuery query = new DataScopeQuery();
-        DataScopeType dataScopeType = dataScopeContextService.getCurrentConditionType();
+        DataScopeType dataScopeType = dataScopeContextService.getCurrentSqlDataScopeType();
         SingleTypeDataScopeInfo dataScopeInfo = dataScopeContextService.getUserInfo();
         if (Objects.isNull(dataScopeInfo)) {
             query.setIsNotNeedQuery(true);

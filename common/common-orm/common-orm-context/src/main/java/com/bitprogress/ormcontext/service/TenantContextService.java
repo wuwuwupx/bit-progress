@@ -6,9 +6,10 @@ import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.ormmodel.info.parser.TenantParserInfo;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public interface TenantContextService extends ParserContextService<TenantParserInfo>,
-        UserContextService<UserTenantInfo>, CurrentConditionTypeContextService<TenantType> {
+        UserContextService<UserTenantInfo>, SqlContextService {
 
     /**
      * 注解的数据范围解析信息
@@ -20,6 +21,12 @@ public interface TenantContextService extends ParserContextService<TenantParserI
      * 作用域为当前线程
      */
     ThreadLocal<UserTenantInfo> TENANT_INFO = new ThreadLocal<>();
+
+    /**
+     * 当前执行 sql 的租户类型
+     * 作用域为一次 sql执行
+     */
+    ThreadLocal<TenantType> PRE_SQL_TENANT_Type = new ThreadLocal<>();
 
     /**
      * 当前执行 sql 的租户类型
@@ -99,53 +106,104 @@ public interface TenantContextService extends ParserContextService<TenantParserI
     }
 
     /**
-     * 获取当前租户类型
+     * 获取前一sql租户类型
      *
      * @return 当前租户类型
      */
-    @Override
-    default TenantType getCurrentConditionType() {
+    default TenantType getPreSqlTenantType() {
+        return PRE_SQL_TENANT_Type.get();
+    }
+
+    /**
+     * 设置前一sql租户类型
+     *
+     * @param tenantType 租户类型
+     */
+    default void setPreSqlTenantType(TenantType tenantType) {
+        PRE_SQL_TENANT_Type.set(tenantType);
+    }
+
+    /**
+     * 清除前一sql租户类型
+     */
+    default void clearPreSqlTenantType() {
+        PRE_SQL_TENANT_Type.remove();
+    }
+
+    /**
+     * 获取当前租户类型
+     *
+     * @return 当前sql租户类型
+     */
+    default TenantType getCurrentSqlTenantType() {
         return CURRENT_SQL_TENANT_Type.get();
     }
 
     /**
-     * 设置当前租户类型
+     * 设置当前sql租户类型
      *
      * @param tenantType 租户类型
      */
-    @Override
-    default void setCurrentConditionType(TenantType tenantType) {
+    default void setCurrentSqlTenantType(TenantType tenantType) {
         CURRENT_SQL_TENANT_Type.set(tenantType);
     }
 
     /**
-     * 清除当前数据范围类型
+     * 清除当前sql租户类型
      */
-    @Override
-    default void clearCurrentConditionType() {
+    default void clearCurrentSqlTenantType() {
         CURRENT_SQL_TENANT_Type.remove();
     }
 
     /**
-     * 设置当前数据范围类型
+     * 缓存前一sql上下文
+     */
+    @Override
+    default void cachePreSqlContext() {
+        Optional<TenantType> currentSqlTenantType = Optional.ofNullable(getCurrentSqlTenantType());
+        currentSqlTenantType.ifPresent(this::setPreSqlTenantType);
+        clearCurrentSqlTenantType();
+    }
+
+    /**
+     * 恢复前一sql上下文
+     */
+    @Override
+    default void restorePreSqlContext() {
+        Optional<TenantType> preSqlTenantType = Optional.ofNullable(getPreSqlTenantType());
+        preSqlTenantType.ifPresent(this::setCurrentSqlTenantType);
+        clearPreSqlTenantType();
+    }
+
+    /**
+     * 设置当前sql上下文
      *
      * @param sqlType sql类型
      */
     @Override
-    default Boolean setCurrentConditionTypeBySqlType(SqlType sqlType) {
+    default Boolean setCurrentSqlContextBySqlType(SqlType sqlType) {
         if (onParser(sqlType)) {
             if (ignoreProcess()) {
                 return false;
             }
-            setCurrentConditionType(getParserInfo().getTenantType());
+            setCurrentSqlTenantType(getParserInfo().getTenantType());
+            return true;
         } else {
             UserTenantInfo userTenantInfo = getUserInfo();
             if (Objects.nonNull(userTenantInfo)) {
-                setCurrentConditionType(userTenantInfo.getTenantType());
+                setCurrentSqlTenantType(userTenantInfo.getTenantType());
                 return true;
             }
+            return false;
         }
-        return false;
+    }
+
+    /**
+     * 清除sql上下文
+     */
+    @Override
+    default void clearCurrentSqlContext() {
+        clearCurrentSqlTenantType();
     }
 
 }

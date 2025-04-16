@@ -289,22 +289,38 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
     }
 
     /**
-     * 设置当前数据范围类型
+     * 缓存前一sql上下文
+     */
+    @Override
+    public void cachePreSqlContext() {
+        ormDataService.cachePreSqlContext();
+    }
+
+    /**
+     * 设置当前sql上下文
      *
      * @param sqlType sql类型
      * @return 是否设置成功
      */
     @Override
-    public boolean setCurrentConditionType(SqlType sqlType) {
-        return ormDataService.setCurrentConditionType(sqlType);
+    public boolean setCurrentSqlContextBySqlType(SqlType sqlType) {
+        return ormDataService.setCurrentSqlContextBySqlType(sqlType);
     }
 
     /**
-     * 清除当前数据范围类型
+     * 清除sql上下文
      */
     @Override
-    public void clearCurrentConditionType() {
-        ormDataService.clearCurrentConditionType();
+    public void clearCurrentSqlContext() {
+        ormDataService.clearCurrentSqlContext();
+    }
+
+    /**
+     * 恢复前一sql上下文
+     */
+    @Override
+    public void restorePreSqlContext() {
+        ormDataService.restorePreSqlContext();
     }
 
 }

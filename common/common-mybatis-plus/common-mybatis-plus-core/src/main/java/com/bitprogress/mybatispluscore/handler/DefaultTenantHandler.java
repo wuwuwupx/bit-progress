@@ -107,22 +107,38 @@ public class DefaultTenantHandler implements TenantHandler {
     }
 
     /**
-     * 设置当前条件类型
+     * 缓存前一sql上下文
+     */
+    @Override
+    public void cachePreSqlContext() {
+        tenantOrmDataService.cachePreSqlContext();
+    }
+
+    /**
+     * 设置当前sql上下文
      *
      * @param sqlType sql类型
      * @return 是否设置成功
      */
     @Override
-    public boolean setCurrentConditionType(SqlType sqlType) {
-        return tenantOrmDataService.setCurrentConditionType(sqlType);
+    public boolean setCurrentSqlContextBySqlType(SqlType sqlType) {
+        return tenantOrmDataService.setCurrentSqlContextBySqlType(sqlType);
     }
 
     /**
-     * 清除当前条件类型
+     * 清除sql上下文
      */
     @Override
-    public void clearCurrentConditionType() {
-        tenantOrmDataService.clearCurrentConditionType();
+    public void clearCurrentSqlContext() {
+        tenantOrmDataService.clearCurrentSqlContext();
+    }
+
+    /**
+     * 恢复前一sql上下文
+     */
+    @Override
+    public void restorePreSqlContext() {
+        tenantOrmDataService.restorePreSqlContext();
     }
 
 }
