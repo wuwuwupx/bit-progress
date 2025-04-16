@@ -2,9 +2,8 @@ package com.bitprogress.ormmodel.info.parser;
 
 import com.bitprogress.basemodel.Info;
 import com.bitprogress.basemodel.util.EnumUtils;
-import com.bitprogress.ormmodel.annotation.DataScopeParserMode;
-import com.bitprogress.ormmodel.enums.DataScopeType;
 import com.bitprogress.ormmodel.enums.ParserType;
+import com.bitprogress.ormmodel.enums.QueryMode;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -39,6 +38,11 @@ public abstract class BaseParserInfo extends Info {
      * sql 类型
      */
     private SqlType[] sqlTypes;
+
+    /**
+     * 查询模式
+     */
+    private QueryMode queryMode;
 
     /**
      * rpc传播
@@ -84,6 +88,16 @@ public abstract class BaseParserInfo extends Info {
                 .stream(sqlTypes)
                 .map(sqlType -> EnumUtils.getByValue(SqlType.class, sqlType))
                 .toArray(SqlType[]::new);
+    }
+
+    @JsonGetter(value = "queryMode")
+    public Integer getQueryModeJson() {
+        return Objects.isNull(queryMode) ? null : queryMode.getValue();
+    }
+
+    @JsonSetter(value = "queryMode")
+    public void setQueryModeJson(Integer queryMode) {
+        this.queryMode = EnumUtils.getByValue(QueryMode.class, queryMode);
     }
 
     @JsonGetter(value = "rpcPropagate")

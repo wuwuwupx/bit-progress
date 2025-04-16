@@ -28,8 +28,10 @@ import java.lang.annotation.*;
  * 引入数据范围类型
  * 默认为自身
  * <p>
- * 可考虑将当前注解拆开为全局解析开关、租户、数据权限注解（参考mybatis-plus原有的租户和数据权限模式）
- * 但是考虑到传播属性和优先级设计等问题，且当前注解的本意是为了一键去除租户模式和数据权限模式而创建，所以暂不进行拆分
+ * 引入查询模式
+ * - 全链路查询
+ * - 上游链路查询
+ * - 下游链路查询
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -58,6 +60,11 @@ public @interface DataScopeParserMode {
      * 只在{@link DataScopeMode#SINGLE} 模式下生效
      */
     DataScopeType dataScopeType() default DataScopeType.SELF;
+
+    /**
+     * 查询模式
+     */
+    QueryMode queryMode() default QueryMode.DOWNSTREAM_CHAIN;
 
     /**
      * rpc传播

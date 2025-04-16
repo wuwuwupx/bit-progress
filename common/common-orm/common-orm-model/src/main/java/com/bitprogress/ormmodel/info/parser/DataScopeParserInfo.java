@@ -38,6 +38,7 @@ public class DataScopeParserInfo extends BaseParserInfo {
         sqlParserInfo.setParserType(parserMode.parserType());
         sqlParserInfo.setSqlTypes(parserMode.sqlTypes());
         sqlParserInfo.setDataScopeType(parserMode.dataScopeType());
+        sqlParserInfo.setQueryMode(parserMode.queryMode());
         sqlParserInfo.setRpcPropagate(parserMode.rpcPropagate());
         return sqlParserInfo;
     }
