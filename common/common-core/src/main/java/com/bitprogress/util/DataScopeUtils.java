@@ -22,7 +22,7 @@ public class DataScopeUtils {
      * @param dataScope          需要校验的数据范围
      * @return true：在基准数据范围全链路上，false：不在基准数据范围全链路上
      */
-    public static boolean onFullLink(String referenceDataScope, String dataScope) {
+    public static boolean onFullChain(String referenceDataScope, String dataScope) {
         return referenceDataScope.startsWith(dataScope) || dataScope.startsWith(referenceDataScope);
     }
 
@@ -33,9 +33,9 @@ public class DataScopeUtils {
      * @param dataScope           需要校验的数据范围
      * @return true：在基准数据范围全链路上，false：不在基准数据范围全链路上
      */
-    public static boolean onFullLink(Set<String> referenceDataScopes, String dataScope) {
+    public static boolean onFullChain(Set<String> referenceDataScopes, String dataScope) {
         return CollectionUtils
-                .anyMatch(referenceDataScopes, referenceDataScope -> onFullLink(referenceDataScope, dataScope));
+                .anyMatch(referenceDataScopes, referenceDataScope -> onFullChain(referenceDataScope, dataScope));
     }
 
     /**
@@ -49,7 +49,7 @@ public class DataScopeUtils {
      * @param dataScope          需要校验的数据范围
      * @return true：在基准数据范围的上游链路，false：不在基准数据范围的上游链路
      */
-    public static boolean onUpperLink(String referenceDataScope, String dataScope) {
+    public static boolean onUpstreamChain(String referenceDataScope, String dataScope) {
         return referenceDataScope.startsWith(dataScope);
     }
 
@@ -60,9 +60,9 @@ public class DataScopeUtils {
      * @param dataScope           需要校验的数据范围
      * @return true：在基准数据范围的上游链路，false：不在基准数据范围的上游链路
      */
-    public static boolean onUpperLink(Set<String> referenceDataScopes, String dataScope) {
+    public static boolean onUpstreamChain(Set<String> referenceDataScopes, String dataScope) {
         return CollectionUtils
-                .anyMatch(referenceDataScopes, referenceDataScope -> onUpperLink(referenceDataScope, dataScope));
+                .anyMatch(referenceDataScopes, referenceDataScope -> onUpstreamChain(referenceDataScope, dataScope));
     }
 
     /**
@@ -76,7 +76,7 @@ public class DataScopeUtils {
      * @param dataScope          需要校验的数据范围
      * @return true：在基准数据范围的下游链路，false：不在基准数据范围的下游链路
      */
-    public static boolean onLowerLink(String referenceDataScope, String dataScope) {
+    public static boolean onDownstreamChain(String referenceDataScope, String dataScope) {
         return dataScope.startsWith(referenceDataScope);
     }
 
@@ -87,9 +87,9 @@ public class DataScopeUtils {
      * @param dataScope           需要校验的数据范围
      * @return true：在基准数据范围的下游链路，false：不在基准数据范围的下游链路
      */
-    public static boolean onLowerLink(Set<String> referenceDataScopes, String dataScope) {
+    public static boolean onDownstreamChain(Set<String> referenceDataScopes, String dataScope) {
         return CollectionUtils
-                .anyMatch(referenceDataScopes, referenceDataScope -> onLowerLink(referenceDataScope, dataScope));
+                .anyMatch(referenceDataScopes, referenceDataScope -> onDownstreamChain(referenceDataScope, dataScope));
     }
 
     /**
@@ -100,8 +100,8 @@ public class DataScopeUtils {
      * @param dataScopes         需要匹配的数据范围列表
      * @return 处于 基准数据范围 全链路上的 数据范围列表
      */
-    public static Set<String> getFullLink(String referenceDataScope, Set<String> dataScopes) {
-        return CollectionUtils.filterSet(dataScopes, dataScope -> onFullLink(referenceDataScope, dataScope));
+    public static Set<String> getFullChain(String referenceDataScope, Set<String> dataScopes) {
+        return CollectionUtils.filterSet(dataScopes, dataScope -> onFullChain(referenceDataScope, dataScope));
     }
 
     /**
@@ -112,8 +112,8 @@ public class DataScopeUtils {
      * @param dataScopes         需要匹配的数据范围列表
      * @return 处于 基准数据范围 全链路上的 压缩后的数据范围列表
      */
-    public static Set<String> getCompressFullLink(String referenceDataScope, Set<String> dataScopes) {
-        return compressDataScopes(dataScope -> onFullLink(referenceDataScope, dataScope), dataScopes);
+    public static Set<String> getCompressFullChain(String referenceDataScope, Set<String> dataScopes) {
+        return compressDataScopes(dataScope -> onFullChain(referenceDataScope, dataScope), dataScopes);
     }
 
     /**
@@ -124,8 +124,8 @@ public class DataScopeUtils {
      * @param dataScopes         需要匹配的数据范围列表
      * @return 处于 基准数据范围 上游链路上的 数据范围列表
      */
-    public static Set<String> getUpperLink(String referenceDataScope, Set<String> dataScopes) {
-        return CollectionUtils.filterSet(dataScopes, dataScope -> onUpperLink(referenceDataScope, dataScope));
+    public static Set<String> getUpstreamChain(String referenceDataScope, Set<String> dataScopes) {
+        return CollectionUtils.filterSet(dataScopes, dataScope -> onUpstreamChain(referenceDataScope, dataScope));
     }
 
     /**
@@ -136,8 +136,8 @@ public class DataScopeUtils {
      * @param dataScopes         需要匹配的数据范围列表
      * @return 处于 基准数据范围 上游链路上的 压缩后的数据范围列表
      */
-    public static Set<String> getCompressUpperLink(String referenceDataScope, Set<String> dataScopes) {
-        return compressDataScopes(dataScope -> onUpperLink(referenceDataScope, dataScope), dataScopes);
+    public static Set<String> getCompressUpstreamChain(String referenceDataScope, Set<String> dataScopes) {
+        return compressDataScopes(dataScope -> onUpstreamChain(referenceDataScope, dataScope), dataScopes);
     }
 
     /**
@@ -148,8 +148,8 @@ public class DataScopeUtils {
      * @param dataScopes         需要匹配的数据范围列表
      * @return 处于 基准数据范围 下游链路上的 数据范围列表
      */
-    public static Set<String> getLowerLink(String referenceDataScope, Set<String> dataScopes) {
-        return CollectionUtils.filterSet(dataScopes, dataScope -> onLowerLink(referenceDataScope, dataScope));
+    public static Set<String> getDownstreamChain(String referenceDataScope, Set<String> dataScopes) {
+        return CollectionUtils.filterSet(dataScopes, dataScope -> onDownstreamChain(referenceDataScope, dataScope));
     }
 
     /**
@@ -160,8 +160,8 @@ public class DataScopeUtils {
      * @param dataScopes         需要匹配的数据范围列表
      * @return 处于 基准数据范围 下游链路上的 压缩后的数据范围列表
      */
-    public static Set<String> getCompressLowerLink(String referenceDataScope, Set<String> dataScopes) {
-        return compressDataScopes(dataScope -> onLowerLink(referenceDataScope, dataScope), dataScopes);
+    public static Set<String> getCompressDownstreamChain(String referenceDataScope, Set<String> dataScopes) {
+        return compressDataScopes(dataScope -> onDownstreamChain(referenceDataScope, dataScope), dataScopes);
     }
 
     /**
@@ -178,7 +178,7 @@ public class DataScopeUtils {
 
     /**
      * 压缩数据范围，满足 predicate 且处于同一链路上的 数据范围进行合并只保留最上游的数据权限，其他数据范围进行过滤
-     * predicate -> onFullLink(A1,dataScope)
+     * predicate -> onFullChain(A1,dataScope)
      * [A1B2,A2B3,A3B2,A3B1] [A1,A2,A1B2,A1B2C3,A2B2,A1B1C3,A3B2C3] -> [A1]
      * predicate -> return true
      * [A1B2,A2B3,A3B2,A3B1] [A1,A2,A1B2,A1B2C3,A2B2,A1B1C3,A3B2C3] -> [A1,A2,A3B2,A3B1]
@@ -200,9 +200,9 @@ public class DataScopeUtils {
                     while (iterator.hasNext()) {
                         String referenceDataScope = iterator.next();
                         // 先检查是否在同一链路上
-                        if (onFullLink(referenceDataScope, dataScope)) {
+                        if (onFullChain(referenceDataScope, dataScope)) {
                             // 检查当前数据范围是否 不在基准数据范围的下游链路 不直接匹配上游是因为相等的情况也不需要操作
-                            if (!onLowerLink(referenceDataScope, dataScope)) {
+                            if (!onDownstreamChain(referenceDataScope, dataScope)) {
                                 iterator.remove();
                                 // 跳出while循环，添加当前数据范围
                                 break;
