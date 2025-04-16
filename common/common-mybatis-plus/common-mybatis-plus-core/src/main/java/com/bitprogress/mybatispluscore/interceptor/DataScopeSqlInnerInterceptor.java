@@ -2,51 +2,51 @@ package com.bitprogress.mybatispluscore.interceptor;
 
 import com.baomidou.mybatisplus.core.toolkit.ClassUtils;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
-import com.baomidou.mybatisplus.extension.plugins.inner.BaseMultiTableInnerInterceptor;
 import com.baomidou.mybatisplus.extension.toolkit.PropertyMapper;
 import com.bitprogress.mybatispluscore.handler.DataScopeHandler;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.util.CollectionUtils;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
-import net.sf.jsqlparser.expression.*;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import net.sf.jsqlparser.expression.Alias;
+import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
-import net.sf.jsqlparser.statement.update.Update;
 import net.sf.jsqlparser.statement.update.UpdateSet;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.function.Consumer;
 
 /**
  * 数据权限拦截器
  */
 @Setter
-@AllArgsConstructor
 public class DataScopeSqlInnerInterceptor extends SqlInnerInterceptor {
 
     private DataScopeHandler dataScopeHandler;
 
-    @Override
-    protected void processSelect(Select select, int index, String sql, Object obj) {
-        process(SqlType.SELECT, null, index, t -> processSelectSql(select, index, sql, obj), dataScopeHandler);
+    public DataScopeSqlInnerInterceptor(DataScopeHandler interceptorHandler) {
+        super(interceptorHandler);
+        dataScopeHandler = interceptorHandler;
     }
 
+    /**
+     * 处理 insert 语句
+     */
     @Override
     protected void processInsert(Insert insert, int index, String sql, Object obj) {
-        Table table = insert.getTable();
-        process(SqlType.INSERT, table, index, t -> processInsertSql(insert, index, sql, obj), dataScopeHandler);
+        process(SqlType.INSERT, insert.getTable(), index, t -> processInsertSql(insert, index, sql, obj));
     }
 
+    /**
+     * 处理 insert 语句
+     */
+    @Override
     protected void processInsertSql(Insert insert, int index, String sql, Object obj) {
         String tableName = insert.getTable().getName();
         if (dataScopeHandler.ignoreTable(tableName)) {
@@ -280,52 +280,10 @@ public class DataScopeSqlInnerInterceptor extends SqlInnerInterceptor {
         }
     }
 
-    /**
-     * update 语句处理
-     */
-    @Override
-    protected void processUpdate(Update update, int index, String sql, Object obj) {
-        Table table = update.getTable();
-        Consumer<Integer> consumer = t -> processUpdateSql(update, index, sql, obj, dataScopeHandler);
-        process(SqlType.UPDATE, table, index, consumer, dataScopeHandler);
-    }
-
-    /**
-     * delete 语句处理
-     */
-    @Override
-    protected void processDelete(Delete delete, int index, String sql, Object obj) {
-        Table table = delete.getTable();
-        Consumer<Integer> consumer = t -> processDeleteSql(delete, index, sql, obj, dataScopeHandler);
-        process(SqlType.DELETE, table, index, consumer, dataScopeHandler);
-    }
-
     @Override
     public void setProperties(Properties properties) {
         PropertyMapper.newInstance(properties).whenNotBlank("dataScopeHandler",
                 ClassUtils::newInstance, this::setDataScopeHandler);
-    }
-
-    /**
-     * 数据范围条件表达式
-     *
-     * @param table        表对象
-     * @param where        当前where条件
-     * @param whereSegment 所属Mapper对象全路径（在原租户拦截器功能中，这个参数并不需要参与相关判断）
-     * @return 数据范围条件表达式
-     * @see BaseMultiTableInnerInterceptor#buildTableExpression(Table, Expression, String)
-     */
-    @Override
-    public Expression buildTableExpression(final Table table, final Expression where, final String whereSegment) {
-        Expression dataScopeCondition = dataScopeHandler.getCondition(table);
-        if (dataScopeCondition instanceof NullValue) {
-            return new EqualsTo(new Column("1"), new LongValue(2));
-        } else if (dataScopeCondition instanceof AllValue) {
-            return null;
-        } else {
-            return dataScopeCondition;
-        }
-
     }
 
 }

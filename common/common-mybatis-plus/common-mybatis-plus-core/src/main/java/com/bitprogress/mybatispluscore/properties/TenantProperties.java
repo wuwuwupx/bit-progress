@@ -20,6 +20,13 @@ public class TenantProperties {
     private Boolean enabled = false;
 
     /**
+     * 启用名单
+     * 为空表示所有的表都启用，不为空则启动配置的表
+     * 当启用名单不为空时，优先级高于 白名单
+     */
+    private List<String> enableTables = new ArrayList<>();
+
+    /**
      * 白名单
      */
     private List<String> ignoreTables = new ArrayList<>();
@@ -29,6 +36,11 @@ public class TenantProperties {
      * 为空表示所有的表都启用，不为空则启动配置的表
      * 当启用名单不为空时，优先级高于 白名单
      */
-    private List<String> enableTables = new ArrayList<>();
+    private List<String> enableInsertTables = new ArrayList<>();
+
+    /**
+     * 白名单
+     */
+    private List<String> ignoreInsertTables = new ArrayList<>();
 
 }

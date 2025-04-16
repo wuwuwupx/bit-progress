@@ -44,6 +44,18 @@ public class DataScopeProperties {
      * 为空表示所有的表都启用，不为空则启动配置的表
      * 当启用名单不为空时，优先级高于 白名单
      */
+    private List<String> enableInsertTables = new ArrayList<>();
+
+    /**
+     * 白名单
+     */
+    private List<String> ignoreInsertTables = new ArrayList<>();
+
+    /**
+     * 启用名单
+     * 为空表示所有的表都启用，不为空则启动配置的表
+     * 当启用名单不为空时，优先级高于 白名单
+     */
     private List<String> enableInsertDataScopeTables = new ArrayList<>();
 
     /**

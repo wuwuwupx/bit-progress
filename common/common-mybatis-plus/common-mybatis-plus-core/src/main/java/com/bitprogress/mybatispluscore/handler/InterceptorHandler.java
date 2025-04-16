@@ -38,6 +38,83 @@ public interface InterceptorHandler<T> {
     }
 
     /**
+     * 是否忽略表，默认不忽略
+     *
+     * @param tableName 表名
+     * @return 是否忽略
+     */
+    default boolean ignoreTable(String tableName) {
+        return false;
+    }
+
+    /**
+     * 是否忽略表，默认不忽略
+     *
+     * @return 是否忽略
+     */
+    default boolean ignoreTable(Table table, SqlType sqlType) {
+        return false;
+    }
+
+    /**
+     * 启用插入字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    default boolean ignoreInsert(String tableName) {
+        return true;
+    }
+
+    /**
+     * 启用插入字段逻辑
+     *
+     * @param columns 表名
+     * @param column  字段
+     * @return 是否启用
+     */
+    default boolean enableInsertColumn(List<Column> columns, String column) {
+        return CollectionUtils.noneMatch(columns, i -> i.getColumnName().equalsIgnoreCase(column));
+    }
+
+    /**
+     * 缓存前一sql上下文
+     */
+    void cachePreSqlContext();
+
+    /**
+     * 设置当前sql上下文
+     *
+     * @param sqlType sql类型
+     * @return 是否设置成功
+     */
+    boolean setCurrentSqlContextBySqlType(SqlType sqlType);
+
+    /**
+     * 清除sql上下文
+     */
+    void clearCurrentSqlContext();
+
+    /**
+     * 恢复前一sql上下文
+     */
+    void restorePreSqlContext();
+
+    /**
+     * 获取 insert 需要的字段
+     *
+     * @return 字段
+     */
+    String getInsertColumn();
+
+    /**
+     * 获取 insert 的值
+     *
+     * @return 值
+     */
+    Expression getInsertValue();
+
+    /**
      * 获取数据范围条件
      *
      * @param table 表
@@ -106,58 +183,5 @@ public interface InterceptorHandler<T> {
      * @return like表达式
      */
     Expression buildLikeExpression(Column column, Set<T> dataSet);
-
-    /**
-     * 是否忽略表，默认不忽略
-     *
-     * @param tableName 表名
-     * @return 是否忽略
-     */
-    default boolean ignoreTable(String tableName) {
-        return false;
-    }
-
-    /**
-     * 是否忽略表，默认不忽略
-     *
-     * @return 是否忽略
-     */
-    default boolean ignoreTable(Table table, SqlType sqlType) {
-        return false;
-    }
-
-    /**
-     * 启用插入字段逻辑
-     *
-     * @param columns 表名
-     * @param column  字段
-     * @return 是否启用
-     */
-    default boolean enableInsertColumn(List<Column> columns, String column) {
-        return CollectionUtils.noneMatch(columns, i -> i.getColumnName().equalsIgnoreCase(column));
-    }
-
-    /**
-     * 缓存前一sql上下文
-     */
-    void cachePreSqlContext();
-
-    /**
-     * 设置当前sql上下文
-     *
-     * @param sqlType sql类型
-     * @return 是否设置成功
-     */
-    boolean setCurrentSqlContextBySqlType(SqlType sqlType);
-
-    /**
-     * 清除sql上下文
-     */
-    void clearCurrentSqlContext();
-
-    /**
-     * 恢复前一sql上下文
-     */
-    void restorePreSqlContext();
 
 }

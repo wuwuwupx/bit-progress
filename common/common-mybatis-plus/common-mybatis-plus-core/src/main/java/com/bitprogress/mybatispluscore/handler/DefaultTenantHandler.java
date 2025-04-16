@@ -33,6 +33,109 @@ public class DefaultTenantHandler implements TenantHandler {
     }
 
     /**
+     * 根据表名判断是否忽略拼接数据范围条件
+     * <p>
+     * 默认都要进行解析并拼接数据范围
+     * - 启用表列表不为空，则只需要判断表名是否启用
+     * - 启用表列表为空，则判断是否在白名单中
+     *
+     * @param tableName 表名
+     * @return 是否忽略, true:表示忽略，false:需要解析并拼接数据范围
+     */
+    @Override
+    public boolean ignoreTable(String tableName) {
+        List<String> enableTables = tenantProperties.getEnableTables();
+        List<String> ignoreTables = tenantProperties.getIgnoreTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.notContains(enableTables, tableName)
+                : CollectionUtils.contains(ignoreTables, tableName);
+    }
+
+    /**
+     * 根据表名判断是否忽略拼接数据范围条件
+     * <p>
+     * 默认都要进行解析并拼接数据范围
+     * - 启用表列表不为空，则只需要判断表名是否启用
+     * - 启用表列表为空，则判断是否在白名单中
+     *
+     * @return 是否忽略, true:表示忽略，false:需要解析并拼接数据范围
+     */
+    @Override
+    public boolean ignoreTable(Table table, SqlType sqlType) {
+        return !SqlType.SELECT.equals(sqlType) && ignoreTable(table.getName());
+    }
+
+    /**
+     * 启用插入字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean ignoreInsert(String tableName) {
+        List<String> enableTables = tenantProperties.getEnableInsertTables();
+        List<String> ignoreTables = tenantProperties.getIgnoreInsertTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.notContains(enableTables, tableName)
+                : CollectionUtils.contains(ignoreTables, tableName);
+    }
+
+    /**
+     * 缓存前一sql上下文
+     */
+    @Override
+    public void cachePreSqlContext() {
+        tenantOrmDataService.cachePreSqlContext();
+    }
+
+    /**
+     * 设置当前sql上下文
+     *
+     * @param sqlType sql类型
+     * @return 是否设置成功
+     */
+    @Override
+    public boolean setCurrentSqlContextBySqlType(SqlType sqlType) {
+        return tenantOrmDataService.setCurrentSqlContextBySqlType(sqlType);
+    }
+
+    /**
+     * 清除sql上下文
+     */
+    @Override
+    public void clearCurrentSqlContext() {
+        tenantOrmDataService.clearCurrentSqlContext();
+    }
+
+    /**
+     * 恢复前一sql上下文
+     */
+    @Override
+    public void restorePreSqlContext() {
+        tenantOrmDataService.restorePreSqlContext();
+    }
+
+    /**
+     * 获取 insert 需要的字段
+     *
+     * @return 字段
+     */
+    @Override
+    public String getInsertColumn() {
+        return getTenantIdColumn();
+    }
+
+    /**
+     * 获取 insert 的值
+     *
+     * @return 值
+     */
+    @Override
+    public Expression getInsertValue() {
+        return getTenantId();
+    }
+
+    /**
      * 获取租户ID
      *
      * @return 租户ID
@@ -71,74 +174,6 @@ public class DefaultTenantHandler implements TenantHandler {
     @Override
     public Expression buildLikeExpression(Column column, Set<Long> dataSet) {
         return null;
-    }
-
-    /**
-     * 根据表名判断是否忽略拼接数据范围条件
-     * <p>
-     * 默认都要进行解析并拼接数据范围
-     * - 启用表列表不为空，则只需要判断表名是否启用
-     * - 启用表列表为空，则判断是否在白名单中
-     *
-     * @param tableName 表名
-     * @return 是否忽略, true:表示忽略，false:需要解析并拼接数据范围
-     */
-    @Override
-    public boolean ignoreTable(String tableName) {
-        List<String> enableTables = tenantProperties.getEnableTables();
-        List<String> ignoreTables = tenantProperties.getIgnoreTables();
-        return CollectionUtils.isNotEmpty(enableTables)
-                ? CollectionUtils.notContains(enableTables, tableName)
-                : CollectionUtils.contains(ignoreTables, tableName);
-    }
-
-    /**
-     * 根据表名判断是否忽略拼接数据范围条件
-     * <p>
-     * 默认都要进行解析并拼接数据范围
-     * - 启用表列表不为空，则只需要判断表名是否启用
-     * - 启用表列表为空，则判断是否在白名单中
-     *
-     * @return 是否忽略, true:表示忽略，false:需要解析并拼接数据范围
-     */
-    @Override
-    public boolean ignoreTable(Table table, SqlType sqlType) {
-        return !SqlType.SELECT.equals(sqlType) && ignoreTable(table.getName());
-    }
-
-    /**
-     * 缓存前一sql上下文
-     */
-    @Override
-    public void cachePreSqlContext() {
-        tenantOrmDataService.cachePreSqlContext();
-    }
-
-    /**
-     * 设置当前sql上下文
-     *
-     * @param sqlType sql类型
-     * @return 是否设置成功
-     */
-    @Override
-    public boolean setCurrentSqlContextBySqlType(SqlType sqlType) {
-        return tenantOrmDataService.setCurrentSqlContextBySqlType(sqlType);
-    }
-
-    /**
-     * 清除sql上下文
-     */
-    @Override
-    public void clearCurrentSqlContext() {
-        tenantOrmDataService.clearCurrentSqlContext();
-    }
-
-    /**
-     * 恢复前一sql上下文
-     */
-    @Override
-    public void restorePreSqlContext() {
-        tenantOrmDataService.restorePreSqlContext();
     }
 
 }

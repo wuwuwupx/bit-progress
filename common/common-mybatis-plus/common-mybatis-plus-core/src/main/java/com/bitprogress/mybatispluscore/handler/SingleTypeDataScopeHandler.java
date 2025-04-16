@@ -38,6 +38,199 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
     }
 
     /**
+     * 根据表名判断是否忽略拼接数据范围条件
+     * <p>
+     * 默认都要进行解析并拼接数据范围
+     * - 启用表列表不为空，则只需要判断表名是否启用
+     * - 启用表列表为空，则判断是否在白名单中
+     *
+     * @param tableName 表名
+     * @return 是否忽略, true:表示忽略，false:需要解析并拼接数据范围
+     */
+    @Override
+    public boolean ignoreTable(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.notContains(enableTables, tableName)
+                : CollectionUtils.contains(ignoreTables, tableName);
+    }
+
+    /**
+     * 根据表名判断是否忽略拼接数据范围条件
+     * <p>
+     * 默认都要进行解析并拼接数据范围
+     * - 启用表列表不为空，则只需要判断表名是否启用
+     * - 启用表列表为空，则判断是否在白名单中
+     *
+     * @return 是否忽略, true:表示忽略，false:需要解析并拼接数据范围
+     */
+    @Override
+    public boolean ignoreTable(Table table, SqlType sqlType) {
+        return !SqlType.SELECT.equals(sqlType) && ignoreTable(table.getName());
+    }
+
+    /**
+     * 启用插入字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean ignoreInsert(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableInsertTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreInsertTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 启用插入数据范围字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean enableInsertDataScope(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableInsertDataScopeTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreInsertDataScopeTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 启用插入拥有字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean enableInsertOwned(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableInsertOwnedTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreInsertOwnedTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 启用插入自身字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean enableInsertSelf(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableInsertSelfTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreInsertSelfTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 启用查询数据范围字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean enableQueryDataScope(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableQueryDataScopeTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreQueryDataScopeTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 启用查询拥有字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean enableQueryOwned(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableQueryOwnedTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreQueryOwnedTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 启用查询自身字段逻辑
+     *
+     * @param tableName 表名
+     * @return 是否启用
+     */
+    @Override
+    public boolean enableQuerySelf(String tableName) {
+        List<String> enableTables = dataScopeProperties.getEnableQuerySelfTables();
+        List<String> ignoreTables = dataScopeProperties.getIgnoreQuerySelfTables();
+        return CollectionUtils.isNotEmpty(enableTables)
+                ? CollectionUtils.contains(enableTables, tableName)
+                : CollectionUtils.notContains(ignoreTables, tableName);
+    }
+
+    /**
+     * 缓存前一sql上下文
+     */
+    @Override
+    public void cachePreSqlContext() {
+        ormDataService.cachePreSqlContext();
+    }
+
+    /**
+     * 设置当前sql上下文
+     *
+     * @param sqlType sql类型
+     * @return 是否设置成功
+     */
+    @Override
+    public boolean setCurrentSqlContextBySqlType(SqlType sqlType) {
+        return ormDataService.setCurrentSqlContextBySqlType(sqlType);
+    }
+
+    /**
+     * 清除sql上下文
+     */
+    @Override
+    public void clearCurrentSqlContext() {
+        ormDataService.clearCurrentSqlContext();
+    }
+
+    /**
+     * 恢复前一sql上下文
+     */
+    @Override
+    public void restorePreSqlContext() {
+        ormDataService.restorePreSqlContext();
+    }
+
+    /**
+     * 获取 insert 需要的字段
+     *
+     * @return 字段
+     */
+    @Override
+    public String getInsertColumn() {
+        return getSourceDataScopeColumn();
+    }
+
+    /**
+     * 获取 insert 的值
+     *
+     * @return 值
+     */
+    @Override
+    public Expression getInsertValue() {
+        return getDataScope();
+    }
+
+    /**
      * 获取数据范围字段
      *
      * @return 数据范围字段
@@ -166,164 +359,6 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
             expression = Objects.isNull(expression) ? selfExpression : new OrExpression(expression, selfExpression);
         }
         return Objects.isNull(expression) ? new NullValue() : new ParenthesedExpressionList<>(expression);
-    }
-
-    /**
-     * 根据表名判断是否忽略拼接数据范围条件
-     * <p>
-     * 默认都要进行解析并拼接数据范围
-     * - 启用表列表不为空，则只需要判断表名是否启用
-     * - 启用表列表为空，则判断是否在白名单中
-     *
-     * @param tableName 表名
-     * @return 是否忽略, true:表示忽略，false:需要解析并拼接数据范围
-     */
-    @Override
-    public boolean ignoreTable(String tableName) {
-        List<String> enableTables = dataScopeProperties.getEnableTables();
-        List<String> ignoreTables = dataScopeProperties.getIgnoreTables();
-        return CollectionUtils.isNotEmpty(enableTables)
-                ? CollectionUtils.notContains(enableTables, tableName)
-                : CollectionUtils.contains(ignoreTables, tableName);
-    }
-
-    /**
-     * 根据表名判断是否忽略拼接数据范围条件
-     * <p>
-     * 默认都要进行解析并拼接数据范围
-     * - 启用表列表不为空，则只需要判断表名是否启用
-     * - 启用表列表为空，则判断是否在白名单中
-     *
-     * @return 是否忽略, true:表示忽略，false:需要解析并拼接数据范围
-     */
-    @Override
-    public boolean ignoreTable(Table table, SqlType sqlType) {
-        return !SqlType.SELECT.equals(sqlType) && ignoreTable(table.getName());
-    }
-
-    /**
-     * 启用插入数据范围字段逻辑
-     *
-     * @param tableName 表名
-     * @return 是否启用
-     */
-    @Override
-    public boolean enableInsertDataScope(String tableName) {
-        List<String> enableTables = dataScopeProperties.getEnableInsertDataScopeTables();
-        List<String> ignoreTables = dataScopeProperties.getIgnoreInsertDataScopeTables();
-        return CollectionUtils.isNotEmpty(enableTables)
-                ? CollectionUtils.contains(enableTables, tableName)
-                : CollectionUtils.notContains(ignoreTables, tableName);
-    }
-
-    /**
-     * 启用插入拥有字段逻辑
-     *
-     * @param tableName 表名
-     * @return 是否启用
-     */
-    @Override
-    public boolean enableInsertOwned(String tableName) {
-        List<String> enableTables = dataScopeProperties.getEnableInsertOwnedTables();
-        List<String> ignoreTables = dataScopeProperties.getIgnoreInsertOwnedTables();
-        return CollectionUtils.isNotEmpty(enableTables)
-                ? CollectionUtils.contains(enableTables, tableName)
-                : CollectionUtils.notContains(ignoreTables, tableName);
-    }
-
-    /**
-     * 启用插入自身字段逻辑
-     *
-     * @param tableName 表名
-     * @return 是否启用
-     */
-    @Override
-    public boolean enableInsertSelf(String tableName) {
-        List<String> enableTables = dataScopeProperties.getEnableInsertSelfTables();
-        List<String> ignoreTables = dataScopeProperties.getIgnoreInsertSelfTables();
-        return CollectionUtils.isNotEmpty(enableTables)
-                ? CollectionUtils.contains(enableTables, tableName)
-                : CollectionUtils.notContains(ignoreTables, tableName);
-    }
-
-    /**
-     * 启用查询数据范围字段逻辑
-     *
-     * @param tableName 表名
-     * @return 是否启用
-     */
-    @Override
-    public boolean enableQueryDataScope(String tableName) {
-        List<String> enableTables = dataScopeProperties.getEnableQueryDataScopeTables();
-        List<String> ignoreTables = dataScopeProperties.getIgnoreQueryDataScopeTables();
-        return CollectionUtils.isNotEmpty(enableTables)
-                ? CollectionUtils.contains(enableTables, tableName)
-                : CollectionUtils.notContains(ignoreTables, tableName);
-    }
-
-    /**
-     * 启用查询拥有字段逻辑
-     *
-     * @param tableName 表名
-     * @return 是否启用
-     */
-    @Override
-    public boolean enableQueryOwned(String tableName) {
-        List<String> enableTables = dataScopeProperties.getEnableQueryOwnedTables();
-        List<String> ignoreTables = dataScopeProperties.getIgnoreQueryOwnedTables();
-        return CollectionUtils.isNotEmpty(enableTables)
-                ? CollectionUtils.contains(enableTables, tableName)
-                : CollectionUtils.notContains(ignoreTables, tableName);
-    }
-
-    /**
-     * 启用查询自身字段逻辑
-     *
-     * @param tableName 表名
-     * @return 是否启用
-     */
-    @Override
-    public boolean enableQuerySelf(String tableName) {
-        List<String> enableTables = dataScopeProperties.getEnableQuerySelfTables();
-        List<String> ignoreTables = dataScopeProperties.getIgnoreQuerySelfTables();
-        return CollectionUtils.isNotEmpty(enableTables)
-                ? CollectionUtils.contains(enableTables, tableName)
-                : CollectionUtils.notContains(ignoreTables, tableName);
-    }
-
-    /**
-     * 缓存前一sql上下文
-     */
-    @Override
-    public void cachePreSqlContext() {
-        ormDataService.cachePreSqlContext();
-    }
-
-    /**
-     * 设置当前sql上下文
-     *
-     * @param sqlType sql类型
-     * @return 是否设置成功
-     */
-    @Override
-    public boolean setCurrentSqlContextBySqlType(SqlType sqlType) {
-        return ormDataService.setCurrentSqlContextBySqlType(sqlType);
-    }
-
-    /**
-     * 清除sql上下文
-     */
-    @Override
-    public void clearCurrentSqlContext() {
-        ormDataService.clearCurrentSqlContext();
-    }
-
-    /**
-     * 恢复前一sql上下文
-     */
-    @Override
-    public void restorePreSqlContext() {
-        ormDataService.restorePreSqlContext();
     }
 
 }
