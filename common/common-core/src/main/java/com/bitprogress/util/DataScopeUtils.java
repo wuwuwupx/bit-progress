@@ -2,7 +2,10 @@ package com.bitprogress.util;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 数据范围工具类
@@ -10,6 +13,8 @@ import java.util.function.Predicate;
  * 由于空字符串比较特殊，不做兼容，应该在实际业务中单独处理
  */
 public class DataScopeUtils {
+
+    private static final Pattern DEFAULT_SPLIT_PATTERN = Pattern.compile("([A-Z]\\d+)");
 
     /**
      * 检查传入的数据范围是否在 基准的数据范围全链路上
@@ -216,6 +221,188 @@ public class DataScopeUtils {
             });
         }
         return compressedDataScopes;
+    }
+
+    /**
+     * 擦除数据权限，基准数据权限为空时默认不清除数据
+     * 如 A1 : [A1,A2,A1B2,A3],[A2B2,A2,A3B4C5] -> [A2,A3] [A2B2,A2,A3B4C5]
+     *
+     * @param referenceDataScope 基准数据权限
+     * @param dataScopes         需要检索的数据权限列表
+     */
+    @SafeVarargs
+    public static void eraseDataScopes(String referenceDataScope, Set<String>... dataScopes) {
+        eraseDataScopes(referenceDataScope, false, dataScopes);
+    }
+
+    /**
+     * 擦除数据权限
+     * 如 A1 : [A1,A2,A1B2,A3],[A2B2,A2,A3B4C5] -> [A2,A3] [A2B2,A2,A3B4C5]
+     * 假设基准字符串为空，应该
+     * <p>
+     * 如果 emptyReferenceClear 为 true，则基准数据权限为空时，会清除所有数据权限；
+     * 为 false 的时候，则基准数据权限为空时则退出，因为无法继续匹配，类似于除零异常
+     *
+     * @param referenceDataScope  基准数据权限
+     * @param emptyReferenceClear 基准数据权限是否为空时，是否清除所有数据权限
+     * @param dataScopesArray     需要检索的数据权限列表
+     */
+    @SafeVarargs
+    public static void eraseDataScopes(String referenceDataScope,
+                                       Boolean emptyReferenceClear,
+                                       Set<String>... dataScopesArray) {
+        if (ArrayUtils.isEmpty(dataScopesArray)) {
+            return;
+        }
+        if (StringUtils.isEmpty(referenceDataScope)) {
+            if (emptyReferenceClear) {
+                for (Set<String> dataScopes : dataScopesArray) {
+                    dataScopes.clear();
+                }
+            }
+            return;
+        }
+        for (Set<String> dataScopes : dataScopesArray) {
+            if (CollectionUtils.isEmpty(dataScopes)) {
+                continue;
+            }
+            // 把处于下游的数据权限擦除
+            dataScopes.removeIf(dataScope -> onDownstreamChain(referenceDataScope, dataScope));
+        }
+    }
+
+    /**
+     * 擦除数据权限，基准数据权限为空时默认不清除数据
+     * 如 [A1,A2] : [A1,A2,A1B2,A3],[A2B2,A2,A3B4C5] -> [A3] [A3B4C5]
+     *
+     * @param referenceDataScopes 基准数据权限列表
+     * @param dataScopesArray     需要检索的数据权限列表
+     */
+    @SafeVarargs
+    public static void eraseDataScopes(Set<String> referenceDataScopes, Set<String>... dataScopesArray) {
+        eraseDataScopes(referenceDataScopes, false, dataScopesArray);
+    }
+
+    /**
+     * 擦除数据权限
+     * 如 [A1,A2] : [A1,A2,A1B2,A3],[A2B2,A2,A3B4C5] -> [A3] [A3B4C5]
+     * <p>
+     * 如果 emptyReferenceClear 为 true，则基准数据权限为空时，会清除所有数据权限；
+     * 为 false 的时候，则基准数据权限为空时则退出，因为无法继续匹配，类似于除零异常
+     *
+     * @param referenceDataScopes 基准数据权限列表
+     * @param emptyReferenceClear 基准数据权限是否为空时，是否清除所有数据权限
+     * @param dataScopesArray     需要检索的数据权限列表
+     */
+    @SafeVarargs
+    public static void eraseDataScopes(Set<String> referenceDataScopes,
+                                       Boolean emptyReferenceClear,
+                                       Set<String>... dataScopesArray) {
+        if (ArrayUtils.isEmpty(dataScopesArray)) {
+            return;
+        }
+        if (CollectionUtils.anyMatch(referenceDataScopes, StringUtils::isEmpty)) {
+            if (emptyReferenceClear) {
+                for (Set<String> dataScopes : dataScopesArray) {
+                    dataScopes.clear();
+                }
+            }
+            return;
+        }
+        for (Set<String> dataScopes : dataScopesArray) {
+            if (CollectionUtils.isEmpty(dataScopes)) {
+                continue;
+            }
+            // 把处于下游的数据权限擦除，即 数据权限处于任一基准数据权限的下游就擦除
+            dataScopes.removeIf(dataScope -> onDownstreamChain(referenceDataScopes, dataScope));
+        }
+    }
+
+    /**
+     * 分割数据范围
+     * 1003 1003A1B2C3 -> [1003, 1003A1、1003A1B2C3]
+     * 1004 1003A1B2C3 -> []
+     * 1004 1004A1B1 -> [1004、1004A1、1004A1B1]
+     *
+     * @param referenceDataScope 基准数据范围
+     * @param dataScope          数据范围
+     */
+    public static Set<String> splitDataScope(String referenceDataScope, String dataScope) {
+        return splitDataScope(referenceDataScope, dataScope, DEFAULT_SPLIT_PATTERN);
+    }
+
+    /**
+     * 分割数据范围
+     * 1003 1003A1B2C3 -> [1003, 1003A1、1003A1B2C3]
+     * 1004 1003A1B2C3 -> []
+     * 1004 1004A1B1 -> [1004、1004A1、1004A1B1]
+     *
+     * @param referenceDataScope 基准数据范围
+     * @param dataScope          数据范围
+     */
+    public static Set<String> splitDataScope(String referenceDataScope, String dataScope, Pattern pattern) {
+        Set<String> dataScopes = CollectionUtils.emptySet();
+        if (StringUtils.isEmpty(referenceDataScope) || StringUtils.isEmpty(dataScope)) {
+            return dataScopes;
+        }
+        splitDataScope(referenceDataScope, dataScope, pattern, dataScopes::add);
+        return dataScopes;
+    }
+
+    /**
+     * 分割数据范围
+     * 1003 1003A1B2C3 -> [1003, 1003A1、1003A1B2C3]
+     * 1004 1003A1B2C3 -> []
+     * 1004 1004A1B1 -> [1004、1004A1、1004A1B1]
+     *
+     * @param referenceDataScope 基准数据范围
+     * @param dataScopes         数据范围
+     */
+    public static Set<String> splitDataScope(String referenceDataScope, Set<String> dataScopes) {
+        return splitDataScope(referenceDataScope, dataScopes, DEFAULT_SPLIT_PATTERN);
+    }
+
+    /**
+     * 分割数据范围
+     * 1003 1003A1B2C3 -> [1003, 1003A1、1003A1B2C3]
+     * 1004 1003A1B2C3 -> []
+     * 1004 1004A1B1 -> [1004、1004A1、1004A1B1]
+     *
+     * @param referenceDataScope 基准数据范围
+     * @param dataScopes         数据范围
+     */
+    public static Set<String> splitDataScope(String referenceDataScope, Set<String> dataScopes, Pattern pattern) {
+        Set<String> splitDataScopes = CollectionUtils.emptySet();
+        if (StringUtils.isEmpty(referenceDataScope) || CollectionUtils.isEmpty(dataScopes)) {
+            return splitDataScopes;
+        }
+        dataScopes.forEach(dataScope -> splitDataScope(referenceDataScope, dataScope, pattern, splitDataScopes::add));
+        return splitDataScopes;
+    }
+
+    /**
+     * 分割数据范围
+     *
+     * @param referenceDataScope 基准数据范围
+     * @param dataScope          数据范围
+     * @param consumer           数据范围处理函数
+     */
+    private static void splitDataScope(String referenceDataScope,
+                                       String dataScope,
+                                       Pattern pattern,
+                                       Consumer<String> consumer) {
+        if (StringUtils.isEmpty(referenceDataScope) || StringUtils.isEmpty(dataScope)) {
+            return;
+        }
+        if (onDownstreamChain(referenceDataScope, dataScope)) {
+            consumer.accept(referenceDataScope);
+            Matcher matcher = pattern.matcher(dataScope.substring(referenceDataScope.length()));
+            StringBuilder builder = new StringBuilder(referenceDataScope);
+            while (matcher.find()) {
+                builder.append(matcher.group(1));
+                consumer.accept(builder.toString());
+            }
+        }
     }
 
 }
