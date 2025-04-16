@@ -1,6 +1,6 @@
 package com.bitprogress.ormmodel.query;
 
-import com.bitprogress.ormmodel.enums.QueryType;
+import com.bitprogress.ormmodel.enums.SqlOperatorType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,7 +22,7 @@ public class DataScopeQuery extends ConditionQuery {
     /**
      * 范围查询模式
      */
-    private QueryType limitQueryType;
+    private SqlOperatorType limitSqlOperatorType;
 
     /**
      * 数据范围列表
@@ -37,7 +37,7 @@ public class DataScopeQuery extends ConditionQuery {
     /**
      * 所属范围查询模式
      */
-    private QueryType belongQueryType;
+    private SqlOperatorType belongSqlOperatorType;
 
     /**
      * 所属数据范围列表

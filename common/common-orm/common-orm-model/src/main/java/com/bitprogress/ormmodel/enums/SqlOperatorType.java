@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public enum QueryType implements OrmEnum, ValueEnum, MessageEnum {
+public enum SqlOperatorType implements OrmEnum, ValueEnum, MessageEnum {
 
     EQUAL(0, "="),
 

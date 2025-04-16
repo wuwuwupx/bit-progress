@@ -3,7 +3,7 @@ package com.bitprogress.ormparser.Service.impl;
 import com.bitprogress.ormcontext.service.impl.SingleTypeDataScopeContextService;
 import com.bitprogress.ormmodel.info.user.SingleTypeDataScopeInfo;
 import com.bitprogress.ormmodel.enums.DataScopeType;
-import com.bitprogress.ormmodel.enums.QueryType;
+import com.bitprogress.ormmodel.enums.SqlOperatorType;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.ormmodel.query.DataScopeQuery;
 import com.bitprogress.ormparser.Service.DataScopeOrmDataService;
@@ -93,10 +93,10 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
                     Set<String> finalBelongDataScopes = DataScopeType.BELONG_LEVEL.equals(dataScopeType)
                             ? DataScopeUtils.compressDataScopes(belongDataScopes)
                             : belongDataScopes;
-                    QueryType queryType = DataScopeType.BELONG_LEVEL.equals(dataScopeType)
-                            ? QueryType.LIKE
-                            : CollectionUtils.isSingle(belongDataScopes) ? QueryType.EQUAL : QueryType.IN;
-                    query.setBelongQueryType(queryType);
+                    SqlOperatorType sqlOperatorType = DataScopeType.BELONG_LEVEL.equals(dataScopeType)
+                            ? SqlOperatorType.LIKE
+                            : CollectionUtils.isSingle(belongDataScopes) ? SqlOperatorType.EQUAL : SqlOperatorType.IN;
+                    query.setBelongSqlOperatorType(sqlOperatorType);
                     query.setBelongDataScopes(finalBelongDataScopes);
                 }
             }
@@ -108,10 +108,10 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
                     Set<String> finalManagedDataScopes = DataScopeType.MANAGED_LEVEL.equals(dataScopeType)
                             ? DataScopeUtils.compressDataScopes(managedDataScopes)
                             : managedDataScopes;
-                    QueryType queryType = DataScopeType.MANAGED_LEVEL.equals(dataScopeType)
-                            ? QueryType.LIKE
-                            : CollectionUtils.isSingle(managedDataScopes) ? QueryType.EQUAL : QueryType.IN;
-                    query.setLimitQueryType(queryType);
+                    SqlOperatorType sqlOperatorType = DataScopeType.MANAGED_LEVEL.equals(dataScopeType)
+                            ? SqlOperatorType.LIKE
+                            : CollectionUtils.isSingle(managedDataScopes) ? SqlOperatorType.EQUAL : SqlOperatorType.IN;
+                    query.setLimitSqlOperatorType(sqlOperatorType);
                     query.setDataScopes(finalManagedDataScopes);
                 }
             }
@@ -120,23 +120,23 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
                 query.setIsQueryLimit(hasManaged);
                 query.setIsQueryBelong(hasBelong);
                 if (hasManaged) {
-                    QueryType queryType = DataScopeType.MANAGED_LEVEL_BELONG_CURRENT.equals(dataScopeType)
-                            ? QueryType.LIKE
-                            : CollectionUtils.isSingle(managedDataScopes) ? QueryType.EQUAL : QueryType.IN;
+                    SqlOperatorType sqlOperatorType = DataScopeType.MANAGED_LEVEL_BELONG_CURRENT.equals(dataScopeType)
+                            ? SqlOperatorType.LIKE
+                            : CollectionUtils.isSingle(managedDataScopes) ? SqlOperatorType.EQUAL : SqlOperatorType.IN;
                     Set<String> dataScopes = DataScopeType.MANAGED_LEVEL_BELONG_CURRENT.equals(dataScopeType)
                             ? DataScopeUtils.compressDataScopes(managedDataScopes)
                             : managedDataScopes;
-                    query.setLimitQueryType(queryType);
+                    query.setLimitSqlOperatorType(sqlOperatorType);
                     query.setDataScopes(dataScopes);
                 }
                 if (hasBelong) {
-                    QueryType queryType = DataScopeType.BELONG_LEVEL_MANAGED_CURRENT.equals(dataScopeType)
-                            ? QueryType.LIKE
-                            : CollectionUtils.isSingle(managedDataScopes) ? QueryType.EQUAL : QueryType.IN;
+                    SqlOperatorType sqlOperatorType = DataScopeType.BELONG_LEVEL_MANAGED_CURRENT.equals(dataScopeType)
+                            ? SqlOperatorType.LIKE
+                            : CollectionUtils.isSingle(managedDataScopes) ? SqlOperatorType.EQUAL : SqlOperatorType.IN;
                     Set<String> dataScopes = DataScopeType.BELONG_LEVEL_MANAGED_CURRENT.equals(dataScopeType)
                             ? DataScopeUtils.compressDataScopes(managedDataScopes)
                             : managedDataScopes;
-                    query.setBelongQueryType(queryType);
+                    query.setBelongSqlOperatorType(sqlOperatorType);
                     query.setBelongDataScopes(dataScopes);
                 }
             }
@@ -149,10 +149,10 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
                     Set<String> compositeDataScopes = DataScopeType.COMPOSITE_LEVEL.equals(dataScopeType)
                             ? DataScopeUtils.compressDataScopes(managedDataScopes, belongDataScopes)
                             : CollectionUtils.newSet(managedDataScopes, belongDataScopes);
-                    QueryType queryType = DataScopeType.COMPOSITE_LEVEL.equals(dataScopeType)
-                            ? QueryType.LIKE
-                            : CollectionUtils.isSingle(compositeDataScopes) ? QueryType.EQUAL : QueryType.IN;
-                    query.setLimitQueryType(queryType);
+                    SqlOperatorType sqlOperatorType = DataScopeType.COMPOSITE_LEVEL.equals(dataScopeType)
+                            ? SqlOperatorType.LIKE
+                            : CollectionUtils.isSingle(compositeDataScopes) ? SqlOperatorType.EQUAL : SqlOperatorType.IN;
+                    query.setLimitSqlOperatorType(sqlOperatorType);
                     query.setDataScopes(compositeDataScopes);
                 }
             }

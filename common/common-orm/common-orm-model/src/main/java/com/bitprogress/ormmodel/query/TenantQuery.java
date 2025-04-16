@@ -1,6 +1,6 @@
 package com.bitprogress.ormmodel.query;
 
-import com.bitprogress.ormmodel.enums.QueryType;
+import com.bitprogress.ormmodel.enums.SqlOperatorType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +13,7 @@ public class TenantQuery extends ConditionQuery {
     /**
      * 查询类型
      */
-    private QueryType queryType;
+    private SqlOperatorType sqlOperatorType;
 
     /**
      * 租户id

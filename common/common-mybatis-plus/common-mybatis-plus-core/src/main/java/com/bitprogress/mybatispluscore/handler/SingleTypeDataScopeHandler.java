@@ -1,7 +1,7 @@
 package com.bitprogress.mybatispluscore.handler;
 
 import com.bitprogress.mybatispluscore.properties.DataScopeProperties;
-import com.bitprogress.ormmodel.enums.QueryType;
+import com.bitprogress.ormmodel.enums.SqlOperatorType;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.ormmodel.query.DataScopeQuery;
 import com.bitprogress.ormparser.Service.DataScopeOrmDataService;
@@ -115,25 +115,25 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
         Expression expression = null;
         if (dataScopeQuery.isQueryLimit() && enableQueryDataScope(tableName)) {
             Set<String> dataScopes = dataScopeQuery.getDataScopes();
-            QueryType limitQueryType = dataScopeQuery.getLimitQueryType();
+            SqlOperatorType limitSqlOperatorType = dataScopeQuery.getLimitSqlOperatorType();
             /*
              * data_scope in (A1,A1B2)
              * data_scope = A1
              * data_scope like A1%
              * data_scope like A1% or data_scope like A2%
              */
-            expression = buildExpressionByQueryType(dataScopeColumn, dataScopes, limitQueryType);
+            expression = buildExpressionByQueryType(dataScopeColumn, dataScopes, limitSqlOperatorType);
         }
         if (dataScopeQuery.isQueryBelong() && enableQueryDataScope(tableName)) {
             Set<String> dataScopes = dataScopeQuery.getBelongDataScopes();
-            QueryType belongQueryType = dataScopeQuery.getBelongQueryType();
+            SqlOperatorType belongSqlOperatorType = dataScopeQuery.getBelongSqlOperatorType();
             /*
              * data_scope in (A1,A1B2)
              * data_scope = A1
              * data_scope like A1%
              * data_scope like A1% or data_scope like A2%
              */
-            Expression belongExpression = buildExpressionByQueryType(dataScopeColumn, dataScopes, belongQueryType);
+            Expression belongExpression = buildExpressionByQueryType(dataScopeColumn, dataScopes, belongSqlOperatorType);
             /*
              * data_scope in (A1,A1B2) or data_scope in (A1,A1B2)
              */

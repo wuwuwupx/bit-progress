@@ -1,7 +1,7 @@
 package com.bitprogress.mybatispluscore.handler;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.bitprogress.ormmodel.enums.QueryType;
+import com.bitprogress.ormmodel.enums.SqlOperatorType;
 import com.bitprogress.ormmodel.enums.SqlType;
 import com.bitprogress.util.CollectionUtils;
 import net.sf.jsqlparser.expression.Alias;
@@ -53,8 +53,8 @@ public interface InterceptorHandler<T> {
      * @param dataSet 数据
      * @return in表达式
      */
-    default Expression buildExpressionByQueryType(Column column, Set<T> dataSet, QueryType queryType) {
-        switch (queryType) {
+    default Expression buildExpressionByQueryType(Column column, Set<T> dataSet, SqlOperatorType sqlOperatorType) {
+        switch (sqlOperatorType) {
             case EQUAL -> {
                 return buildEqualExpression(column, dataSet);
             }
@@ -64,7 +64,7 @@ public interface InterceptorHandler<T> {
             case LIKE -> {
                 return buildLikeExpression(column, dataSet);
             }
-            default -> throw new IllegalStateException("Unexpected value: " + queryType);
+            default -> throw new IllegalStateException("Unexpected value: " + sqlOperatorType);
         }
     }
 
