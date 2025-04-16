@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 
@@ -126,14 +127,14 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
         }
         if (dataScopeQuery.isQueryBelong() && enableQueryDataScope(tableName)) {
             Set<String> dataScopes = dataScopeQuery.getBelongDataScopes();
-            SqlOperatorType belongSqlOperatorType = dataScopeQuery.getBelongSqlOperatorType();
+            SqlOperatorType operatorType = dataScopeQuery.getBelongSqlOperatorType();
             /*
              * data_scope in (A1,A1B2)
              * data_scope = A1
              * data_scope like A1%
              * data_scope like A1% or data_scope like A2%
              */
-            Expression belongExpression = buildExpressionBySqlOperatorType(dataScopeColumn, dataScopes, belongSqlOperatorType);
+            Expression belongExpression = buildExpressionBySqlOperatorType(dataScopeColumn, dataScopes, operatorType);
             /*
              * data_scope in (A1,A1B2) or data_scope in (A1,A1B2)
              */
@@ -161,7 +162,7 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
              */
             expression = Objects.isNull(expression) ? selfExpression : new OrExpression(expression, selfExpression);
         }
-        return expression;
+        return Objects.isNull(expression) ? new NullValue() : new ParenthesedExpressionList<>(expression);
     }
 
     /**
