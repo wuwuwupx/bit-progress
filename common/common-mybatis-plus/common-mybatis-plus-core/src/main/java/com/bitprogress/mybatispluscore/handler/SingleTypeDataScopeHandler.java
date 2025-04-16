@@ -122,7 +122,7 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
              * data_scope like A1%
              * data_scope like A1% or data_scope like A2%
              */
-            expression = buildExpressionByQueryType(dataScopeColumn, dataScopes, limitSqlOperatorType);
+            expression = buildExpressionBySqlOperatorType(dataScopeColumn, dataScopes, limitSqlOperatorType);
         }
         if (dataScopeQuery.isQueryBelong() && enableQueryDataScope(tableName)) {
             Set<String> dataScopes = dataScopeQuery.getBelongDataScopes();
@@ -133,7 +133,7 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
              * data_scope like A1%
              * data_scope like A1% or data_scope like A2%
              */
-            Expression belongExpression = buildExpressionByQueryType(dataScopeColumn, dataScopes, belongSqlOperatorType);
+            Expression belongExpression = buildExpressionBySqlOperatorType(dataScopeColumn, dataScopes, belongSqlOperatorType);
             /*
              * data_scope in (A1,A1B2) or data_scope in (A1,A1B2)
              */

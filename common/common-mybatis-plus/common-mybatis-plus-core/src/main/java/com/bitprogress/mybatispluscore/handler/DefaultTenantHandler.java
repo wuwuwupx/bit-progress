@@ -58,7 +58,7 @@ public class DefaultTenantHandler implements TenantHandler {
             return new AllValue();
         }
         Column tenantIdColumn = getAliasTenantIdColumn(table);
-        return buildExpressionByQueryType(tenantIdColumn, conditionQuery.getTenantIds(), conditionQuery.getSqlOperatorType());
+        return buildExpressionBySqlOperatorType(tenantIdColumn, conditionQuery.getTenantIds(), conditionQuery.getSqlOperatorType());
     }
 
     /**

@@ -53,7 +53,7 @@ public interface InterceptorHandler<T> {
      * @param dataSet 数据
      * @return in表达式
      */
-    default Expression buildExpressionByQueryType(Column column, Set<T> dataSet, SqlOperatorType sqlOperatorType) {
+    default Expression buildExpressionBySqlOperatorType(Column column, Set<T> dataSet, SqlOperatorType sqlOperatorType) {
         switch (sqlOperatorType) {
             case EQUAL -> {
                 return buildEqualExpression(column, dataSet);
