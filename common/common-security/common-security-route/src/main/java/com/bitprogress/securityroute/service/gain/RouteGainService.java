@@ -1,4 +1,4 @@
-package com.bitprogress.securityroute.service;
+package com.bitprogress.securityroute.service.gain;
 
 import com.bitprogress.securityroute.entity.ApiRoute;
 
