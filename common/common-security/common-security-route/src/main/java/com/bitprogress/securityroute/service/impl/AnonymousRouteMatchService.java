@@ -53,7 +53,7 @@ public class AnonymousRouteMatchService implements RouteMatchService<ApiRoute> {
      * @return 路由信息
      */
     @Override
-    public Set<ApiRoute> getRoutesByContext() {
+    public Set<ApiRoute> getRoutesByAnnotation() {
         return routeContextService.getContextInfo();
     }
 

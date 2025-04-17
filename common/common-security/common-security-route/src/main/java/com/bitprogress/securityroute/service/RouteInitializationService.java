@@ -1,13 +1,10 @@
-package com.bitprogress.securityroute.config;
+package com.bitprogress.securityroute.service;
 
 import com.bitprogress.securityroute.annotation.AnonymousApi;
 import com.bitprogress.securityroute.annotation.InnerApi;
 import com.bitprogress.securityroute.annotation.Permission;
 import com.bitprogress.securityroute.entity.ApiRoute;
 import com.bitprogress.securityroute.entity.PermissionRoute;
-import com.bitprogress.securityroute.service.context.impl.AnonymousRouteContextService;
-import com.bitprogress.securityroute.service.context.impl.InnerRouteContextService;
-import com.bitprogress.securityroute.service.context.impl.PermissionRouteContextService;
 import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeansException;
@@ -31,17 +28,13 @@ import java.util.Set;
  * 特殊接口初始化
  */
 @AllArgsConstructor
-public abstract class RouteInitialization implements InitializingBean, ApplicationContextAware {
+public abstract class RouteInitializationService implements InitializingBean, ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 
-    private final AnonymousRouteContextService anonymousRouteContextService;
-    private final InnerRouteContextService innerRouteContextService;
-    private final PermissionRouteContextService permissionRouteContextService;
-
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        RouteInitialization.applicationContext = applicationContext;
+        RouteInitializationService.applicationContext = applicationContext;
     }
 
     /**
@@ -112,18 +105,8 @@ public abstract class RouteInitialization implements InitializingBean, Applicati
      * @param innerRoutes      内部路由
      * @param permissionRoutes 权限路由
      */
-    protected void publishRoute(Set<ApiRoute> anonymousRoutes,
-                                Set<ApiRoute> innerRoutes,
-                                Set<PermissionRoute> permissionRoutes) {
-        if (Objects.nonNull(anonymousRoutes)) {
-            anonymousRouteContextService.setContextInfo(anonymousRoutes);
-        }
-        if (Objects.nonNull(innerRoutes)) {
-            innerRouteContextService.setContextInfo(innerRoutes);
-        }
-        if (Objects.nonNull(permissionRoutes)) {
-            permissionRouteContextService.setContextInfo(permissionRoutes);
-        }
-    }
+    protected abstract void publishRoute(Set<ApiRoute> anonymousRoutes,
+                                         Set<ApiRoute> innerRoutes,
+                                         Set<PermissionRoute> permissionRoutes);
 
 }

@@ -8,6 +8,7 @@ public class CommonExceptionMessage {
     public static final String REQUEST_ARGUMENT_MESSAGE = "请求参数错误或者参数为空";
     public static final String AUTH_ACCOUNT_PASSWORD_WRONG_MESSAGE = "账号或密码错误";
     public static final String INTERNAL_SERVER_ERROR_MESSAGE = "server_internal";
+    public static final String FORBIDDEN_EXCEPTION_MESSAGE = "拒绝访问";
     public static final String TYPE_NOT_APPOINT_MESSAGE = "参数类型没有指定";
     public static final String NON_GATEWAY_FORWARD_MESSAGE = "非网关转发";
     public static final String NON_INTERNAL_ACCESS_MESSAGE = "非内部访问";

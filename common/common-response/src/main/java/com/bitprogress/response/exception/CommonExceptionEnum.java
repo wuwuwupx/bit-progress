@@ -22,6 +22,10 @@ public enum CommonExceptionEnum implements ExceptionMessage {
      */
     TYPE_NOT_APPOINT(400, TYPE_NOT_APPOINT_MESSAGE),
     /**
+     * 参数类型没有指定
+     */
+    FORBIDDEN_EXCEPTION(403, FORBIDDEN_EXCEPTION_MESSAGE),
+    /**
      * 非网关转发
      */
     NON_GATEWAY_FORWARD_ERROR(412, NON_GATEWAY_FORWARD_MESSAGE),

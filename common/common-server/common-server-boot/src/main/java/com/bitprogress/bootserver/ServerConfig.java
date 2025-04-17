@@ -1,5 +1,6 @@
-package com.bitprogress.securityroute.config;
+package com.bitprogress.bootserver;
 
+import com.bitprogress.bootserver.service.BootRouteInitializationService;
 import com.bitprogress.securityroute.property.AnonymousRouteProperties;
 import com.bitprogress.securityroute.property.InnerRouteProperties;
 import com.bitprogress.securityroute.property.PermissionRouteProperties;
@@ -10,14 +11,22 @@ import com.bitprogress.securityroute.service.context.impl.PermissionRouteContext
 import com.bitprogress.securityroute.service.impl.AnonymousRouteMatchService;
 import com.bitprogress.securityroute.service.impl.InnerRouteMatchService;
 import com.bitprogress.securityroute.service.impl.PermissionRouteMatchService;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@AutoConfiguration
-@EnableConfigurationProperties({AnonymousRouteProperties.class, InnerRouteProperties.class, PermissionRouteProperties.class})
-public class SecurityRouteConfiguration {
+@EnableAutoConfiguration
+@Configuration
+public class ServerConfig {
+
+    @Bean
+    @ConditionalOnMissingBean(RouteInitializationService.class)
+    public RouteInitializationService routeInitializationService(AnonymousRouteContextService anonymousRouteContextService,
+                                                                 InnerRouteContextService innerRouteContextService,
+                                                                 PermissionRouteContextService permissionRouteContextService) {
+        return new BootRouteInitializationService(anonymousRouteContextService, innerRouteContextService, permissionRouteContextService);
+    }
 
     @Bean
     @ConditionalOnMissingBean(AnonymousRouteContextService.class)

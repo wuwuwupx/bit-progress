@@ -18,7 +18,7 @@ public interface RouteMatchService<T extends ApiRoute> {
      * @return 路由是否匹配
      */
     default Boolean matchRoute(HttpMethod method, String url) {
-        return matchByProperties(method, url) || (!isCoverByProperties() && matchRouteByContext(method, url));
+        return matchByProperties(method, url) || (!isCoverByProperties() && matchRouteByAnnotation(method, url));
     }
 
     /**
@@ -47,11 +47,11 @@ public interface RouteMatchService<T extends ApiRoute> {
     }
 
     /**
-     * 从上下文中获取路由信息
+     * 从注解中获取路由信息
      *
      * @return 路由信息
      */
-    Set<T> getRoutesByContext();
+    Set<T> getRoutesByAnnotation();
 
     /**
      * 判断是否是匿名路由
@@ -60,8 +60,8 @@ public interface RouteMatchService<T extends ApiRoute> {
      * @param url    url
      * @return 路由是否匹配
      */
-    default Boolean matchRouteByContext(HttpMethod method, String url) {
-        return CollectionUtils.anyMatch(getRoutesByContext(), apiRoute -> pathMatch(apiRoute, method, url));
+    default Boolean matchRouteByAnnotation(HttpMethod method, String url) {
+        return CollectionUtils.anyMatch(getRoutesByAnnotation(), apiRoute -> pathMatch(apiRoute, method, url));
     }
 
     /**
@@ -74,7 +74,7 @@ public interface RouteMatchService<T extends ApiRoute> {
     default Optional<T> getClosestApiRoute(HttpMethod method, String url) {
         Set<T> apiRoutes = isCoverByProperties()
                 ? getRoutesByProperties()
-                : CollectionUtils.newSet(getRoutesByProperties(), getRoutesByContext());
+                : CollectionUtils.newSet(getRoutesByProperties(), getRoutesByAnnotation());
         return ApiRouteMatchUtils.findClosestApiRoute(apiRoutes, method, url);
     }
 

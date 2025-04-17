@@ -9,7 +9,9 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
-import static com.bitprogress.exception.constant.ResultConstants.*;
+import static com.bitprogress.exception.constant.ExceptionConstants.FAIL_CODE;
+import static com.bitprogress.exception.constant.ExceptionConstants.FAIL_MESSAGE;
+import static com.bitprogress.response.constant.ResponseConstants.*;
 
 /**
  * 结果集响应

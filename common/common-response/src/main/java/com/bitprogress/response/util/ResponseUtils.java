@@ -5,7 +5,7 @@ import com.bitprogress.response.exception.CommonExceptionEnum;
 import com.bitprogress.response.model.ResultResponse;
 import com.bitprogress.exception.util.Assert;
 
-import static com.bitprogress.exception.constant.ResultConstants.SUCCESS_CODE;
+import static com.bitprogress.response.constant.ResponseConstants.SUCCESS_CODE;
 
 /**
  * 响应工具类

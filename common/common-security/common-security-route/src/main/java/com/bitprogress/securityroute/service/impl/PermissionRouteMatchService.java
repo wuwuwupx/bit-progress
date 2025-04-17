@@ -53,7 +53,7 @@ public class PermissionRouteMatchService implements RouteMatchService<Permission
      * @return 路由信息
      */
     @Override
-    public Set<PermissionRoute> getRoutesByContext() {
+    public Set<PermissionRoute> getRoutesByAnnotation() {
         return routeContextService.getContextInfo();
     }
 
