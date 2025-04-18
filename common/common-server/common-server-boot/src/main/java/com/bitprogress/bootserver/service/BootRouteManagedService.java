@@ -2,7 +2,7 @@ package com.bitprogress.bootserver.service;
 
 import com.bitprogress.securityroute.entity.ApiRoute;
 import com.bitprogress.securityroute.entity.PermissionRoute;
-import com.bitprogress.securityroute.service.RouteInitializationService;
+import com.bitprogress.securityroute.service.RouteManagedService;
 import com.bitprogress.securityroute.service.context.impl.AnonymousRouteContextService;
 import com.bitprogress.securityroute.service.context.impl.InnerRouteContextService;
 import com.bitprogress.securityroute.service.context.impl.PermissionRouteContextService;
@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @AllArgsConstructor
-public class BootRouteInitializationService extends RouteInitializationService {
+public class BootRouteManagedService extends RouteManagedService {
 
     private final AnonymousRouteContextService anonymousRouteContextService;
     private final InnerRouteContextService innerRouteContextService;
@@ -37,6 +37,19 @@ public class BootRouteInitializationService extends RouteInitializationService {
         if (Objects.nonNull(permissionRoutes)) {
             permissionRouteContextService.setContextInfo(permissionRoutes);
         }
+    }
+
+    /**
+     * Invoked by the containing {@code BeanFactory} on destruction of a bean.
+     *
+     * @throws Exception in case of shutdown errors. Exceptions will get logged
+     *                   but not rethrown to allow other beans to release their resources as well.
+     */
+    @Override
+    public void destroy() throws Exception {
+        anonymousRouteContextService.clearContextInfo();
+        innerRouteContextService.clearContextInfo();
+        permissionRouteContextService.clearContextInfo();
     }
 
 }

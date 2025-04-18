@@ -6,13 +6,13 @@ import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Properties;
 
-/**
- * @author wuwuwupx
- */
+@EnableAutoConfiguration
 @AutoConfigureAfter(NacosConfigProperties.class)
 public class NacosConfig {
 
@@ -20,9 +20,10 @@ public class NacosConfig {
      * 初始化nacos配置中心服务
      *
      * @return 对应环境的nacos配置中心服务
-     * @throws NacosException
+     * @throws NacosException nacos异常
      */
     @Bean
+    @ConditionalOnMissingBean(ConfigService.class)
     public ConfigService configService(NacosConfigProperties nacosConfigProperties) throws NacosException {
         Properties properties = new Properties();
         String namespace = nacosConfigProperties.getNamespace();

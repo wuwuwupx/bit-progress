@@ -10,7 +10,6 @@ import com.bitprogress.request.enums.RequestType;
 import com.bitprogress.service.AuthService;
 import com.bitprogress.service.MatchService;
 import com.bitprogress.service.PermissionService;
-import com.bitprogress.util.CollectionUtils;
 import com.bitprogress.util.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -25,8 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_LOADBALANCER_RESPONSE_ATTR;
 
@@ -91,7 +88,7 @@ public class SecurityGatewayFilter implements GlobalFilter {
         ServerHttpRequest.Builder mutate = request.mutate();
         // 设置请求头信息
         mutate.header(VerifyConstant.REQUEST_RESOURCE, RequestSource.GATEWAY_ROUTE.getValue().toString())
-                .header(VerifyConstant.ROUTE_TOKEN, server.getMetadata().get(VerifyConstant.ROUTE_TOKEN))
+                .header(VerifyConstant.GATEWAY_TOKEN, server.getMetadata().get(VerifyConstant.GATEWAY_TOKEN))
                 .header(VerifyConstant.REQUEST_TYPE, requestType.getValue().toString())
                 .header(VerifyConstant.USER_ID, authInfo.getUserId())
                 .header(VerifyConstant.USER_INFO, userInfo);

@@ -93,7 +93,12 @@ public class VerifyConstant {
     /**
      * 对于Api接口的token追加
      */
-    public static final String ROUTE_TOKEN = "route_token";
+    public static final String GATEWAY_TOKEN = "gateway-token";
+
+    /**
+     * 对于Api接口的token追加
+     */
+    public static final String INNER_TOKEN = "inner-token";
 
     /**
      * 对于基础的FeignClient接口的token

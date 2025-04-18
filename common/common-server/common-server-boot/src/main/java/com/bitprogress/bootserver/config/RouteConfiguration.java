@@ -1,8 +1,8 @@
 package com.bitprogress.bootserver.config;
 
-import com.bitprogress.bootserver.service.BootRouteInitializationService;
+import com.bitprogress.bootserver.service.BootRouteManagedService;
 import com.bitprogress.bootserver.service.route.*;
-import com.bitprogress.securityroute.service.RouteInitializationService;
+import com.bitprogress.securityroute.service.RouteManagedService;
 import com.bitprogress.securityroute.service.context.impl.AnonymousRouteContextService;
 import com.bitprogress.securityroute.service.context.impl.InnerRouteContextService;
 import com.bitprogress.securityroute.service.context.impl.PermissionRouteContextService;
@@ -19,12 +19,12 @@ import org.springframework.context.annotation.Configuration;
 public class RouteConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(RouteInitializationService.class)
-    public RouteInitializationService routeInitializationService(
+    @ConditionalOnMissingBean(RouteManagedService.class)
+    public RouteManagedService routeInitializationService(
             AnonymousRouteContextService anonymousRouteContextService,
             InnerRouteContextService innerRouteContextService,
             PermissionRouteContextService permissionRouteContextService) {
-        return new BootRouteInitializationService(anonymousRouteContextService, innerRouteContextService, permissionRouteContextService);
+        return new BootRouteManagedService(anonymousRouteContextService, innerRouteContextService, permissionRouteContextService);
     }
 
     @Bean

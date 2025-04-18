@@ -2,6 +2,7 @@ package com.bitprogress.discover;
 
 import com.alibaba.cloud.nacos.ConditionalOnNacosDiscoveryEnabled;
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
+import com.alibaba.cloud.nacos.NacosServiceManager;
 import com.alibaba.cloud.nacos.discovery.NacosDiscoveryAutoConfiguration;
 import com.alibaba.cloud.nacos.discovery.NacosDiscoveryClientConfiguration;
 import com.bitprogress.property.ServerVersionProperties;
@@ -31,8 +32,9 @@ public class NacosCustomDiscoveryAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public NacosServiceDiscovery nacosServiceDiscovery(ServerVersionProperties serverVersionProperties,
-													   NacosDiscoveryProperties discoveryProperties) {
-		return new NacosServiceDiscovery(serverVersionProperties, discoveryProperties);
+													   NacosDiscoveryProperties discoveryProperties,
+													   NacosServiceManager nacosServiceManager) {
+		return new NacosServiceDiscovery(serverVersionProperties, discoveryProperties, nacosServiceManager);
 	}
 
 }

@@ -2,6 +2,7 @@ package com.bitprogress.discover;
 
 import com.alibaba.cloud.nacos.NacosDiscoveryProperties;
 import com.alibaba.cloud.nacos.NacosServiceInstance;
+import com.alibaba.cloud.nacos.NacosServiceManager;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.alibaba.nacos.api.naming.pojo.ListView;
@@ -25,8 +26,9 @@ import static com.bitprogress.constant.NacosConstant.VERSION;
 public class NacosServiceDiscovery {
 
 	private final ServerVersionProperties serverVersionProperties;
-
 	private final NacosDiscoveryProperties discoveryProperties;
+
+	private final NacosServiceManager nacosServiceManager;
 
 	/**
 	 * Return all instances for the given service.
@@ -36,7 +38,7 @@ public class NacosServiceDiscovery {
 	 */
 	public List<ServiceInstance> getInstances(String serviceId) throws NacosException {
 		String group = discoveryProperties.getGroup();
-		List<Instance> instances = discoveryProperties.namingServiceInstance()
+		List<Instance> instances = nacosServiceManager.getNamingService()
 				.selectInstances(serviceId, group, true);
 		return hostToServiceInstanceList(instances, serviceId);
 	}
@@ -48,7 +50,7 @@ public class NacosServiceDiscovery {
 	 */
 	public List<String> getServices() throws NacosException {
 		String group = discoveryProperties.getGroup();
-		ListView<String> services = discoveryProperties.namingServiceInstance()
+		ListView<String> services = nacosServiceManager.getNamingService()
 				.getServicesOfServer(1, Integer.MAX_VALUE, group);
 		return services.getData();
 	}
@@ -87,7 +89,7 @@ public class NacosServiceDiscovery {
 		metadata.put("nacos.instanceId", instance.getInstanceId());
 		metadata.put("nacos.weight", instance.getWeight() + "");
 		metadata.put("nacos.healthy", instance.isHealthy() + "");
-		metadata.put("nacos.cluster", instance.getClusterName() + "");
+		metadata.put("nacos.cluster", instance.getClusterName());
 		metadata.putAll(instanceMetadata);
 		nacosServiceInstance.setMetadata(metadata);
 

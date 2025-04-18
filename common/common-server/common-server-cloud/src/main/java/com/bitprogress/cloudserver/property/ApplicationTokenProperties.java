@@ -2,17 +2,25 @@ package com.bitprogress.cloudserver.property;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 @Data
-@Configuration
 @ConfigurationProperties(prefix = ApplicationTokenProperties.PREFIX)
 public class ApplicationTokenProperties {
 
     public static final String PREFIX = "application.server.token";
 
     /**
-     * 服务路由token
+     * gateway token
+     */
+    private String gateway;
+
+    /**
+     * feign token
+     */
+    private String feign;
+
+    /**
+     * route token
      */
     private String route;
 

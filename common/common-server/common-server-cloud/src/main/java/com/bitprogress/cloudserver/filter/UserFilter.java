@@ -78,14 +78,14 @@ public class UserFilter implements Filter, UserContextMaintenanceService {
             // 获取请求来源
             RequestSource requestSource = DispatcherUtils.getRequestSource(httpRequest);
 
-            // 校验服务token
-            String requestRouteToken = httpRequest.getHeader(VerifyConstant.ROUTE_TOKEN);
-            String routeToken = applicationTokenProperties.getRoute();
-            boolean tokenEquals = StringUtils.equals(routeToken, requestRouteToken);
-            Assert.isTrue(tokenEquals, RequestExceptionMessage.REQUEST_TOKEN_NOT_APPOINT_EXCEPTION);
-
             switch (requestSource) {
                 case GATEWAY_ROUTE -> {
+                    // 校验服务token
+                    String requestRouteToken = httpRequest.getHeader(VerifyConstant.GATEWAY_TOKEN);
+                    String routeToken = applicationTokenProperties.getGateway();
+                    boolean tokenEquals = StringUtils.equals(routeToken, requestRouteToken);
+                    Assert.isTrue(tokenEquals, RequestExceptionMessage.REQUEST_TOKEN_NOT_APPOINT_EXCEPTION);
+
                     // 设置用户上下文
                     RequestType requestType = DispatcherUtils.getRequestType(httpRequest);
                     if (RequestType.USER_REQUEST.equals(requestType)) {
@@ -97,6 +97,12 @@ public class UserFilter implements Filter, UserContextMaintenanceService {
                     }
                 }
                 case FEIGN -> {
+                    // 校验服务token
+                    String requestInnerToken = httpRequest.getHeader(VerifyConstant.INNER_TOKEN);
+                    String innerToken = applicationTokenProperties.getFeign();
+                    boolean tokenEquals = StringUtils.equals(innerToken, requestInnerToken);
+                    Assert.isTrue(tokenEquals, RequestExceptionMessage.REQUEST_TOKEN_NOT_APPOINT_EXCEPTION);
+
                     // 设置上下文信息
                     String dispatcherTypeJson = httpRequest.getHeader(VerifyConstant.DISPATCHER_TYPE);
                     if (StringUtils.isNotEmpty(dispatcherTypeJson)) {

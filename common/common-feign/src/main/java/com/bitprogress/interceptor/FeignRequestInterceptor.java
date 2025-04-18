@@ -36,8 +36,8 @@ public class FeignRequestInterceptor implements RequestInterceptor {
         // 基础FeignClient进行请求，带上对应的标识
         ServiceInstance instance = serviceInstanceChooser.choose(serverId);
         Map<String, String> metadata = instance.getMetadata();
-        String routeToken = CollectionUtils.getForMap(metadata, VerifyConstant.ROUTE_TOKEN);
-        template.header(VerifyConstant.ROUTE_TOKEN, routeToken);
+        String innerToken = CollectionUtils.getForMap(metadata, VerifyConstant.INNER_TOKEN);
+        template.header(VerifyConstant.INNER_TOKEN, innerToken);
         // 上下文信息
         String dispatcherTypeJson = DispatcherContextService.getDispatcherTypeJson();
         if (StringUtils.isNotEmpty(dispatcherTypeJson)) {

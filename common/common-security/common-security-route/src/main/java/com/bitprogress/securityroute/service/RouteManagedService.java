@@ -9,6 +9,7 @@ import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -28,13 +29,13 @@ import java.util.Set;
  * 特殊接口初始化
  */
 @AllArgsConstructor
-public abstract class RouteInitializationService implements InitializingBean, ApplicationContextAware {
+public abstract class RouteManagedService implements InitializingBean, DisposableBean, ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        RouteInitializationService.applicationContext = applicationContext;
+        RouteManagedService.applicationContext = applicationContext;
     }
 
     /**

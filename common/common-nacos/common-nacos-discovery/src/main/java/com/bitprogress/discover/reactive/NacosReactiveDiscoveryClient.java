@@ -21,7 +21,7 @@ public class NacosReactiveDiscoveryClient implements ReactiveDiscoveryClient {
 	private static final Logger log = LoggerFactory
 			.getLogger(NacosReactiveDiscoveryClient.class);
 
-	private NacosServiceDiscovery serviceDiscovery;
+	private final NacosServiceDiscovery serviceDiscovery;
 
 	public NacosReactiveDiscoveryClient(NacosServiceDiscovery nacosServiceDiscovery) {
 		this.serviceDiscovery = nacosServiceDiscovery;
