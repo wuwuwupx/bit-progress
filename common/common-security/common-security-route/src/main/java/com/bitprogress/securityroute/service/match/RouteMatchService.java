@@ -22,6 +22,17 @@ public interface RouteMatchService<T extends ApiRoute> {
     }
 
     /**
+     * 获取路由信息
+     *
+     * @return 路由信息
+     */
+    default Set<T> getRoutes() {
+        return isCoverByProperties()
+                ? getRoutesByProperties()
+                : CollectionUtils.newSet(getRoutesByProperties(), getRoutesByAnnotation());
+    }
+
+    /**
      * 是否被配置文件中的路由信息覆盖
      *
      * @return 是否覆盖

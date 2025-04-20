@@ -511,6 +511,21 @@ public class CollectionUtils {
     }
 
     /**
+     * 转换集合为数组
+     *
+     * @param collection 需要转换的集合
+     * @return 转换后的数组
+     */
+    @SuppressWarnings("unchecked")
+    public static <T, R> R[] toArray(Collection<T> collection, Function<T, R> function) {
+        if (isEmpty(collection)) {
+            return (R[]) new Object[0];
+        }
+        return (R[]) map(collection, function)
+                .toArray(Object[]::new);
+    }
+
+    /**
      * 是否是单元素集合
      *
      * @param collection 需要检查的集合

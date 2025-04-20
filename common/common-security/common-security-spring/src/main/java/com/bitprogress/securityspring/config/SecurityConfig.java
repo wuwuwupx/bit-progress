@@ -1,7 +1,10 @@
 package com.bitprogress.securityspring.config;
 
+import com.bitprogress.securityroute.service.match.AbstractAnonymousRouteMatchService;
+import com.bitprogress.securityroute.service.match.AbstractInnerRouteMatchService;
 import com.bitprogress.securityspring.handler.ForbiddenExceptionHandler;
 import com.bitprogress.securityspring.handler.InvalidAuthenticationEntryPoint;
+import com.bitprogress.util.CollectionUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -21,7 +25,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    AccessDeniedHandler accessDeniedHandler,
-                                                   AuthenticationEntryPoint authenticationEntryPoint) throws Exception {
+                                                   AuthenticationEntryPoint authenticationEntryPoint,
+                                                   AbstractAnonymousRouteMatchService anonymousRouteMatchService,
+                                                   AbstractInnerRouteMatchService innerRouteMatchService) throws Exception {
         return http
                 // 禁用basic明文验证
                 .httpBasic(AbstractHttpConfigurer::disable)
@@ -37,18 +43,25 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler)
                         .authenticationEntryPoint(authenticationEntryPoint))
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                                // 允许所有OPTIONS请求通过
-                                .requestMatchers(HttpMethod.OPTIONS, "/**")
-                                .permitAll()
-                        // 允许白名单请求通过
-//                        .requestMatchers(Stream.of(ignoreWhiteProperties.getAnonymousApiWhites(), ignoreWhiteProperties.getInnerApiWhites())
-//                                .flatMap(Collection::stream)
-//                                .map(api -> new AntPathRequestMatcher(api.getUrl(), api.getHttpMethod()))
-//                                .toList()
-//                                .toArray(new AntPathRequestMatcher[]{}))
-//                        .permitAll()
-                        // 任意请求通过AuthorizationManager验证是否通过
-//                        .anyRequest().access(customAuthorizationManager)
+                        // 允许所有OPTIONS请求通过
+                        .requestMatchers(HttpMethod.OPTIONS, "/**")
+                        .permitAll()
+                        .requestMatchers(CollectionUtils
+                                .map(anonymousRouteMatchService.getRoutes(),
+                                        apiRoute -> {
+                                            HttpMethod method = apiRoute.getMethod();
+                                            return new AntPathRequestMatcher(apiRoute.getUrl(), method.name());
+                                        })
+                                .toArray(AntPathRequestMatcher[]::new)
+                        ).permitAll()
+                        .requestMatchers(CollectionUtils
+                                .map(innerRouteMatchService.getRoutes(),
+                                        apiRoute -> {
+                                            HttpMethod method = apiRoute.getMethod();
+                                            return new AntPathRequestMatcher(apiRoute.getUrl(), method.name());
+                                        })
+                                .toArray(AntPathRequestMatcher[]::new)
+                        ).permitAll()
                 )
                 .build();
     }
