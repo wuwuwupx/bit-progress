@@ -782,6 +782,22 @@ public class CollectionUtils {
 
     /**
      * 避免map为null的情况下发生NPE
+     * 不存在则返回 {defaultValue}
+     *
+     * @param map      map
+     * @param key      获取的key
+     * @param supplier 获取默认值的函数
+     * @param <T>      key类型
+     * @param <R>      value类型
+     * @return 获取的值
+     */
+    public static <T, R> R getForMap(Map<T, R> map, T key, Supplier<R> supplier) {
+        R value = getForMap(map, key);
+        return Objects.isNull(value) ? supplier.get() : value;
+    }
+
+    /**
+     * 避免map为null的情况下发生NPE
      * 表达式结果为false则返回 {defaultValue}
      *
      * @param map          map
@@ -1111,6 +1127,9 @@ public class CollectionUtils {
      * @return 返回集合是否符合特定的匹配条件
      */
     public static <T> boolean anyMatch(Collection<T> collection, Predicate<T> predicate) {
+        if (isEmpty(collection)) {
+            return false;
+        }
         return collection.stream().anyMatch(predicate);
     }
 
@@ -1123,6 +1142,9 @@ public class CollectionUtils {
      * @return 返回集合是否符合特定的匹配条件
      */
     public static <T> boolean allMatch(Collection<T> collection, Predicate<T> predicate) {
+        if (isEmpty(collection)) {
+            return false;
+        }
         return collection.stream().allMatch(predicate);
     }
 
@@ -1135,6 +1157,9 @@ public class CollectionUtils {
      * @return 返回集合是否符合特定的匹配条件
      */
     public static <T> boolean noneMatch(Collection<T> collection, Predicate<T> predicate) {
+        if (isEmpty(collection)) {
+            return false;
+        }
         return collection.stream().noneMatch(predicate);
     }
 
@@ -2739,12 +2764,14 @@ public class CollectionUtils {
             return emptyMap();
         }
         BinaryOperator<T> operator = type.binaryOperator(comparableFunction);
-        int size = size(toSet(filter(collection, Objects::nonNull), keyFunction));
-        if (size == size(collection)) {
-            return filter(collection, Objects::nonNull).collect(Collectors.toMap(keyFunction, valueFunction));
-        }
-        Map<R, U> map = new HashMap<>(size);
-        Map<R, T> comparableMap = new HashMap<>(size);
+        // 不进行 key 重复情况的检查，避免多余的遍历
+//        int size = size(toSet(filter(collection, Objects::nonNull), keyFunction));
+//        if (size == size(collection)) {
+//            return filter(collection, Objects::nonNull).collect(Collectors.toMap(keyFunction, valueFunction));
+//        }
+        int size = size(collection);
+        Map<R, U> map = emptyMap(size);
+        Map<R, T> comparableMap = emptyMap(size);
         collection.forEach(currentData -> {
             if (Objects.isNull(currentData)) {
                 return;
@@ -2780,41 +2807,6 @@ public class CollectionUtils {
      */
     public static <T, R> boolean checkParamUnRepeat(Collection<T> collection, Function<T, R> function) {
         return isEmpty(collection) || (toSet(collection, function).size() == collection.size());
-    }
-
-    /**
-     * collection 转换为 map
-     * key不重复的情况将collection转换为map的方法
-     *
-     * @param collection    需要转换的collection
-     * @param keyFunction   获取map的key的function <T, R> T传入的类型，R转换后map的key类型
-     * @param valueFunction 获取map的value的function <T, C> T传入类型，C转换后map的value类型
-     * @return Map<R, C>
-     */
-    private static <T, C, R> Map<R, C> simpleToMap(Collection<T> collection,
-                                                   Function<T, R> keyFunction,
-                                                   Function<T, C> valueFunction) {
-        return collection.stream().collect(Collectors.toMap(keyFunction, valueFunction));
-    }
-
-    /**
-     * collection 转换为 map
-     * key重复的情况下将list转换为map的方法
-     *
-     * @param collection         需要转换的collection
-     * @param keyFunction        获取map的key的function <T, R> T传入的类型，R转换后map的key类型
-     * @param comparableFunction key重复的情况下获取构造器的function <T, U> T传入的类型，U生成比较器的类型
-     * @param valueFunction      获取map的value的function <T, C> T传入类型，C转换后map的value类型
-     * @param type               key重复情况下，比较器的类型，MAX最大值或MIN最小值，默认为MAX
-     * @return Map<R, C>
-     */
-    private static <T, C, R, U extends Comparable<U>> Map<R, C> groupToMap(Collection<T> collection,
-                                                                           Function<T, R> keyFunction,
-                                                                           Function<T, U> comparableFunction,
-                                                                           Function<T, C> valueFunction,
-                                                                           ComparableType type) {
-        return filter(collection, Objects::nonNull).collect(groupingBy(keyFunction, collectingAndThen(
-                collectingAndThen(getCollector(comparableFunction, type), Optional::get), valueFunction)));
     }
 
     /**
