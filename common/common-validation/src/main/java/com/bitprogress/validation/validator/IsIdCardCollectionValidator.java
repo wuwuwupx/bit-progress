@@ -4,10 +4,13 @@ import com.bitprogress.validation.annotation.IsIdCard;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import java.util.Collection;
+
 /**
  * 身份证校验器
  */
-public class IsIdCardValidator extends AbstractIsIdCardValidator implements ConstraintValidator<IsIdCard, String> {
+public class IsIdCardCollectionValidator extends AbstractIsIdCardValidator
+        implements ConstraintValidator<IsIdCard, Collection<String>>, CollectionItemValidator {
 
     @Override
     public void initialize(IsIdCard constraintAnnotation) {
@@ -15,8 +18,7 @@ public class IsIdCardValidator extends AbstractIsIdCardValidator implements Cons
     }
 
     @Override
-    public boolean isValid(String src, ConstraintValidatorContext constraintValidatorContext) {
-        return super.valid(src);
+    public boolean isValid(Collection<String> idCards, ConstraintValidatorContext constraintValidatorContext) {
+        return validCollection(super.isRequired(), idCards, super::valid);
     }
-
 }

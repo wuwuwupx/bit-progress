@@ -12,8 +12,6 @@ import java.util.regex.Pattern;
 
 public class ValidatorUtils {
 
-    private static final Pattern PATTERN_MOBILE = Pattern.compile("^1[3-9]\\d{9}$");
-
     /**
      * 匹配数字、字母、下划线、汉字
      */
@@ -32,6 +30,15 @@ public class ValidatorUtils {
      * 匹配中文姓名，过滤空格
      */
     private static final Pattern PATTERN_CHINESE_NAME_SPACES = Pattern.compile("^[\\u4e00-\\u9fa5·\\s]*$");
+
+    /**
+     * 匹配手机号
+     */
+    private static final Pattern MOBILE_REGEX = Pattern.compile("^1[3-9]\\d{9}$");
+    /**
+     * 匹配座机
+     */
+    private static final Pattern LANDLINE_REGEX = Pattern.compile("^(0\\d{2,3}-\\d{7,8}(-\\d{1,5})?)|(\\d{7,8})$");
 
     /**
      * 匹配年份
@@ -70,7 +77,27 @@ public class ValidatorUtils {
      * @return true：匹配成功，false：匹配失败
      */
     public static boolean isMobile(String src) {
-        return isLegal(PATTERN_MOBILE, src);
+        return isLegal(MOBILE_REGEX, src);
+    }
+
+    /**
+     * 判断是否为座机
+     *
+     * @param src 待匹配的字符串
+     * @return true：匹配成功，false：匹配失败
+     */
+    public static boolean isLandline(String src) {
+        return isLegal(LANDLINE_REGEX, src);
+    }
+
+    /**
+     * 判断是否为手机号或座机
+     *
+     * @param src 待匹配的字符串
+     * @return true：匹配成功，false：匹配失败
+     */
+    public static boolean isPhone(String src) {
+        return isMobile(src) || isLandline(src);
     }
 
     /**

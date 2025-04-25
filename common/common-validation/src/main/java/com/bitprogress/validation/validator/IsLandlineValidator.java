@@ -1,19 +1,17 @@
 package com.bitprogress.validation.validator;
 
-import com.bitprogress.validation.annotation.IsChineseName;
+import com.bitprogress.validation.annotation.IsLandline;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 /**
- * 中文姓名校验器
+ * 固定电话号码校验器
  */
-public class IsChineseNameValidator extends AbstractIsChineseNameValidator
-        implements ConstraintValidator<IsChineseName, String> {
+public class IsLandlineValidator extends AbstractIsLandlineValidator implements ConstraintValidator<IsLandline, String> {
 
     @Override
-    public void initialize(IsChineseName constraintAnnotation) {
+    public void initialize(IsLandline constraintAnnotation) {
         super.setRequired(constraintAnnotation.isRequired());
-        super.setIgnoreSpaces(constraintAnnotation.ignoreSpaces());
     }
 
     @Override

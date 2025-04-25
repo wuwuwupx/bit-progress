@@ -1,15 +1,16 @@
 package com.bitprogress.validation.validator;
 
-import com.bitprogress.util.StringUtils;
 import com.bitprogress.validation.annotation.IsYear;
-import com.bitprogress.validation.utils.ValidatorUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
+import java.util.Collection;
 
 /**
  * 年份校验器
  */
-public class IsYearValidator extends AbstractIsYearValidator implements ConstraintValidator<IsYear, String> {
+public class IsYearCollectionValidator extends AbstractIsYearValidator
+        implements ConstraintValidator<IsYear, Collection<String>>, CollectionItemValidator {
 
     @Override
     public void initialize(IsYear constraintAnnotation) {
@@ -17,7 +18,7 @@ public class IsYearValidator extends AbstractIsYearValidator implements Constrai
     }
 
     @Override
-    public boolean isValid(String src, ConstraintValidatorContext constraintValidatorContext) {
-        return valid(src);
+    public boolean isValid(Collection<String> years, ConstraintValidatorContext constraintValidatorContext) {
+        return validCollection(super.isRequired(), years, super::valid);
     }
 }

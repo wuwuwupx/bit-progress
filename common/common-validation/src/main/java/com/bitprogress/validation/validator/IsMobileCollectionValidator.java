@@ -4,10 +4,13 @@ import com.bitprogress.validation.annotation.IsMobile;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import java.util.Collection;
+
 /**
  * 手机号码校验器
  */
-public class IsMobileValidator extends AbstractIsMobileValidator implements ConstraintValidator<IsMobile, String> {
+public class IsMobileCollectionValidator extends AbstractIsMobileValidator
+        implements ConstraintValidator<IsMobile, Collection<String>>, CollectionItemValidator {
 
     @Override
     public void initialize(IsMobile constraintAnnotation) {
@@ -15,8 +18,8 @@ public class IsMobileValidator extends AbstractIsMobileValidator implements Cons
     }
 
     @Override
-    public boolean isValid(String src, ConstraintValidatorContext constraintValidatorContext) {
-        return super.valid(src);
+    public boolean isValid(Collection<String> mobiles, ConstraintValidatorContext constraintValidatorContext) {
+        return validCollection(super.isRequired(), mobiles, super::valid);
     }
 
 }
