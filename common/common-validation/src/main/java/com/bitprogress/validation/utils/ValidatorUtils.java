@@ -1,14 +1,18 @@
 package com.bitprogress.validation.utils;
 
+import com.bitprogress.basemodel.enums.text.TextType;
+import com.bitprogress.util.ArrayUtils;
 import com.bitprogress.util.CollectionUtils;
 import com.bitprogress.util.StringUtils;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 
+import java.util.Arrays;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ValidatorUtils {
 
@@ -48,7 +52,15 @@ public class ValidatorUtils {
     /**
      * 默认验证器
      */
-    private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
+    private static Validator VALIDATOR;
+
+    static {
+        try {
+            VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
+        } catch (Exception e) {
+            VALIDATOR = null;
+        }
+    }
 
     /**
      * 默认分隔符
@@ -149,6 +161,25 @@ public class ValidatorUtils {
      */
     public static boolean isChineseName(String src, boolean ignoreSpaces) {
         Pattern pattern = ignoreSpaces ? PATTERN_CHINESE_NAME_SPACES : PATTERN_CHINESE_NAME;
+        return isLegal(pattern, src);
+    }
+
+    /**
+     * 验证是否为允许的文本
+     *
+     * @param src          待匹配的文本
+     * @param textTypes    允许的文本类型
+     * @param ignoreSpaces 是否过滤空格
+     * @return true：匹配成功，false：匹配失败
+     */
+    public static boolean isAllowedText(String src, TextType[] textTypes, boolean ignoreSpaces) {
+        if (ArrayUtils.isEmpty(textTypes)) {
+            return true;
+        }
+        String regex = Arrays.stream(textTypes)
+                .map(TextType::getRegex)
+                .collect(Collectors.joining());
+        Pattern pattern = Pattern.compile(ignoreSpaces ? "^[" + regex + "]+\\s*$" : "^[" + regex + "]+$");
         return isLegal(pattern, src);
     }
 
