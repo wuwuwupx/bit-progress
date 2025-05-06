@@ -1,16 +1,16 @@
 package com.bitprogress.bootserver.service.route;
 
 import com.bitprogress.securityroute.entity.ApiRoute;
+import com.bitprogress.bootserver.context.route.impl.TicketRouteContextService;
 import com.bitprogress.securityroute.service.gain.RouteAnnotationService;
-import com.bitprogress.bootserver.context.route.impl.AnonymousRouteContextService;
 import lombok.AllArgsConstructor;
 
 import java.util.Set;
 
 @AllArgsConstructor
-public class AnonymousRouteAnnotationService implements RouteAnnotationService<ApiRoute> {
+public class TicketRouteAnnotationService implements RouteAnnotationService<ApiRoute> {
 
-    private final AnonymousRouteContextService contextService;
+    private final TicketRouteContextService contextService;
 
     /**
      * 从配置中获取路由集合

@@ -1,5 +1,6 @@
-package com.bitprogress.securityroute.entity;
+package com.bitprogress.securityspring.entity;
 
+import com.bitprogress.securityroute.entity.BaseUserInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

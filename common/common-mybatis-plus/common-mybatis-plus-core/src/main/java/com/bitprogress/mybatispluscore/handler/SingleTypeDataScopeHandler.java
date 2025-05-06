@@ -8,7 +8,10 @@ import com.bitprogress.ormparser.Service.DataScopeOrmDataService;
 import com.bitprogress.util.CollectionUtils;
 import com.bitprogress.util.DataScopeUtils;
 import lombok.AllArgsConstructor;
-import net.sf.jsqlparser.expression.*;
+import net.sf.jsqlparser.expression.AllValue;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.NullValue;
+import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.schema.Column;
@@ -277,7 +280,7 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
      */
     @Override
     public Expression getOwnedData() {
-        return new LongValue(ormDataService.getOwnedData());
+        return new StringValue(ormDataService.getOwnedData());
     }
 
     /**
@@ -287,7 +290,7 @@ public class SingleTypeDataScopeHandler implements DataScopeHandler {
      */
     @Override
     public Expression getSelfData() {
-        return new LongValue(ormDataService.getSelfData());
+        return new StringValue(ormDataService.getSelfData());
     }
 
     /**

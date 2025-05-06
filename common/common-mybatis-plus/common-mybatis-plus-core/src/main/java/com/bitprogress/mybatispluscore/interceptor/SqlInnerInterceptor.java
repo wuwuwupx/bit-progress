@@ -11,8 +11,8 @@ import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.expression.AllValue;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.NullValue;
+import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
@@ -278,7 +278,7 @@ public abstract class SqlInnerInterceptor extends BaseMultiTableInnerInterceptor
     public Expression buildTableExpression(final Table table, final Expression where, final String whereSegment) {
         Expression condition = interceptorHandler.getCondition(table);
         if (condition instanceof NullValue) {
-            return new EqualsTo(new Column("1"), new LongValue(2));
+            return new EqualsTo(new Column("1"), new StringValue("2"));
         } else if (condition instanceof AllValue) {
             return null;
         } else {

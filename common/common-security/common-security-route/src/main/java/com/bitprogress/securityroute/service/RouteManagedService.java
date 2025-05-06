@@ -3,6 +3,7 @@ package com.bitprogress.securityroute.service;
 import com.bitprogress.securityroute.annotation.AnonymousApi;
 import com.bitprogress.securityroute.annotation.InnerApi;
 import com.bitprogress.securityroute.annotation.Permission;
+import com.bitprogress.securityroute.annotation.TicketApi;
 import com.bitprogress.securityroute.entity.ApiRoute;
 import com.bitprogress.securityroute.entity.PermissionRoute;
 import com.bitprogress.util.CollectionUtils;
@@ -54,8 +55,9 @@ public abstract class RouteManagedService implements InitializingBean, Disposabl
         handlerMethods.forEach((info, handlerMethod) -> {
             Set<ApiRoute> anonymousRoutes = getApiRoutes(info, handlerMethod, AnonymousApi.class);
             Set<ApiRoute> innerRoutes = getApiRoutes(info, handlerMethod, InnerApi.class);
+            Set<ApiRoute> ticketRoutes = getApiRoutes(info, handlerMethod, TicketApi.class);
             Set<PermissionRoute> permissionRoutes = getPermissionRoutes(info, handlerMethod);
-            publishRoute(anonymousRoutes, innerRoutes, permissionRoutes);
+            publishRoute(anonymousRoutes, innerRoutes, ticketRoutes, permissionRoutes);
         });
     }
 
@@ -104,10 +106,12 @@ public abstract class RouteManagedService implements InitializingBean, Disposabl
      *
      * @param anonymousRoutes  匿名路由
      * @param innerRoutes      内部路由
+     * @param ticketRoutes     ticket路由
      * @param permissionRoutes 权限路由
      */
     protected abstract void publishRoute(Set<ApiRoute> anonymousRoutes,
                                          Set<ApiRoute> innerRoutes,
+                                         Set<ApiRoute> ticketRoutes,
                                          Set<PermissionRoute> permissionRoutes);
 
 }

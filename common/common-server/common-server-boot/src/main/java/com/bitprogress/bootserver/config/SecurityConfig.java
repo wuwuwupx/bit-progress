@@ -1,11 +1,15 @@
-package com.bitprogress.securityspring.config;
+package com.bitprogress.bootserver.config;
 
+import com.bitprogress.bootserver.propertity.AuthProperties;
+import com.bitprogress.bootserver.service.route.AnonymousRouteMatchService;
 import com.bitprogress.securityroute.service.match.AbstractAnonymousRouteMatchService;
 import com.bitprogress.securityroute.service.match.AbstractInnerRouteMatchService;
 import com.bitprogress.securityspring.handler.ForbiddenExceptionHandler;
 import com.bitprogress.securityspring.handler.InvalidAuthenticationEntryPoint;
 import com.bitprogress.util.CollectionUtils;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,15 +22,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+@EnableAutoConfiguration
 @Configuration
 @EnableWebSecurity
+@EnableConfigurationProperties({AuthProperties.class})
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    AccessDeniedHandler accessDeniedHandler,
                                                    AuthenticationEntryPoint authenticationEntryPoint,
-                                                   AbstractAnonymousRouteMatchService anonymousRouteMatchService,
+                                                   AnonymousRouteMatchService anonymousRouteMatchService,
                                                    AbstractInnerRouteMatchService innerRouteMatchService) throws Exception {
         return http
                 // 禁用basic明文验证
@@ -48,14 +54,6 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers(CollectionUtils
                                 .map(anonymousRouteMatchService.getRoutes(),
-                                        apiRoute -> {
-                                            HttpMethod method = apiRoute.getMethod();
-                                            return new AntPathRequestMatcher(apiRoute.getUrl(), method.name());
-                                        })
-                                .toArray(AntPathRequestMatcher[]::new)
-                        ).permitAll()
-                        .requestMatchers(CollectionUtils
-                                .map(innerRouteMatchService.getRoutes(),
                                         apiRoute -> {
                                             HttpMethod method = apiRoute.getMethod();
                                             return new AntPathRequestMatcher(apiRoute.getUrl(), method.name());

@@ -2,10 +2,9 @@ package com.bitprogress.servercore.util;
 
 import com.bitprogress.ormmodel.enums.DataScopeType;
 import com.bitprogress.ormmodel.enums.TenantType;
-import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.ormmodel.info.user.SingleTypeDataScopeInfo;
+import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.request.constant.VerifyConstant;
-import com.bitprogress.securityroute.entity.UserAuthorisationInfo;
 import com.bitprogress.usercontext.entity.UserInfo;
 import com.bitprogress.util.JsonUtils;
 import com.bitprogress.util.StringUtils;
@@ -80,20 +79,6 @@ public class UserUtils {
             dataScopeInfo.setDataScopeType(DataScopeType.SELF);
         }
         return dataScopeInfo;
-    }
-
-    /**
-     * 从用户信息中获取权限信息
-     * 不依赖前端传递
-     *
-     * @param userInfo 用户信息
-     * @return 权限信息
-     */
-    public static UserAuthorisationInfo getUserAuthorisationInfo(UserInfo userInfo) {
-        UserAuthorisationInfo authorisationInfo = new UserAuthorisationInfo();
-        authorisationInfo.setRoleKeys(userInfo.getRoleKeys());
-        authorisationInfo.setPermissions(userInfo.getPermissions());
-        return authorisationInfo;
     }
 
 }

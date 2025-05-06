@@ -1,14 +1,16 @@
 package com.bitprogress.bootserver.config;
 
-import com.bitprogress.bootserver.service.BootRouteManagedService;
+import com.bitprogress.bootserver.service.route.BootRouteManagedService;
 import com.bitprogress.bootserver.service.route.*;
 import com.bitprogress.securityroute.service.RouteManagedService;
-import com.bitprogress.securityroute.service.context.impl.AnonymousRouteContextService;
-import com.bitprogress.securityroute.service.context.impl.InnerRouteContextService;
-import com.bitprogress.securityroute.service.context.impl.PermissionRouteContextService;
+import com.bitprogress.bootserver.context.route.impl.AnonymousRouteContextService;
+import com.bitprogress.bootserver.context.route.impl.InnerRouteContextService;
+import com.bitprogress.bootserver.context.route.impl.PermissionRouteContextService;
+import com.bitprogress.bootserver.context.route.impl.TicketRouteContextService;
 import com.bitprogress.securityroute.service.gain.impl.AnonymousRoutePropertyService;
 import com.bitprogress.securityroute.service.gain.impl.InnerRoutePropertyService;
 import com.bitprogress.securityroute.service.gain.impl.PermissionRoutePropertyService;
+import com.bitprogress.securityroute.service.gain.impl.TicketRoutePropertyService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +25,10 @@ public class RouteConfiguration {
     public RouteManagedService routeInitializationService(
             AnonymousRouteContextService anonymousRouteContextService,
             InnerRouteContextService innerRouteContextService,
+            TicketRouteContextService ticketRouteContextService,
             PermissionRouteContextService permissionRouteContextService) {
-        return new BootRouteManagedService(anonymousRouteContextService, innerRouteContextService, permissionRouteContextService);
+        return new BootRouteManagedService(anonymousRouteContextService, innerRouteContextService,
+                ticketRouteContextService, permissionRouteContextService);
     }
 
     @Bean
@@ -63,6 +67,25 @@ public class RouteConfiguration {
     @ConditionalOnMissingBean(InnerRouteContextService.class)
     public InnerRouteContextService innerRouteContextService() {
         return new InnerRouteContextService();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(TicketRouteMatchService.class)
+    public TicketRouteMatchService ticketRouteMatchService(TicketRoutePropertyService propertyService,
+                                                           TicketRouteAnnotationService annotationService) {
+        return new TicketRouteMatchService(propertyService, annotationService);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(TicketRouteAnnotationService.class)
+    public TicketRouteAnnotationService ticketRouteAnnotationService(TicketRouteContextService contextService) {
+        return new TicketRouteAnnotationService(contextService);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(TicketRouteContextService.class)
+    public TicketRouteContextService ticketRouteContextService() {
+        return new TicketRouteContextService();
     }
 
     @Bean

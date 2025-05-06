@@ -1,6 +1,6 @@
-package com.bitprogress.securityroute.service.context;
+package com.bitprogress.securityspring.context;
 
-import com.bitprogress.securityroute.entity.UserAuthorisationInfo;
+import com.bitprogress.securityspring.entity.UserAuthorisationInfo;
 
 public interface UserAuthorisationContextService extends UserInfoContextService<UserAuthorisationInfo> {
 

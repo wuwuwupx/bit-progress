@@ -1,6 +1,7 @@
-package com.bitprogress.usercontext.entity;
+package com.bitprogress.bootserver.entity;
 
-import com.bitprogress.basemodel.info.ContextInfo;
+import com.bitprogress.securityspring.entity.AuthMsg;
+import com.bitprogress.usercontext.entity.CombinationDataScope;
 import com.bitprogress.usercontext.enums.DataScopeType;
 import com.bitprogress.usercontext.enums.UserType;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfo extends ContextInfo {
+public class UserAuthMsg extends AuthMsg {
 
     /**
      * 用户ID

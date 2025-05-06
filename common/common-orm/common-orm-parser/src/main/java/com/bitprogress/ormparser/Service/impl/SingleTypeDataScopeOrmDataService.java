@@ -68,8 +68,8 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
             query.setIsNotNeedQuery(true);
             return query;
         }
-        Long selfData = dataScopeInfo.getSelfData();
-        Long ownedData = dataScopeInfo.getOwnedData();
+        String selfData = dataScopeInfo.getSelfData();
+        String ownedData = dataScopeInfo.getOwnedData();
         boolean hasSelf = Objects.nonNull(selfData);
         boolean hasOwned = Objects.nonNull(ownedData);
         // 设置拥有数据和自身数据
@@ -180,7 +180,7 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
      * @return 用户标识拥有数据的值
      */
     @Override
-    public Long getOwnedData() {
+    public String getOwnedData() {
         SingleTypeDataScopeInfo dataScopeInfo = dataScopeContextService.getUserInfo();
         return Objects.nonNull(dataScopeInfo) ? dataScopeInfo.getOwnedData() : null;
     }
@@ -191,7 +191,7 @@ public class SingleTypeDataScopeOrmDataService implements DataScopeOrmDataServic
      * @return 用户标识自身数据的值
      */
     @Override
-    public Long getSelfData() {
+    public String getSelfData() {
         SingleTypeDataScopeInfo dataScopeInfo = dataScopeContextService.getUserInfo();
         return Objects.nonNull(dataScopeInfo) ? dataScopeInfo.getSelfData() : null;
     }

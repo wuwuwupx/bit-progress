@@ -2,7 +2,7 @@ package com.bitprogress.mybatispluscore.handler;
 
 import com.bitprogress.util.CollectionUtils;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.LongValue;
+import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.expression.operators.relational.InExpression;
 import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
@@ -12,7 +12,7 @@ import net.sf.jsqlparser.schema.Table;
 import java.util.List;
 import java.util.Set;
 
-public interface TenantHandler extends InterceptorHandler<Long> {
+public interface TenantHandler extends InterceptorHandler<String> {
 
     /**
      * 数据范围字段别名设置
@@ -49,8 +49,8 @@ public interface TenantHandler extends InterceptorHandler<Long> {
      * @param tenantId 租户ID
      * @return in表达式
      */
-    default Expression buildEqualExpression(Column column, Long tenantId) {
-        return new EqualsTo(column, new LongValue(tenantId));
+    default Expression buildEqualExpression(Column column, String tenantId) {
+        return new EqualsTo(column, new StringValue(tenantId));
     }
 
     /**
@@ -60,8 +60,8 @@ public interface TenantHandler extends InterceptorHandler<Long> {
      * @param tenantIds 租户ID
      * @return in表达式
      */
-    default Expression buildInExpression(Column column, Set<Long> tenantIds) {
-        List<LongValue> values = CollectionUtils.toList(tenantIds, LongValue::new);
+    default Expression buildInExpression(Column column, Set<String> tenantIds) {
+        List<StringValue> values = CollectionUtils.toList(tenantIds, StringValue::new);
         return new InExpression(column, new ParenthesedExpressionList<>(values));
     }
 

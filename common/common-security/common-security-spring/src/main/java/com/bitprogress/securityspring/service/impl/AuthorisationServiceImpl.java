@@ -1,8 +1,8 @@
-package com.bitprogress.securityroute.service.impl;
+package com.bitprogress.securityspring.service.impl;
 
-import com.bitprogress.securityroute.entity.UserAuthorisationInfo;
-import com.bitprogress.securityroute.service.AuthorisationService;
-import com.bitprogress.securityroute.service.context.UserAuthorisationContextService;
+import com.bitprogress.securityspring.entity.UserAuthorisationInfo;
+import com.bitprogress.securityspring.context.UserAuthorisationContextService;
+import com.bitprogress.securityspring.service.AuthorisationService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

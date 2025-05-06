@@ -4,7 +4,6 @@ import com.bitprogress.ormmodel.enums.QueryMode;
 import com.bitprogress.util.CollectionUtils;
 import com.bitprogress.util.DataScopeUtils;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
@@ -250,8 +249,8 @@ public interface DataScopeHandler extends InterceptorHandler<String> {
      * @param ownedData 拥有数据
      * @return 表达式
      */
-    default Expression buildOwnedExpression(Table table, Long ownedData) {
-        return new EqualsTo(getAliasOwnedColumn(table), new LongValue(ownedData));
+    default Expression buildOwnedExpression(Table table, String ownedData) {
+        return new EqualsTo(getAliasOwnedColumn(table), new StringValue(ownedData));
     }
 
     /**
@@ -261,8 +260,8 @@ public interface DataScopeHandler extends InterceptorHandler<String> {
      * @param selfData 自身数据
      * @return 表达式
      */
-    default Expression buildSelfExpression(Table table, Long selfData) {
-        return new EqualsTo(getAliasSelfColumn(table), new LongValue(selfData));
+    default Expression buildSelfExpression(Table table, String selfData) {
+        return new EqualsTo(getAliasSelfColumn(table), new StringValue(selfData));
     }
 
     /**

@@ -2,7 +2,7 @@ package com.bitprogress.bootserver.service.route;
 
 import com.bitprogress.securityroute.entity.ApiRoute;
 import com.bitprogress.securityroute.service.gain.RouteAnnotationService;
-import com.bitprogress.securityroute.service.context.impl.InnerRouteContextService;
+import com.bitprogress.bootserver.context.route.impl.InnerRouteContextService;
 import lombok.AllArgsConstructor;
 
 import java.util.Set;

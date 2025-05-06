@@ -30,11 +30,13 @@ public class CloudRouteManagedService extends RouteManagedService {
      *
      * @param anonymousRoutes  匿名路由
      * @param innerRoutes      内部路由
+     * @param ticketRoutes     ticket路由
      * @param permissionRoutes 权限路由
      */
     @Override
     protected void publishRoute(Set<ApiRoute> anonymousRoutes,
                                 Set<ApiRoute> innerRoutes,
+                                Set<ApiRoute> ticketRoutes,
                                 Set<PermissionRoute> permissionRoutes) {
         String group = applicationDataProperties.getRoutePublishGroup();
         String applicationName = applicationProperties.getName();
@@ -53,6 +55,15 @@ public class CloudRouteManagedService extends RouteManagedService {
                 // 发布路由
                 String innerRouteDataId = applicationName + "-" + routeToken + "-inner-route.json";
                 configService.publishConfig(innerRouteDataId, group, JsonUtils.serializeObject(innerRoutes));
+            } catch (NacosException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (Objects.nonNull(ticketRoutes)) {
+            try {
+                // 发布路由
+                String innerRouteDataId = applicationName + "-" + routeToken + "-ticket-route.json";
+                configService.publishConfig(innerRouteDataId, group, JsonUtils.serializeObject(ticketRoutes));
             } catch (NacosException e) {
                 throw new RuntimeException(e);
             }
@@ -80,21 +91,28 @@ public class CloudRouteManagedService extends RouteManagedService {
         String applicationName = applicationProperties.getName();
         String routeToken = applicationTokenProperties.getRoute();
         try {
-            // 发布路由
+            // 清除路由
             String anonymousRouteDataId = applicationName + "-" + routeToken + "-anonymous-route.json";
             configService.removeConfig(anonymousRouteDataId, group);
         } catch (NacosException e) {
             throw new RuntimeException(e);
         }
         try {
-            // 发布路由
+            // 清除路由
             String innerRouteDataId = applicationName + "-" + routeToken + "-inner-route.json";
             configService.removeConfig(innerRouteDataId, group);
         } catch (NacosException e) {
             throw new RuntimeException(e);
         }
         try {
-            // 发布路由
+            // 清除路由
+            String ticketRouteDataId = applicationName + "-" + routeToken + "-ticket-route.json";
+            configService.removeConfig(ticketRouteDataId, group);
+        } catch (NacosException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            // 清除路由
             String permissionRouteDataId = applicationName + "-" + routeToken + "-permission-route.json";
             configService.removeConfig(permissionRouteDataId, group);
         } catch (NacosException e) {

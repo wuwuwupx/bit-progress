@@ -1,7 +1,7 @@
-package com.bitprogress.securityroute.service;
+package com.bitprogress.securityspring.service;
 
 import com.bitprogress.securityroute.entity.PermissionRoute;
-import com.bitprogress.securityroute.entity.UserAuthorisationInfo;
+import com.bitprogress.securityspring.entity.UserAuthorisationInfo;
 import com.bitprogress.util.ArrayUtils;
 import com.bitprogress.util.CollectionUtils;
 import com.bitprogress.util.StringUtils;

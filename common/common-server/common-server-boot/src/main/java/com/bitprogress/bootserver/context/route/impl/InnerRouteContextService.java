@@ -1,11 +1,11 @@
-package com.bitprogress.securityroute.service.context.impl;
+package com.bitprogress.bootserver.context.route.impl;
 
 import com.bitprogress.securityroute.entity.ApiRoute;
-import com.bitprogress.securityroute.service.context.RouteContextService;
+import com.bitprogress.bootserver.context.route.RouteContextService;
 
 import java.util.Set;
 
-public class AnonymousRouteContextService implements RouteContextService<ApiRoute> {
+public class InnerRouteContextService implements RouteContextService<ApiRoute> {
 
     private static final ThreadLocal<Set<ApiRoute>> ROUTES = new ThreadLocal<>();
 

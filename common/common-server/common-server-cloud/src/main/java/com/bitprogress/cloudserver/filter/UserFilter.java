@@ -9,8 +9,6 @@ import com.bitprogress.ormmodel.info.user.UserTenantInfo;
 import com.bitprogress.request.constant.VerifyConstant;
 import com.bitprogress.request.enums.RequestSource;
 import com.bitprogress.request.enums.RequestType;
-import com.bitprogress.securityroute.entity.UserAuthorisationInfo;
-import com.bitprogress.securityroute.service.context.UserAuthorisationContextService;
 import com.bitprogress.servercore.exception.RequestExceptionMessage;
 import com.bitprogress.servercore.service.UserContextMaintenanceService;
 import com.bitprogress.servercore.util.DispatcherUtils;
@@ -39,8 +37,6 @@ public class UserFilter implements Filter, UserContextMaintenanceService {
     private TenantContextService tenantContextService;
     @Autowired
     private SingleTypeDataScopeContextService dataScopeContextService;
-    @Autowired
-    private UserAuthorisationContextService userAuthorisationContextService;
 
     /**
      * The <code>doFilter</code> method of the Filter is called by the container each time a request/response pair is passed
@@ -149,8 +145,6 @@ public class UserFilter implements Filter, UserContextMaintenanceService {
         tenantContextService.setUserInfo(userTenantInfo);
         SingleTypeDataScopeInfo singleTypeDataScopeInfo = UserUtils.getDataScopeInfo(userInfo);
         dataScopeContextService.setUserInfo(singleTypeDataScopeInfo);
-        UserAuthorisationInfo userAuthorisationInfo = UserUtils.getUserAuthorisationInfo(userInfo);
-        userAuthorisationContextService.setContextInfo(userAuthorisationInfo);
     }
 
     /**
@@ -163,7 +157,6 @@ public class UserFilter implements Filter, UserContextMaintenanceService {
         tenantContextService.clearParserInfo();
         dataScopeContextService.clearUserInfo();
         dataScopeContextService.clearParserInfo();
-        userAuthorisationContextService.clearContextInfo();
     }
 
 }

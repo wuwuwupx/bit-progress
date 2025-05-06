@@ -19,13 +19,13 @@ public interface DataScopeOrmDataService extends OrmDataService<DataScopeQuery> 
      *
      * @return 用户标识拥有数据的值
      */
-    Long getOwnedData();
+    String getOwnedData();
 
     /**
      * 获取当前用户标识自身数据的值
      *
      * @return 用户标识自身数据的值
      */
-    Long getSelfData();
+    String getSelfData();
 
 }

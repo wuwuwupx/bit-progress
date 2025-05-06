@@ -9,6 +9,6 @@ public interface TenantOrmDataService extends OrmDataService<TenantQuery> {
      *
      * @return 租户ID
      */
-    Long getTenantId();
+    String getTenantId();
 
 }

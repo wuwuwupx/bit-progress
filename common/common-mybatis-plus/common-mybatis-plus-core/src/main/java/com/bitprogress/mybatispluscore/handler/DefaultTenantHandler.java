@@ -8,8 +8,8 @@ import com.bitprogress.util.CollectionUtils;
 import lombok.AllArgsConstructor;
 import net.sf.jsqlparser.expression.AllValue;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.NullValue;
+import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 
@@ -142,7 +142,7 @@ public class DefaultTenantHandler implements TenantHandler {
      */
     @Override
     public Expression getTenantId() {
-        return new LongValue(tenantOrmDataService.getTenantId());
+        return new StringValue(tenantOrmDataService.getTenantId());
     }
 
     /**
@@ -172,7 +172,7 @@ public class DefaultTenantHandler implements TenantHandler {
      * @return like表达式
      */
     @Override
-    public Expression buildLikeExpression(Column column, Set<Long> dataSet) {
+    public Expression buildLikeExpression(Column column, Set<String> dataSet) {
         return null;
     }
 

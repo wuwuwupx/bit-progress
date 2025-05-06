@@ -18,6 +18,6 @@ public class TenantQuery extends ConditionQuery {
     /**
      * 租户id
      */
-    private Set<Long> tenantIds;
+    private Set<String> tenantIds;
 
 }

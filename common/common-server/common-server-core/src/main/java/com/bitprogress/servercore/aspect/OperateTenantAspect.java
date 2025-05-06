@@ -43,20 +43,13 @@ public class OperateTenantAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         Assert.notNull(attributes, "获取请求信息失败");
         HttpServletRequest request = attributes.getRequest();
-        String operateTenantIdStr = request.getHeader(TenantConstant.OPERATE_TENANT_KEY);
+        String operateTenantId = request.getHeader(TenantConstant.OPERATE_TENANT_KEY);
         boolean required = operateTenantApi.required();
-        if (StringUtils.isNotEmpty(operateTenantIdStr)) {
-            long operateTenantId;
-            try {
-                operateTenantId = Long.parseLong(operateTenantIdStr);
-            } catch (Exception e) {
-                log.error("operateTenantId convert error", e);
-                throw CommonException.error("获取操作租户ID失败");
-            }
+        if (StringUtils.isNotEmpty(operateTenantId)) {
             UserInfo userInfo = UserInfoContextService.getUserInfo();
             Assert.notNull(userInfo, "获取用户信息失败");
             if (Objects.isNull(userInfo.getCanOperateAllTenant()) || !userInfo.getCanOperateAllTenant()) {
-                Set<Long> operateTenantIds = userInfo.getOperateTenantIds();
+                Set<String> operateTenantIds = userInfo.getOperateTenantIds();
                 Assert.isTrue(CollectionUtils.contains(operateTenantIds, operateTenantId), "无权限操作此租户");
             }
             /*

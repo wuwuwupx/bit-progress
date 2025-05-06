@@ -31,12 +31,12 @@ public class BaseDataScopeInfo extends BaseUserInfo {
     /**
      * 用户自身数据，userId 之类的
      */
-    private Long selfData;
+    private String selfData;
 
     /**
      * 用户拥有数据，salesId 之类的
      */
-    private Long ownedData;
+    private String ownedData;
 
     /**
      * 所属的数据范围列表

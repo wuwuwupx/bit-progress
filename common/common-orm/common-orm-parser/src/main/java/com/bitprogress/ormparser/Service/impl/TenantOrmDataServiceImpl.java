@@ -68,7 +68,7 @@ public class TenantOrmDataServiceImpl implements TenantOrmDataService {
             return query;
         }
         TenantType conditionType = tenantContextService.getCurrentSqlTenantType();
-        Long tenantId = userTenantInfo.getTenantId();
+        String tenantId = userTenantInfo.getTenantId();
         boolean hasTenant = Objects.nonNull(tenantId);
         if (Objects.isNull(conditionType) || TenantType.CURRENT.equals(conditionType)) {
             query.setIsQueryAll(false);
@@ -80,7 +80,7 @@ public class TenantOrmDataServiceImpl implements TenantOrmDataService {
         }
         switch (conditionType) {
             case OPERATE -> {
-                Long operateTenantId = userTenantInfo.getOperateTenantId();
+                String operateTenantId = userTenantInfo.getOperateTenantId();
                 boolean hasOperateTenant = Objects.nonNull(operateTenantId);
                 query.setIsQueryAll(false);
                 query.setIsNotNeedQuery(!hasOperateTenant);
@@ -94,7 +94,7 @@ public class TenantOrmDataServiceImpl implements TenantOrmDataService {
                     query.setIsQueryAll(true);
                 } else {
                     query.setIsQueryAll(false);
-                    Set<Long> operateTenantIds = userTenantInfo.getOperateTenantIds();
+                    Set<String> operateTenantIds = userTenantInfo.getOperateTenantIds();
                     boolean hasOperateTenant = CollectionUtils.isNotEmpty(operateTenantIds);
                     query.setIsNotNeedQuery(!hasTenant && !hasOperateTenant);
                     if (hasTenant || hasOperateTenant) {
@@ -119,7 +119,7 @@ public class TenantOrmDataServiceImpl implements TenantOrmDataService {
      * @return 租户ID
      */
     @Override
-    public Long getTenantId() {
+    public String getTenantId() {
         UserTenantInfo userInfo = tenantContextService.getUserInfo();
         Assert.notNull(userInfo, "获取用户租户信息失败");
         TenantType conditionType = tenantContextService.getCurrentSqlTenantType();

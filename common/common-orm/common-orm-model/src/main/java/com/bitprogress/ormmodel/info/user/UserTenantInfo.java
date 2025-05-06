@@ -18,12 +18,12 @@ public class UserTenantInfo extends BaseUserInfo {
     /**
      * 当前租户ID
      */
-    private Long tenantId;
+    private String tenantId;
 
     /**
      * 操作租户ID
      */
-    private Long operateTenantId;
+    private String operateTenantId;
 
     /**
      * 租户类型
@@ -39,7 +39,7 @@ public class UserTenantInfo extends BaseUserInfo {
     /**
      * 操作租户ID集合
      */
-    private Set<Long> operateTenantIds;
+    private Set<String> operateTenantIds;
 
     /**
      * 是否可操作所有租户

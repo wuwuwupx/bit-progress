@@ -1,7 +1,7 @@
-package com.bitprogress.securityroute.service.context.impl;
+package com.bitprogress.bootserver.context.route.impl;
 
 import com.bitprogress.securityroute.entity.PermissionRoute;
-import com.bitprogress.securityroute.service.context.RouteContextService;
+import com.bitprogress.bootserver.context.route.RouteContextService;
 
 import java.util.Set;
 

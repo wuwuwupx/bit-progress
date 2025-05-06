@@ -1,4 +1,4 @@
-package com.bitprogress.securityroute.service.context;
+package com.bitprogress.securityspring.context;
 
 import com.bitprogress.basecontext.service.InfoContextService;
 import com.bitprogress.securityroute.entity.BaseUserInfo;

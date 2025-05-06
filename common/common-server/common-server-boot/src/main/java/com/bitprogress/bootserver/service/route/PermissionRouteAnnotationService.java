@@ -1,7 +1,7 @@
 package com.bitprogress.bootserver.service.route;
 
 import com.bitprogress.securityroute.entity.PermissionRoute;
-import com.bitprogress.securityroute.service.context.impl.PermissionRouteContextService;
+import com.bitprogress.bootserver.context.route.impl.PermissionRouteContextService;
 import com.bitprogress.securityroute.service.gain.RouteAnnotationService;
 import lombok.AllArgsConstructor;
 

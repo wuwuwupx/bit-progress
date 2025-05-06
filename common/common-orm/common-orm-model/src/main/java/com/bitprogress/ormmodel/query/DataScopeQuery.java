@@ -52,7 +52,7 @@ public class DataScopeQuery extends ConditionQuery {
     /**
      * 用于匹配拥有数据的值
      */
-    private Long ownedData;
+    private String ownedData;
 
     /**
      * 是否查询自身数据
@@ -62,7 +62,7 @@ public class DataScopeQuery extends ConditionQuery {
     /**
      * 自身数据
      */
-    private Long selfData;
+    private String selfData;
 
     public boolean hasRangeQuery() {
         return Objects.nonNull(hasRangeQuery) && hasRangeQuery;
