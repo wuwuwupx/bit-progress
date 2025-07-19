@@ -1,12 +1,9 @@
 package com.bitprogress.mvcapi.config;
 
-import io.swagger.v3.oas.models.OpenAPI;
 import org.springdoc.core.models.GroupedOpenApi;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@EnableAutoConfiguration
 @Configuration
 public class OpenapiConfig {
 
@@ -14,7 +11,7 @@ public class OpenapiConfig {
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
                 .group("default")
-                .pathsToMatch("/**/controller")
+                .pathsToMatch("/**")
                 .build();
     }
 
@@ -22,7 +19,7 @@ public class OpenapiConfig {
     public GroupedOpenApi adminApi() {
         return GroupedOpenApi.builder()
                 .group("test")
-                .pathsToMatch("/**/controller")
+                .pathsToMatch("/**")
                 .build();
     }
 
