@@ -9,11 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>common-swagger</artifactId>
+    <artifactId>common-springdoc</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>swagger-core</module>
-        <module>swagger-ui</module>
+        <module>common-springdoc-mvcapi</module>
+        <module>common-springdoc-gatewayui</module>
+        <module>common-springdoc-serverui</module>
     </modules>
 
 </project>

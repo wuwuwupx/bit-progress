@@ -21,7 +21,7 @@
         <module>common-json</module>
         <module>common-exception</module>
         <module>common-response</module>
-        <module>common-swagger</module>
+        <module>common-springdoc</module>
         <module>common-redis</module>
         <module>common-elasticsearch</module>
         <module>common-feign</module>

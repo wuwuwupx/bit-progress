@@ -35,13 +35,4 @@ public class AuthMsg implements Serializable {
      */
     private Set<String> ignoreKeys;
 
-    @Override
-    public String toString() {
-        return "AuthMsg{" +
-                "token='" + token + '\'' +
-                ", params=" + params +
-                ", ignoreKeys=" + ignoreKeys +
-                '}';
-    }
-
 }

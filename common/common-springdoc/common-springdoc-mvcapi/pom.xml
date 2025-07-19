@@ -3,29 +3,33 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>common-server</artifactId>
+        <artifactId>common-springdoc</artifactId>
         <groupId>com.bitprogress</groupId>
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>${revision}</version>
 
-    <artifactId>common-server-model</artifactId>
+    <artifactId>common-springdoc-mvcapi</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-base-model</artifactId>
+            <artifactId>common-core</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <!-- Spring -->
         <dependency>
-            <groupId>com.bitprogress</groupId>
-            <artifactId>common-springdoc-mvcapi</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
         <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
         </dependency>
     </dependencies>
 

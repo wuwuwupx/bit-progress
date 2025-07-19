@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>swagger-ui</artifactId>
+            <artifactId>common-springdoc-gatewayui</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>

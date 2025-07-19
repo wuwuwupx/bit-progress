@@ -1,17 +1,16 @@
-package com.bitprogress.property;
+package com.bitprogress.springdocui.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * @author wuwuwupx
  * swagger配置类
  */
 @Component
 @ConfigurationProperties(prefix = SwaggerProperties.PREFIX)
 public class SwaggerProperties {
 
-    public static final String PREFIX = "swagger";
+    public static final String PREFIX = "springdoc";
 
     private String group;
 

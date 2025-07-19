@@ -20,12 +20,12 @@
         <!-- Revision -->
         <revision>1.0.0</revision>
         <!-- Spring Boot Version -->
-        <spring-boot.version>3.2.5</spring-boot.version>
+        <spring-boot.version>3.5.3</spring-boot.version>
         <!-- 编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <!-- Spring Cloud Version -->
-        <spring.cloud.version>2023.0.1</spring.cloud.version>
+        <spring.cloud.version>2025.0.0</spring.cloud.version>
         <!-- Spring Cloud Alibaba Version -->
         <spring.cloud.alibaba.version>2023.0.1.0</spring.cloud.alibaba.version>
         <!-- Spring Cloud Alibaba Dubbo Version -->
@@ -37,10 +37,12 @@
         <mysql.java.connector.version>8.0.28</mysql.java.connector.version>
         <!-- Lombok Version -->
         <lombok.version>1.18.32</lombok.version>
+        <!-- Springdoc -->
+        <spring.doc.version>2.8.9</spring.doc.version>
         <!-- Swagger -->
         <swagger.v3.version>2.2.21</swagger.v3.version>
         <!-- knife4j -->
-        <knife4j.version>3.0.3</knife4j.version>
+        <knife4j.version>4.4.0</knife4j.version>
         <!-- Okhttp -->
         <okhttp.version>3.14.1</okhttp.version>
         <feign.okhttp.version>11.5</feign.okhttp.version>
@@ -50,7 +52,7 @@
         <ali.sms.version>4.1.0</ali.sms.version>
         <!-- MapStruct -->
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
-        <!-- MapStruct -->
+        <!-- Redisson -->
         <org.redisson.version>2.15.2</org.redisson.version>
         <easyexcel.version>3.3.2</easyexcel.version>
         <jakarta.validation.api.version>3.0.2</jakarta.validation.api.version>
@@ -83,6 +85,15 @@
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
                 <version>${spring.cloud.alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Springdoc -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-bom</artifactId>
+                <version>${spring.doc.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -125,17 +136,10 @@
                 <version>${lombok.version}</version>
             </dependency>
 
-            <!-- Swagger -->
-            <dependency>
-                <groupId>io.swagger.core.v3</groupId>
-                <artifactId>swagger-annotations-jakarta</artifactId>
-                <version>${swagger.v3.version}</version>
-            </dependency>
-
             <!-- Knife4j -->
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
             </dependency>
 

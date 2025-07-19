@@ -104,10 +104,10 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         if (StringUtils.isEmpty(BASE_STRING)) {
             return "";
         } else {
-            StringBuilder sb = new StringBuilder(length);
             if (length < 1) {
                 length = 1;
             }
+            StringBuilder sb = new StringBuilder(length);
 
             int baseLength = BASE_STRING.length();
 
