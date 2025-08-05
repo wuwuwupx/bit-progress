@@ -15,9 +15,10 @@
     <packaging>pom</packaging>
     <modules>
         <module>common-application-model</module>
-        <module>common-application-user-context</module>
+        <module>common-application-context</module>
         <module>common-application-core</module>
         <module>common-application-cloud</module>
+        <module>common-application-basic</module>
         <module>common-application-simple</module>
     </modules>
 

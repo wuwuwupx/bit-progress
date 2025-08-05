@@ -9,21 +9,25 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>common-application-user-context</artifactId>
+    <artifactId>common-application-basic</artifactId>
     <version>${revision}</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-utils</artifactId>
+            <artifactId>common-application-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-base-context</artifactId>
+            <artifactId>common-redis</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.bitprogress</groupId>
-            <artifactId>common-json</artifactId>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
         </dependency>
     </dependencies>
 

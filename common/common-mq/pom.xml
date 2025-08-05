@@ -12,9 +12,9 @@
     <artifactId>common-mq</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>rabbitmq</module>
-        <module>rocketmq</module>
-        <module>kafka</module>
+        <module>common-mq-rabbitmq</module>
+        <module>common-mq-rocketmq</module>
+        <module>common-mq-kafka</module>
     </modules>
 
 </project>

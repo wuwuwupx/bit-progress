@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-application-user-context</artifactId>
+            <artifactId>common-application-context</artifactId>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>

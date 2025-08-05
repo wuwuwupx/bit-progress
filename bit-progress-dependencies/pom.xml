@@ -335,12 +335,12 @@
             </dependency>
             <dependency>
                 <groupId>com.bitprogress</groupId>
-                <artifactId>common-application-simple</artifactId>
+                <artifactId>common-application-model</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.bitprogress</groupId>
-                <artifactId>common-application-cloud</artifactId>
+                <artifactId>common-application-context</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -350,12 +350,17 @@
             </dependency>
             <dependency>
                 <groupId>com.bitprogress</groupId>
-                <artifactId>common-application-model</artifactId>
+                <artifactId>common-application-basic</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.bitprogress</groupId>
-                <artifactId>common-application-user-context</artifactId>
+                <artifactId>common-application-simple</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-application-cloud</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
