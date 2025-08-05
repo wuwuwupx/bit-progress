@@ -21,7 +21,6 @@
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-base-model</artifactId>
-            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

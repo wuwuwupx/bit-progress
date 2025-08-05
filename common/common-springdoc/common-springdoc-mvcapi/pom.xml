@@ -14,8 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-core</artifactId>
-            <version>1.0.0</version>
+            <artifactId>common-utils</artifactId>
         </dependency>
 
         <!-- Spring -->

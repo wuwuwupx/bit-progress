@@ -15,7 +15,6 @@
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-nacos-config</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
         <dependency>

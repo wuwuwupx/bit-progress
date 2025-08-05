@@ -14,28 +14,23 @@
     <dependencies>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-core</artifactId>
-            <version>1.0.0</version>
+            <artifactId>common-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-springdoc-gatewayui</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-nacos-discovery</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-nacos-config</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-redis</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
         <!-- gateway -->
@@ -54,7 +49,6 @@
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-request</artifactId>
-            <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
 

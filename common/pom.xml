@@ -17,7 +17,7 @@
     <modules>
         <module>common-base-model</module>
         <module>common-base-context</module>
-        <module>common-core</module>
+        <module>common-utils</module>
         <module>common-http</module>
         <module>common-json</module>
         <module>common-exception</module>
@@ -37,7 +37,7 @@
         <module>common-sharding</module>
         <module>common-orm</module>
         <module>common-mybatis-plus</module>
-        <module>common-server</module>
+        <module>common-application</module>
         <module>common-security</module>
         <module>common-system-context</module>
     </modules>

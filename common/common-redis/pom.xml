@@ -15,12 +15,10 @@
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-base-model</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-core</artifactId>
-            <version>1.0.0</version>
+            <artifactId>common-utils</artifactId>
         </dependency>
 
         <dependency>
@@ -34,7 +32,6 @@
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-json</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

@@ -2,33 +2,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.bitprogress</groupId>
         <artifactId>common</artifactId>
+        <groupId>com.bitprogress</groupId>
         <version>${revision}</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>common-validation</artifactId>
-    <version>${revision}</version>
-
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <artifactId>common-utils</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
+            <groupId>com.bitprogress</groupId>
+            <artifactId>common-exception</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-utils</artifactId>
+            <artifactId>common-base-model</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

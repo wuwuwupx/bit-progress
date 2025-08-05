@@ -3,12 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>common-server</artifactId>
+        <artifactId>common-application</artifactId>
         <groupId>com.bitprogress</groupId>
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>common-server-core</artifactId>
+    <artifactId>common-application-core</artifactId>
     <version>${revision}</version>
 
     <dependencies>
@@ -16,42 +16,34 @@
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-response</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-server-user-context</artifactId>
-            <version>1.0.0</version>
+            <artifactId>common-application-user-context</artifactId>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-orm-parser</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-server-model</artifactId>
-            <version>1.0.0</version>
+            <artifactId>common-application-model</artifactId>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-json</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-request</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-security-route</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-system-context</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
         <dependency>

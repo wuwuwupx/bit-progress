@@ -23,7 +23,6 @@
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-feign</artifactId>
-            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

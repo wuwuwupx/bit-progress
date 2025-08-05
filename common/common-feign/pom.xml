@@ -16,27 +16,22 @@
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-response</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-request</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-orm-parser</artifactId>
-            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-server-user-context</artifactId>
-            <version>1.0.0</version>
+            <artifactId>common-application-user-context</artifactId>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
             <artifactId>common-system-context</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
         <!-- feign -->

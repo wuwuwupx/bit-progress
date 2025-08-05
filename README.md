@@ -6,7 +6,7 @@
   4. 如果服务消费方没有指定明确的服务版本，则采用所有配置为默认版本的服务
 
 ## 依赖问题
-  1. 应用需要依赖server-common模块
+  1. 应用需要依赖application-common模块
   2. 需要注册为SpringCloud的服务需要依赖cloud-nacos或者cloud-eureka模块
 
 ## 鉴权模块

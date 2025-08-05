@@ -5,37 +5,25 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.bitprogress</groupId>
-        <artifactId>common-server</artifactId>
+        <artifactId>common-application</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>common-server-cloud</artifactId>
+    <artifactId>common-application-user-context</artifactId>
     <version>${revision}</version>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-server-core</artifactId>
-            <version>1.0.0</version>
+            <artifactId>common-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-nacos-discovery</artifactId>
-            <version>1.0.0</version>
+            <artifactId>common-base-context</artifactId>
         </dependency>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-nacos-config</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.bitprogress</groupId>
-            <artifactId>common-system-context</artifactId>
-            <version>1.0.0</version>
+            <artifactId>common-json</artifactId>
         </dependency>
     </dependencies>
 
