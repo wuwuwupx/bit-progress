@@ -2,13 +2,143 @@ package com.bitprogress.util;
 
 import com.bitprogress.basemodel.enums.time.WeekType;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Objects;
 
 public class LocalDateUtils {
+
+    private static final DateTimeFormatter ISO_LOCAL_DATE = DateTimeFormatter.ISO_LOCAL_DATE;
+    private static final DateTimeFormatter ISO_DATE_WITH_SLASH = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    private static final DateTimeFormatter ISO_DATE_WITH_DASH = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    /**
+     * 格式化日期
+     * 默认使用 ISO_LOCAL_DATE
+     *
+     * @param date 日期对象
+     * @return 格式化后的日期
+     */
+    public static LocalDate parse(String date) {
+        if (StringUtils.isEmpty(date)) {
+            return null;
+        }
+        // 处理纯数字时间戳格式
+        if (date.matches("\\d+")) {
+            try {
+                long timestamp = Long.parseLong(date);
+                // 判断是秒级还是毫秒级时间戳
+                if (timestamp > 9999999999L) {
+                    // 毫秒级时间戳
+                    return Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDate();
+                } else {
+                    // 秒级时间戳
+                    return Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault()).toLocalDate();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Unable to parse timestamp: " + date);
+            }
+        }
+
+        // 处理日期格式
+        try {
+            return date.contains("/") ? parseWithSlash(date) : parse(date, ISO_LOCAL_DATE);
+        } catch (DateTimeParseException e) {
+            throw new RuntimeException("Unable to parse timestamp: " + date);
+        }
+    }
+
+    /**
+     * 解析 ISO_LOCAL_DATE 格式的日期
+     *
+     * @param date 日期对象
+     * @return 格式化后的日期
+     */
+    public static LocalDate parseWithIsoLocalDate(String date) {
+        return parse(date, ISO_LOCAL_DATE);
+    }
+
+    /**
+     * 解析 - 格式的日期
+     * 默认使用 ISO_LOCAL_DATE
+     *
+     * @param date 日期对象
+     * @return 格式化后的日期
+     */
+    public static LocalDate parseWithDash(String date) {
+        return parse(date, ISO_DATE_WITH_DASH);
+    }
+
+    /**
+     * 解析 / 格式的日期
+     *
+     * @param date 日期对象
+     * @return 格式化后的日期
+     */
+    public static LocalDate parseWithSlash(String date) {
+        return parse(date, ISO_DATE_WITH_SLASH);
+    }
+
+    /**
+     * 获取特定格式的日期
+     *
+     * @param date      日期对象
+     * @param formatter 格式化对象
+     * @return 格式化后的日期
+     */
+    public static LocalDate parse(String date, DateTimeFormatter formatter) {
+        if (StringUtils.isEmpty(date)) {
+            return null;
+        }
+        return LocalDate.parse(date, formatter);
+    }
+
+    /**
+     * 格式化日期
+     * 默认使用 ISO_LOCAL_DATE
+     *
+     * @param date 日期对象
+     * @return 格式化后的日期
+     */
+    public static String format(LocalDate date) {
+        return format(date, ISO_LOCAL_DATE);
+    }
+
+    /**
+     * 格式化 - 格式的日期
+     *
+     * @param date 日期对象
+     * @return 格式化后的日期
+     */
+    public static String formatWithDash(LocalDate date) {
+        return format(date, ISO_DATE_WITH_DASH);
+    }
+
+    /**
+     * 获取 / 格式的日期
+     *
+     * @param date 日期对象
+     * @return 获取 / 格式的日期
+     */
+    public static String formatWithSlash(LocalDate date) {
+        return format(date, ISO_DATE_WITH_SLASH);
+    }
+
+    /**
+     * 获取特定格式的日期
+     *
+     * @param date      日期对象
+     * @param formatter 格式化对象
+     * @return 格式化后的日期
+     */
+    public static String format(LocalDate date, DateTimeFormatter formatter) {
+        if (Objects.isNull(date)) {
+            return "";
+        }
+        return date.format(formatter);
+    }
 
     /**
      * 判断传入日期是否在对应的区间内，默认包含区间边界

@@ -9,12 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>common-springdoc</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>common-springdoc-mvcapi</module>
-        <module>common-springdoc-gatewayui</module>
-        <module>common-springdoc-applicationui</module>
-    </modules>
+    <artifactId>common-formatter</artifactId>
+    <version>${revision}</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.bitprogress</groupId>
+            <artifactId>common-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

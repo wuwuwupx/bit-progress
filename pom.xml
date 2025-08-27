@@ -15,6 +15,9 @@
         <module>bit-progress-dependencies</module>
         <module>common</module>
         <module>openfeign</module>
+        <module>business-common</module>
+        <module>common/common-feign</module>
+        <module>common/common-formatter</module>
     </modules>
 
     <properties>

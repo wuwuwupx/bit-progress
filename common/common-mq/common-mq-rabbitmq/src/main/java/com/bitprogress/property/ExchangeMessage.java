@@ -1,11 +1,15 @@
 package com.bitprogress.property;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Map;
 
 /**
- * @author wuwuwupx
  * 交换机配置
  */
+@Setter
+@Getter
 public class ExchangeMessage {
 
     /**
@@ -60,46 +64,6 @@ public class ExchangeMessage {
 
         ;
 
-    }
-
-    public String getExchangeName() {
-        return exchangeName;
-    }
-
-    public void setExchangeName(String exchangeName) {
-        this.exchangeName = exchangeName;
-    }
-
-    public ExchangeType getExchangeType() {
-        return exchangeType;
-    }
-
-    public void setExchangeType(ExchangeType exchangeType) {
-        this.exchangeType = exchangeType;
-    }
-
-    public Map<String, Object> getArgument() {
-        return argument;
-    }
-
-    public void setArgument(Map<String, Object> argument) {
-        this.argument = argument;
-    }
-
-    public boolean isDurable() {
-        return durable;
-    }
-
-    public void setDurable(boolean durable) {
-        this.durable = durable;
-    }
-
-    public boolean isAutoDelete() {
-        return autoDelete;
-    }
-
-    public void setAutoDelete(boolean autoDelete) {
-        this.autoDelete = autoDelete;
     }
 
 }

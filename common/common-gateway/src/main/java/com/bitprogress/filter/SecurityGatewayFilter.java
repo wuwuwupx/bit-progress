@@ -87,7 +87,7 @@ public class SecurityGatewayFilter implements GlobalFilter {
         String userInfo = authInfo.getUserInfo();
         ServerHttpRequest.Builder mutate = request.mutate();
         // 设置请求头信息
-        mutate.header(VerifyConstant.REQUEST_RESOURCE, RequestSource.GATEWAY_ROUTE.getValue().toString())
+        mutate.header(VerifyConstant.REQUEST_RESOURCE, RequestSource.GATEWAY.getValue().toString())
                 .header(VerifyConstant.GATEWAY_TOKEN, server.getMetadata().get(VerifyConstant.GATEWAY_TOKEN))
                 .header(VerifyConstant.REQUEST_TYPE, requestType.getValue().toString())
                 .header(VerifyConstant.USER_ID, authInfo.getUserId())

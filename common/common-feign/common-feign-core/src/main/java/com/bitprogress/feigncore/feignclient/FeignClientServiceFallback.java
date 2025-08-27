@@ -1,4 +1,4 @@
-package com.bitprogress.feignclient;
+package com.bitprogress.feigncore.feignclient;
 
 import com.bitprogress.response.model.ResultResponse;
 import org.springframework.cloud.openfeign.FallbackFactory;

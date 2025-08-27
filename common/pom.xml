@@ -25,7 +25,6 @@
         <module>common-springdoc</module>
         <module>common-redis</module>
         <module>common-elasticsearch</module>
-        <module>common-feign</module>
         <module>common-mq</module>
         <module>common-nacos</module>
         <module>common-sentinel</module>

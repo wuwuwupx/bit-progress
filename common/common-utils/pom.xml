@@ -17,10 +17,6 @@
             <artifactId>common-exception</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.bitprogress</groupId>
-            <artifactId>common-base-model</artifactId>
-        </dependency>
-        <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
         </dependency>

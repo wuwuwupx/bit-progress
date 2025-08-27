@@ -1,4 +1,4 @@
-package com.bitprogress.interceptor;
+package com.bitprogress.feigncontext.interceptor;
 
 import com.bitprogress.ormcontext.service.DataScopeContextService;
 import com.bitprogress.ormcontext.service.TenantContextService;

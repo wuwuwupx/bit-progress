@@ -14,10 +14,6 @@
     <dependencies>
         <dependency>
             <groupId>com.bitprogress</groupId>
-            <artifactId>common-base-model</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.bitprogress</groupId>
             <artifactId>common-exception</artifactId>
         </dependency>
     </dependencies>

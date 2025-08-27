@@ -75,7 +75,7 @@ public class UserFilter implements Filter, UserContextMaintenanceService {
             RequestSource requestSource = DispatcherUtils.getRequestSource(httpRequest);
 
             switch (requestSource) {
-                case GATEWAY_ROUTE -> {
+                case GATEWAY -> {
                     // 校验服务token
                     String requestRouteToken = httpRequest.getHeader(VerifyConstant.GATEWAY_TOKEN);
                     String routeToken = applicationTokenProperties.getGateway();

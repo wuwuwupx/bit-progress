@@ -6,6 +6,7 @@ import com.bitprogress.basemodel.enums.time.WeekType;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
@@ -17,48 +18,15 @@ import java.util.Objects;
  */
 public class LocalDateTimeUtils {
 
-    public static final String DEFAULT_DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_TIME_PATTERN_WITH_DASH = "yyyy-MM-dd HH:mm:ss";
     public static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
-            .appendPattern(DEFAULT_DATE_TIME_PATTERN)
+            .appendPattern(DATE_TIME_PATTERN_WITH_DASH)
             .optionalStart()
             .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)
             .toFormatter();
-    public static final String DEFAULT_DATE_PATTERN = "yyyy-MM-dd";
-    public static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_DATE_PATTERN);
-    public static final String DEFAULT_TIME_PATTERN = "HH:mm:ss";
-    public static final DateTimeFormatter DEFAULT_TIME_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_TIME_PATTERN);
-
-    /**
-     * 格式化 LocalDateTime , 默认 'yyyy-MM-dd HH:mm:ss' 格式.
-     *
-     * @param time LocalDateTime
-     * @return yyyy-MM-dd HH:mm:ss
-     */
-    public static String format(LocalDateTime time) {
-        return format(time, DEFAULT_DATE_TIME_FORMATTER);
-    }
-
-    /**
-     * 格式化 LocalDateTime , 手动指定日期格式.
-     *
-     * @param time    LocalDateTime
-     * @param pattern 日期格式
-     * @return LocalDateTime with pattern
-     */
-    public static String format(LocalDateTime time, String pattern) {
-        return format(time, DateTimeFormatter.ofPattern(pattern));
-    }
-
-    /**
-     * 格式化 LocalDateTime , 手动指定日期格式.
-     *
-     * @param time      LocalDateTime
-     * @param formatter 日期格式
-     * @return LocalDateTime with formatter
-     */
-    public static String format(LocalDateTime time, DateTimeFormatter formatter) {
-        return time.format(formatter);
-    }
+    private static final DateTimeFormatter ISO_LOCAL_DATE_TIME = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    public static final DateTimeFormatter ISO_DATE_TIME_WITH_DASH = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN_WITH_DASH);
+    private static final DateTimeFormatter ISO_DATE_TIME_WITH_SLASH = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
     /**
      * Converts a string to LocalDateTime using the specified formatter
@@ -67,7 +35,67 @@ public class LocalDateTimeUtils {
      * @return LocalDateTime with default formatter
      */
     public static LocalDateTime parse(String time) {
+        if (StringUtils.isEmpty(time)) {
+            return null;
+        }
+        // 处理纯数字时间戳格式
+        if (time.matches("\\d+")) {
+            try {
+                long timestamp = Long.parseLong(time);
+                // 判断是秒级还是毫秒级时间戳
+                if (timestamp > 9999999999L) {
+                    // 毫秒级时间戳
+                    return Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                } else {
+                    // 秒级时间戳
+                    return Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Unable to parse timestamp: " + time);
+            }
+        }
+        // 处理格式化字符串
+        try {
+            if (time.contains("/")) {
+                return parseWithSlash(time);
+            } else if (time.contains("T")) {
+                return parseWithIsoLocalDateTime(time);
+            } else {
+                return parseWithDash(time);
+            }
+        } catch (DateTimeParseException e) {
+            throw new RuntimeException("Unable to parse timestamp: " + time);
+        }
+    }
+
+    /**
+     * Converts a string to LocalDateTime using the - pattern
+     *
+     * @param time LocalDateTime
+     * @return LocalDateTime with default formatter
+     */
+    private static LocalDateTime parseWithDash(String time) {
         return parse(time, DEFAULT_DATE_TIME_FORMATTER);
+    }
+
+    /**
+     * Converts a string to LocalDateTime using the / pattern
+     *
+     * @param time LocalDateTime
+     * @return LocalDateTime with default formatter
+     */
+    private static LocalDateTime parseWithSlash(String time) {
+        return parse(time, DateTimeFormatter.ofPattern(""));
+    }
+
+    /**
+     * Converts a string to LocalDateTime using the ISO_LOCAL_DATE_TIME
+     *
+     * @param time LocalDateTime
+     * @return LocalDateTime with formatter
+     */
+    public static LocalDateTime parseWithIsoLocalDateTime(String time) {
+        return parse(time, ISO_LOCAL_DATE_TIME);
     }
 
     /**
@@ -90,6 +118,68 @@ public class LocalDateTimeUtils {
      */
     public static LocalDateTime parse(String time, DateTimeFormatter formatter) {
         return LocalDateTime.parse(time, formatter);
+    }
+
+    /**
+     * 格式化 LocalDateTime , 默认 'yyyy-MM-dd HH:mm:ss' 格式.
+     *
+     * @param time LocalDateTime
+     * @return yyyy-MM-dd HH:mm:ss
+     */
+    public static String format(LocalDateTime time) {
+        return formatWithDash(time);
+    }
+
+    /**
+     * 格式化 LocalDateTime 为 - 格式的日期时间.
+     *
+     * @param time    LocalDateTime
+     * @return LocalDateTime with pattern
+     */
+    public static String formatWithDash(LocalDateTime time) {
+        return format(time, ISO_DATE_TIME_WITH_DASH);
+    }
+
+    /**
+     * 格式化 LocalDateTime 为 / 格式的日期时间.
+     *
+     * @param time    LocalDateTime
+     * @return LocalDateTime with pattern
+     */
+    public static String formatWithSlash(LocalDateTime time) {
+        return format(time, ISO_DATE_TIME_WITH_SLASH);
+    }
+
+    /**
+     * 格式化 LocalDateTime 为 ISO_LOCAL_DATE_TIME 格式
+     *
+     * @param time    LocalDateTime
+     * @return LocalDateTime with pattern
+     */
+    public static String formatWithIsoLocalDateTime(LocalDateTime time) {
+        return format(time, ISO_LOCAL_DATE_TIME);
+    }
+
+    /**
+     * 格式化 LocalDateTime , 手动指定日期格式.
+     *
+     * @param time    LocalDateTime
+     * @param pattern 日期格式
+     * @return LocalDateTime with pattern
+     */
+    public static String format(LocalDateTime time, String pattern) {
+        return format(time, DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
+     * 格式化 LocalDateTime , 手动指定日期格式.
+     *
+     * @param time      LocalDateTime
+     * @param formatter 日期格式
+     * @return LocalDateTime with formatter
+     */
+    public static String format(LocalDateTime time, DateTimeFormatter formatter) {
+        return time.format(formatter);
     }
 
     /**
