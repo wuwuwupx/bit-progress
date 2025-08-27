@@ -1778,6 +1778,18 @@ public class CollectionUtils {
                 groupingBy(tripleGroupFunction, mapping(valueFunction, Collectors.toList())))));
     }
 
+    public static <T, K, SK, V> Map<K, Map<SK, V>> groupMap(Collection<T> collection,
+                                                            Function<T, K> groupFunction,
+                                                            Function<T, SK> subKeyFunction,
+                                                            Function<T, V> valueFunction,
+                                                            BinaryOperator<V> binaryOperator) {
+        if (isEmpty(collection)) {
+            return emptyMap();
+        }
+        return collection.stream()
+                .collect(groupingBy(groupFunction, Collectors.toMap(subKeyFunction, valueFunction, binaryOperator)));
+    }
+
     /**
      * 将集合内的元素类型进行函数运算
      *
