@@ -7,6 +7,7 @@ import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.alibaba.excel.write.handler.WriteHandler;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.bitprogress.excelcore.data.WriteSheetData;
+import com.bitprogress.excelcore.handler.ExcelWriteHandler;
 import com.bitprogress.util.CollectionUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -37,7 +38,11 @@ public class ExcelWriteUtils {
      */
     public static <T> void exportExcel(OutputStream outputStream, List<T> list, Class<T> tClass, String sheetName) {
         ExcelWriter excelWriter = EasyExcel.write(outputStream, tClass).build();
-        WriteSheet writeSheet = EasyExcel.writerSheet(sheetName).build();
+        ExcelWriterSheetBuilder sheetBuilder = EasyExcel.writerSheet(sheetName);
+        // 处理自定义的写入处理器
+        ExcelWriteHandler.registerWriteHandler(sheetBuilder, tClass);
+        WriteSheet writeSheet = EasyExcel.writerSheet(sheetName)
+                .build();
         // 这里注意 如果同一个sheet只要创建一次
         excelWriter.write(list, writeSheet);
         excelWriter.finish();
@@ -55,11 +60,13 @@ public class ExcelWriteUtils {
                                                                String sheetName,
                                                                List<R> writeHandlers) {
         ExcelWriter excelWriter = EasyExcel.write(outputStream, tClass).build();
-        ExcelWriterSheetBuilder builder = EasyExcel.writerSheet(sheetName);
+        ExcelWriterSheetBuilder sheetBuilder = EasyExcel.writerSheet(sheetName);
         if (CollectionUtils.isNotEmpty(writeHandlers)) {
-            writeHandlers.forEach(builder::registerWriteHandler);
+            writeHandlers.forEach(sheetBuilder::registerWriteHandler);
         }
-        WriteSheet writeSheet = builder.build();
+        // 处理自定义的写入处理器
+        ExcelWriteHandler.registerWriteHandler(sheetBuilder, tClass);
+        WriteSheet writeSheet = sheetBuilder.build();
         // 这里注意 如果同一个sheet只要创建一次
         excelWriter.write(list, writeSheet);
         excelWriter.finish();
@@ -78,13 +85,15 @@ public class ExcelWriteUtils {
                                                                String sheetName,
                                                                R... writeHandlers) {
         ExcelWriter excelWriter = EasyExcel.write(outputStream, tClass).build();
-        ExcelWriterSheetBuilder builder = EasyExcel.writerSheet(sheetName);
+        ExcelWriterSheetBuilder sheetBuilder = EasyExcel.writerSheet(sheetName);
         for (R writeHandler : writeHandlers) {
             if (Objects.nonNull(writeHandler)) {
-                builder.registerWriteHandler(writeHandler);
+                sheetBuilder.registerWriteHandler(writeHandler);
             }
         }
-        WriteSheet writeSheet = builder.build();
+        // 处理自定义的写入处理器
+        ExcelWriteHandler.registerWriteHandler(sheetBuilder, tClass);
+        WriteSheet writeSheet = sheetBuilder.build();
         // 这里注意 如果同一个sheet只要创建一次
         excelWriter.write(list, writeSheet);
         excelWriter.finish();

@@ -4,15 +4,12 @@ import com.alibaba.excel.write.handler.SheetWriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
 import com.bitprogress.excelcore.data.FreezePaneData;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.apache.poi.ss.usermodel.Sheet;
 
-@AllArgsConstructor
-@Getter
-public class FreezePaneHandler implements SheetWriteHandler {
-
-    private final FreezePaneData freezePaneData;
+/**
+ * 冻结窗格处理器
+ */
+public record FreezePaneHandler(FreezePaneData freezePaneData) implements SheetWriteHandler {
 
     public Integer getColSplit() {
         return freezePaneData.getColSplit();
