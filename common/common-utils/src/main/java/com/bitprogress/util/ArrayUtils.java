@@ -87,6 +87,16 @@ public class ArrayUtils {
     }
 
     /**
+     * 数组是否只包含一个元素
+     *
+     * @param array 需要检查的数组
+     * @return true：只包含一个元素
+     */
+    public static boolean isSingle(Object[] array) {
+        return isNotEmpty(array) && array.length == 1;
+    }
+
+    /**
      * 获取数组中元素的索引
      * 不存在则返回 -1
      *

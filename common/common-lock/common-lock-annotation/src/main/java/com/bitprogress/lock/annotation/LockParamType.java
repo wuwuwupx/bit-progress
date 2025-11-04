@@ -1,31 +1,27 @@
-package com.bitprogress.basemodel.endpoint.interval.enums;
+package com.bitprogress.lock.annotation;
 
 import com.bitprogress.basemodel.enums.NameEnum;
 import com.bitprogress.basemodel.enums.ValueEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * 端点类型
- */
 @Getter
 @AllArgsConstructor
-public enum EndpointType implements IntervalEnums, ValueEnum, NameEnum {
+public enum LockParamType implements ValueEnum, NameEnum {
 
     /**
-     * 区间开始的端点
+     * 上下文类型，自定义获取
      */
-    LEFT(0, "左端点"),
+    CONTEXT(0, "context"),
 
     /**
-     * 区间结束的端点
+     * Spring EL表达式类型，通过 Spring EL表达式获取
      */
-    RIGHT(1, "右端点"),
+    SPRING_EL(1, "springEl"),
 
     ;
 
     private final Integer value;
-
     private final String name;
 
 }

@@ -1,6 +1,6 @@
 package com.bitprogress.basemodel.endpoint.interval.enums;
 
-import com.bitprogress.basemodel.enums.MessageEnum;
+import com.bitprogress.basemodel.enums.NameEnum;
 import com.bitprogress.basemodel.enums.ValueEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum BoundaryType implements IntervalEnums, ValueEnum, MessageEnum {
+public enum BoundaryType implements IntervalEnums, ValueEnum, NameEnum {
 
     /**
      * 开区间
@@ -26,7 +26,7 @@ public enum BoundaryType implements IntervalEnums, ValueEnum, MessageEnum {
 
     private final Integer value;
 
-    private final String message;
+    private final String name;
 
     /**
      * 区间左边界符号

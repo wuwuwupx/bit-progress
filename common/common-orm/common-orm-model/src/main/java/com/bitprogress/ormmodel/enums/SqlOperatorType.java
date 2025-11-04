@@ -1,6 +1,7 @@
 package com.bitprogress.ormmodel.enums;
 
-import com.bitprogress.basemodel.enums.MessageEnum;
+import com.bitprogress.basemodel.enums.NameEnum;
+import com.bitprogress.basemodel.enums.SymbolsEnum;
 import com.bitprogress.basemodel.enums.ValueEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,18 +11,18 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public enum SqlOperatorType implements OrmEnum, ValueEnum, MessageEnum {
+public enum SqlOperatorType implements OrmEnum, ValueEnum, NameEnum, SymbolsEnum {
 
-    EQUAL(0, "="),
+    EQUAL(0, "等于", "="),
 
-    IN(1, "in"),
+    IN(1, "包含", "in"),
 
-    LIKE(2, "like"),
+    LIKE(2, "模糊匹配", "like"),
 
     ;
 
     private final Integer value;
-
-    private final String message;
+    private final String name;
+    private final String symbols;
 
 }

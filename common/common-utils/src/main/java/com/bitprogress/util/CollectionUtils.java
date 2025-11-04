@@ -1548,6 +1548,29 @@ public class CollectionUtils {
     }
 
     /**
+     * 对集合进行分组后再转换成map
+     *
+     * @param collection    需要分分组的集合
+     * @param groupFunction 分组元素
+     * @param keyFunction   分组后的map的key元素
+     * @return 分组后的集合
+     */
+    public static <T, G, K, V extends Comparable<V>> Map<G, Map<K, V>> groupMap(Collection<T> collection,
+                                                                                Function<T, G> groupFunction,
+                                                                                Function<T, K> keyFunction,
+                                                                                Function<T, V> valueFunction,
+                                                                                Function<T, V> compareFunction,
+                                                                                ComparableType comparableType) {
+        if (isEmpty(collection)) {
+            return emptyMap();
+        }
+        BinaryOperator<V> tBinaryOperator = comparableType.binaryOperator();
+        return collection
+                .stream()
+                .collect(groupingBy(groupFunction, Collectors.toMap(keyFunction, valueFunction, tBinaryOperator)));
+    }
+
+    /**
      * 双重分组
      *
      * @param collection        需要分组的集合

@@ -1,6 +1,6 @@
 package com.bitprogress.basemodel.enums.text;
 
-import com.bitprogress.basemodel.enums.MessageEnum;
+import com.bitprogress.basemodel.enums.NameEnum;
 import com.bitprogress.basemodel.enums.RegexEnum;
 import com.bitprogress.basemodel.enums.TextEnum;
 import com.bitprogress.basemodel.enums.ValueEnum;
@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum TextType implements TextEnum, ValueEnum, MessageEnum, RegexEnum {
+public enum TextType implements TextEnum, ValueEnum, NameEnum, RegexEnum {
 
     /**
      * 全部数字（\p{Nd} + \p{Nl} + \p{No}）
@@ -134,7 +134,7 @@ public enum TextType implements TextEnum, ValueEnum, MessageEnum, RegexEnum {
 
     private final Integer value;
 
-    private final String message;
+    private final String name;
 
     private final String regex;
 

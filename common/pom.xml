@@ -20,6 +20,7 @@
         <module>common-utils</module>
         <module>common-http</module>
         <module>common-json</module>
+        <module>common-lock</module>
         <module>common-exception</module>
         <module>common-response</module>
         <module>common-springdoc</module>

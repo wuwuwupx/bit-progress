@@ -1,14 +1,14 @@
 package com.bitprogress.basemodel.enums.field;
 
 import com.bitprogress.basemodel.enums.FieldEnum;
-import com.bitprogress.basemodel.enums.MessageEnum;
+import com.bitprogress.basemodel.enums.NameEnum;
 import com.bitprogress.basemodel.enums.ValueEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum FieldType implements FieldEnum, ValueEnum, MessageEnum {
+public enum FieldType implements FieldEnum, ValueEnum, NameEnum {
 
     /**
      * 单行文本
@@ -69,6 +69,6 @@ public enum FieldType implements FieldEnum, ValueEnum, MessageEnum {
 
     private final Integer value;
 
-    private final String message;
+    private final String name;
 
 }

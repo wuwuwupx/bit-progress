@@ -1,6 +1,6 @@
 package com.bitprogress.basemodel.enums.time;
 
-import com.bitprogress.basemodel.enums.MessageEnum;
+import com.bitprogress.basemodel.enums.NameEnum;
 import com.bitprogress.basemodel.enums.TimeEnum;
 import com.bitprogress.basemodel.enums.ValueEnum;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum WeekType implements TimeEnum, ValueEnum, MessageEnum {
+public enum WeekType implements TimeEnum, ValueEnum, NameEnum {
 
     PRE_WEEK(0, "上周"),
     THIS_WEEK(1, "本周"),
@@ -16,6 +16,6 @@ public enum WeekType implements TimeEnum, ValueEnum, MessageEnum {
     ;
 
     private final Integer value;
-    private final String message;
+    private final String name;
 
 }

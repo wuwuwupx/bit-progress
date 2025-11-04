@@ -2,6 +2,7 @@ package com.bitprogress.basemodel.enums.comparable;
 
 import com.bitprogress.basemodel.enums.ComparableEnum;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.BinaryOperator;

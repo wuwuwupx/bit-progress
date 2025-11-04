@@ -1,6 +1,6 @@
 package com.bitprogress.basemodel.coordinate.enums;
 
-import com.bitprogress.basemodel.enums.MessageEnum;
+import com.bitprogress.basemodel.enums.NameEnum;
 import com.bitprogress.basemodel.enums.ValueEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum AxisType implements CoordinateEnum, ValueEnum, MessageEnum {
+public enum AxisType implements CoordinateEnum, ValueEnum, NameEnum {
 
     /**
      * horizontal axis
@@ -34,6 +34,6 @@ public enum AxisType implements CoordinateEnum, ValueEnum, MessageEnum {
 
     private final Integer value;
 
-    private final String message;
+    private final String name;
 
 }
