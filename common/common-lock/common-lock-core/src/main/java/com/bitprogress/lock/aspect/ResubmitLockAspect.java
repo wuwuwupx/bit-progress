@@ -123,7 +123,9 @@ public class ResubmitLockAspect {
             for (int i = 0; i < args.length; i++) {
                 Object arg = args[i];
                 context.setVariable("param" + i, arg);
-                context.setVariable(arg.getClass().getSimpleName(), arg);
+                String simpleName = arg.getClass().getSimpleName();
+                context.setVariable(simpleName, arg);
+                context.setVariable(toCamelCase(simpleName), arg);
             }
 
             // 如果只有一个参数，也作为根对象
@@ -132,6 +134,22 @@ public class ResubmitLockAspect {
             }
         }
         return context;
+    }
+
+    /**
+     * 将类名转换为驼峰式
+     *
+     * @param className 类名
+     * @return 驼峰式类名
+     */
+    private static String toCamelCase(String className) {
+        if (StringUtils.isEmpty(className)) {
+            return className;
+        }
+        if (className.length() == 1) {
+            return className.toLowerCase();
+        }
+        return Character.toLowerCase(className.charAt(0)) + className.substring(1);
     }
 
 }
