@@ -1555,19 +1555,65 @@ public class CollectionUtils {
      * @param keyFunction   分组后的map的key元素
      * @return 分组后的集合
      */
+    public static <T, G, K extends Comparable<K>> Map<G, Map<K, T>> groupMap(Collection<T> collection,
+                                                                             Function<T, G> groupFunction,
+                                                                             Function<T, K> keyFunction) {
+        return groupMap(collection, groupFunction, keyFunction, Function.identity(), keyFunction);
+    }
+
+    /**
+     * 对集合进行分组后再转换成map
+     *
+     * @param collection    需要分分组的集合
+     * @param groupFunction 分组元素
+     * @param keyFunction   分组后的map的key元素
+     * @return 分组后的集合
+     */
     public static <T, G, K, V extends Comparable<V>> Map<G, Map<K, V>> groupMap(Collection<T> collection,
                                                                                 Function<T, G> groupFunction,
                                                                                 Function<T, K> keyFunction,
-                                                                                Function<T, V> valueFunction,
-                                                                                Function<T, V> compareFunction,
-                                                                                ComparableType comparableType) {
+                                                                                Function<T, V> valueFunction) {
+        return groupMap(collection, groupFunction, keyFunction, valueFunction, valueFunction);
+    }
+
+    /**
+     * 对集合进行分组后再转换成map
+     *
+     * @param collection    需要分分组的集合
+     * @param groupFunction 分组元素
+     * @param keyFunction   分组后的map的key元素
+     * @return 分组后的集合
+     */
+    public static <T, G, K, V, C extends Comparable<C>> Map<G, Map<K, V>> groupMap(Collection<T> collection,
+                                                                                   Function<T, G> groupFunction,
+                                                                                   Function<T, K> keyFunction,
+                                                                                   Function<T, V> valueFunction,
+                                                                                   Function<T, C> compareFunction) {
+        return groupMap(collection, groupFunction, keyFunction, valueFunction, compareFunction, ComparableType.MIN);
+    }
+
+    /**
+     * 对集合进行分组后再转换成map
+     *
+     * @param collection    需要分分组的集合
+     * @param groupFunction 分组元素
+     * @param keyFunction   分组后的map的key元素
+     * @return 分组后的集合
+     */
+    public static <T, G, K, V, C extends Comparable<C>> Map<G, Map<K, V>> groupMap(Collection<T> collection,
+                                                                                   Function<T, G> groupFunction,
+                                                                                   Function<T, K> keyFunction,
+                                                                                   Function<T, V> valueFunction,
+                                                                                   Function<T, C> compareFunction,
+                                                                                   ComparableType comparableType) {
         if (isEmpty(collection)) {
             return emptyMap();
         }
-        BinaryOperator<V> tBinaryOperator = comparableType.binaryOperator();
+        Collector<T, ?, Map<K, V>> collector = getGroupMapCollector(groupFunction, keyFunction, valueFunction,
+                compareFunction, comparableType, emptyMap());
         return collection
                 .stream()
-                .collect(groupingBy(groupFunction, Collectors.toMap(keyFunction, valueFunction, tBinaryOperator)));
+                .collect(groupingBy(groupFunction, collector));
     }
 
     /**
@@ -1799,18 +1845,6 @@ public class CollectionUtils {
                                                                               Function<T, V> valueFunction) {
         return stream.collect(groupingBy(groupFunction, groupingBy(dualGroupFunction,
                 groupingBy(tripleGroupFunction, mapping(valueFunction, Collectors.toList())))));
-    }
-
-    public static <T, K, SK, V> Map<K, Map<SK, V>> groupMap(Collection<T> collection,
-                                                            Function<T, K> groupFunction,
-                                                            Function<T, SK> subKeyFunction,
-                                                            Function<T, V> valueFunction,
-                                                            BinaryOperator<V> binaryOperator) {
-        if (isEmpty(collection)) {
-            return emptyMap();
-        }
-        return collection.stream()
-                .collect(groupingBy(groupFunction, Collectors.toMap(subKeyFunction, valueFunction, binaryOperator)));
     }
 
     /**
@@ -2829,6 +2863,55 @@ public class CollectionUtils {
             comparableMap.put(key, data);
         });
         return map;
+    }
+
+    /**
+     * 获取Collector
+     *
+     * @param groupFunction      分组方法
+     * @param keyFunction        获取key方法
+     * @param valueFunction      获取value方法
+     * @param comparatorFunction 获取比较方法
+     * @param comparableType     获取比较类型
+     * @param elementMap         获取元素
+     * @return Collector
+     */
+    public static <T, G, K, V, C extends Comparable<C>>
+    Collector<T, ?, Map<K, V>> getGroupMapCollector(Function<T, G> groupFunction,
+                                                    Function<T, K> keyFunction,
+                                                    Function<T, V> valueFunction,
+                                                    Function<T, C> comparatorFunction,
+                                                    ComparableType comparableType,
+                                                    Map<G, Map<K, T>> elementMap) {
+        BiConsumer<Map<K, V>, T> accumulator = (map, element) -> {
+            G group = groupFunction.apply(element);
+            K key = keyFunction.apply(element);
+            Map<K, T> groupMap = getForMap(elementMap, group, emptyMap());
+            V oldValue = map.get(key);
+            if (Objects.isNull(oldValue)) {
+                map.put(key, valueFunction.apply(element));
+            } else {
+                T oldElement = getForMap(groupMap, key);
+                T finalElement = comparableType.binaryOperator(comparatorFunction).apply(oldElement, element);
+                map.put(key, valueFunction.apply(finalElement));
+            }
+            groupMap.put(key, element);
+            elementMap.put(group, groupMap);
+        };
+
+        // 工具类方法中不使用并行流，不做处理
+        BinaryOperator<Map<K, V>> combiner = (m1, m2) -> {
+            for (Map.Entry<K, V> e : m2.entrySet()) {
+                K key = e.getKey();
+
+                if (!m1.containsKey(key)) {
+                    m1.put(key, e.getValue());
+                }
+            }
+            return m1;
+        };
+
+        return Collector.of(HashMap::new, accumulator, combiner, Collector.Characteristics.IDENTITY_FINISH);
     }
 
     /**
