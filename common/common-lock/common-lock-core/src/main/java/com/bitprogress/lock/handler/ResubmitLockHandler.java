@@ -1,8 +1,8 @@
-package com.bitprogress.lock.service;
+package com.bitprogress.lock.handler;
 
 import java.util.concurrent.TimeUnit;
 
-public interface ResubmitLockService {
+public interface ResubmitLockHandler {
 
     /**
      * 锁

@@ -17,6 +17,10 @@
             <groupId>com.bitprogress</groupId>
             <artifactId>common-lock-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.bitprogress</groupId>
+            <artifactId>common-redis</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

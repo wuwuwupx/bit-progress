@@ -5,8 +5,8 @@ import com.bitprogress.exception.util.Assert;
 import com.bitprogress.lock.annotation.LockParam;
 import com.bitprogress.lock.annotation.LockParamType;
 import com.bitprogress.lock.annotation.ResubmitLock;
-import com.bitprogress.lock.service.ContextValueService;
-import com.bitprogress.lock.service.ResubmitLockService;
+import com.bitprogress.lock.handler.ContextValueHandler;
+import com.bitprogress.lock.handler.ResubmitLockHandler;
 import com.bitprogress.util.ArrayUtils;
 import com.bitprogress.util.StringUtils;
 import lombok.AllArgsConstructor;
@@ -27,9 +27,9 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public class ResubmitLockAspect {
 
-    private final ContextValueService contextValueService;
+    private final ContextValueHandler contextValueHandler;
 
-    private final ResubmitLockService resubmitLockService;
+    private final ResubmitLockHandler resubmitLockHandler;
 
     @SneakyThrows
     @Around("@annotation(resubmitLock)")
@@ -44,13 +44,13 @@ public class ResubmitLockAspect {
         boolean release = resubmitLock.release();
         Object[] args = joinPoint.getArgs();
         String lockKey = getLockKey(keyPrefix, lockParams, args);
-        boolean lock = resubmitLockService.lock(lockKey, expire, timeUnit);
+        boolean lock = resubmitLockHandler.lock(lockKey, expire, timeUnit);
         Assert.isTrue(lock, "点击太快啦！请稍后重试");
         try {
             return joinPoint.proceed();
         } finally {
             if (release) {
-                resubmitLockService.unlock(lockKey);
+                resubmitLockHandler.unlock(lockKey);
             }
         }
     }
@@ -71,7 +71,7 @@ public class ResubmitLockAspect {
             LockParamType lockParamType = lockParam.paramType();
             String value;
             switch (lockParamType) {
-                case CONTEXT -> value = contextValueService.getContextValue(expression);
+                case CONTEXT -> value = contextValueHandler.getContextValue(expression);
                 case SPRING_EL -> value = getSpringElValue(expression, args);
                 default -> value = "";
             }

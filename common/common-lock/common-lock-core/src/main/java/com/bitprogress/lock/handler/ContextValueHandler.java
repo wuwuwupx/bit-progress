@@ -1,6 +1,6 @@
-package com.bitprogress.lock.service;
+package com.bitprogress.lock.handler;
 
-public interface ContextValueService {
+public interface ContextValueHandler {
 
     /**
      * 获取上下文值
