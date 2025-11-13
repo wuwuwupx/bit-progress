@@ -27,8 +27,9 @@
         <!-- MyBatis-Plus Version -->
         <mybatisplus.version>3.5.10.1</mybatisplus.version>
         <mybatisplus.join.version>1.5.1</mybatisplus.join.version>
+        <logback.core.version>1.5.19</logback.core.version>
         <!-- Mysql Connector Version -->
-        <mysql.java.connector.version>8.0.28</mysql.java.connector.version>
+        <mysql.java.connector.version>8.0.33</mysql.java.connector.version>
         <!-- Lombok Version -->
         <lombok.version>1.18.32</lombok.version>
         <!-- Springdoc -->
@@ -38,7 +39,7 @@
         <!-- knife4j -->
         <knife4j.version>4.4.0</knife4j.version>
         <!-- Okhttp -->
-        <okhttp.version>3.14.1</okhttp.version>
+        <okhttp.version>5.3.0</okhttp.version>
         <feign.okhttp.version>11.5</feign.okhttp.version>
         <!-- quartz -->
         <quartz.version>2.3.2</quartz.version>
@@ -119,6 +120,12 @@
                 <artifactId>mybatis-plus-jsqlparser</artifactId>
                 <version>${mybatisplus.version}</version>
             </dependency>
+            <!-- 修复 -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.core.version}</version>
+            </dependency>
 
             <!--mybatis-plus-join 扩展包-->
             <dependency>
@@ -152,6 +159,8 @@
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
+                <type>pom</type>
+                <scope>import</scope>
                 <version>${okhttp.version}</version>
             </dependency>
 

@@ -1,6 +1,5 @@
 package com.bitprogress.util;
 
-import com.bitprogress.basemodel.IJson;
 import com.bitprogress.basemodel.json.ObjectToJson;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,6 +13,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -143,6 +144,25 @@ public class JsonUtils {
     }
 
     /**
+     * 反序列化json字符串为对象
+     *
+     * @param json   json字符串
+     * @param target 目标类型
+     * @return 反序列化后的对象
+     */
+    public static <T> T deserializeObject(InputStream json, Class<T> target) {
+        try {
+            return DEFAULT_MAPPER.readValue(json, target);
+        } catch (JsonProcessingException e) {
+            logger.error("deserializeObject procession error {} ", json, e);
+            throw new RuntimeException("反序列化异常");
+        } catch (IOException e) {
+            logger.error("deserializeObject read error {}", json, e);
+            throw new RuntimeException("反序列化读取异常");
+        }
+    }
+
+    /**
      * 反序列化json字符串为对象，用于泛型转换
      *
      * @param json          json字符串
@@ -162,6 +182,25 @@ public class JsonUtils {
     /**
      * 反序列化json字符串为对象
      *
+     * @param json          json字符串
+     * @param typeReference 目标类型
+     * @return 反序列化后的对象
+     */
+    public static <T> T deserializeObject(InputStream json, TypeReference<T> typeReference) {
+        try {
+            return DEFAULT_MAPPER.readValue(json, typeReference);
+        } catch (JsonProcessingException e) {
+            logger.error("deserializeObject procession error {} ", json, e);
+            throw new RuntimeException("反序列化异常");
+        } catch (IOException e) {
+            logger.error("deserializeObject read error {}", json, e);
+            throw new RuntimeException("反序列化读取异常");
+        }
+    }
+
+    /**
+     * 反序列化json字符串为对象
+     *
      * @param json   json字符串
      * @param target 目标类型
      * @return 反序列化后的对象
@@ -172,6 +211,25 @@ public class JsonUtils {
         } catch (JsonProcessingException e) {
             logger.error("deserializeObject {} errorMessage {} ", json, e.getMessage(), e);
             throw new RuntimeException("反序列化异常" + e.getMessage());
+        }
+    }
+
+    /**
+     * 反序列化json字符串为对象
+     *
+     * @param json     json字符串
+     * @param javaType 目标类型
+     * @return 反序列化后的对象
+     */
+    public static <T> T deserializeObject(InputStream json, JavaType javaType) {
+        try {
+            return DEFAULT_MAPPER.readValue(json, javaType);
+        } catch (JsonProcessingException e) {
+            logger.error("deserializeObject procession error {} ", json, e);
+            throw new RuntimeException("反序列化异常");
+        } catch (IOException e) {
+            logger.error("deserializeObject read error {}", json, e);
+            throw new RuntimeException("反序列化读取异常");
         }
     }
 

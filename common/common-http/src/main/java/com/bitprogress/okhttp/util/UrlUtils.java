@@ -1,20 +1,20 @@
-package com.bitprogress.util;
+package com.bitprogress.okhttp.util;
 
 import com.bitprogress.basemodel.constant.StringConstants;
+import com.bitprogress.util.CollectionUtils;
 
 import java.util.Map;
 
 /**
- * @author wuwuwupx
- *  url拼接工具类
+ * url拼接工具类
  */
 public class UrlUtils {
 
     /**
      * 拼接url和参数
      *
-     * @param url
-     * @param params
+     * @param url    原始url
+     * @param params 请求参数
      */
     public static String urlJoinParam(String url, Map<String, String> params) {
         if (CollectionUtils.isNotEmpty(params)) {

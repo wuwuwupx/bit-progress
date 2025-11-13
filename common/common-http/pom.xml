@@ -17,6 +17,10 @@
             <artifactId>common-utils</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.bitprogress</groupId>
+            <artifactId>common-json</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
         </dependency>
