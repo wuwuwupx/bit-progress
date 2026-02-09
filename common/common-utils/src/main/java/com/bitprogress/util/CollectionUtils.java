@@ -1191,6 +1191,10 @@ public class CollectionUtils {
      * 差集 A-B，属于 A 但不属于 B 的元素构成的集合
      * A={1,2,3,4},B={3,4,5,6}
      * A∖B={1,2}
+     * 特殊示例说明
+     * 集合A为空的情况：A=∅（B 任意） ∅∖B=∅
+     * 集合B为空的情况：B=∅（A 任意） A∖∅=A
+     * 集合A和B都为空的情况：A=∅且B=∅ ∅∖∅=∅ （在实际判断中包含在集合A为空的情况中）
      *
      * @param collectionA 集合A
      * @param collectionB 集合B
