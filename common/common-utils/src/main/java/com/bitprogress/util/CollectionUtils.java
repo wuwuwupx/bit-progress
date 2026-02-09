@@ -32,17 +32,6 @@ public class CollectionUtils {
     private static final String DEFAULT_DELIMITER = ",";
 
     /**
-     * 返回默认容量的hashMap
-     *
-     * @param <T> key类型
-     * @param <R> value类型
-     * @return 默认容量的hashMap
-     */
-    public static <T, R> Map<T, R> emptyMap() {
-        return emptyMap(DEFAULT_EXPECTED_CAPACITY);
-    }
-
-    /**
      * 计算hashMap期望容量的初始值
      * (int) ((float) expectedSize / loadFactor + 1)
      *
@@ -52,6 +41,17 @@ public class CollectionUtils {
      */
     public static int getInitialCapacity(int expectedCapacity, float loadFactor) {
         return (int) ((float) expectedCapacity / loadFactor + 1);
+    }
+
+    /**
+     * 返回默认容量的hashMap
+     *
+     * @param <T> key类型
+     * @param <R> value类型
+     * @return 默认容量的hashMap
+     */
+    public static <T, R> Map<T, R> emptyMap() {
+        return emptyMap(DEFAULT_EXPECTED_CAPACITY);
     }
 
     /**
@@ -136,6 +136,115 @@ public class CollectionUtils {
     }
 
     /**
+     * 创建一个包含一个元素的 HashMap
+     *
+     * @param k key
+     * @param v value
+     * @return 包含一个元素的 HashMap
+     */
+    public static <K, V> Map<K, V> asMap(K k, V v) {
+        Map<K, V> map = emptyMap();
+        map.put(k, v);
+        return map;
+    }
+
+    /**
+     * 将多个 Map 合并为一个新的 HashMap
+     *
+     * @param maps 需要合并的Map
+     * @return 新的 HashMap
+     */
+    @SafeVarargs
+    public static <K, V> Map<K, V> newMap(Map<K, V>... maps) {
+        if (ArrayUtils.isEmpty(maps)) {
+            return emptyMap();
+        }
+        int size = 0;
+        for (Map<K, V> map : maps) {
+            if (isNotEmpty(map)) {
+                size += map.size();
+            }
+        }
+        Map<K, V> newMap = emptyMap(size);
+        for (Map<K, V> map : maps) {
+            if (isNotEmpty(map)) {
+                newMap.putAll(map);
+            }
+        }
+        return newMap;
+    }
+
+    @SafeVarargs
+    public static <T> Set<T> asSet(T... ts) {
+        return asSet(t -> true, ts);
+    }
+
+    /**
+     * 将传入的 元素数组中满足判断表达式的元素创建为新的 HashSet
+     *
+     * @param predicate 判断表达式
+     * @param ts        元素数组
+     * @return 新的 HashMap
+     */
+    @SafeVarargs
+    public static <T> Set<T> asSet(Predicate<T> predicate, T... ts) {
+        if (Objects.isNull(ts)) {
+            return emptySet();
+        }
+        Set<T> set = emptySet(ts.length);
+        for (T t : ts) {
+            if (predicate.test(t)) {
+                set.add(t);
+            }
+        }
+        return set;
+    }
+
+    /**
+     * 将传入的集合和元素整合为新的 HashSet
+     *
+     * @param collection 传入的集合
+     * @param ts         传入的元素数组
+     * @return 整合后的 HashMap
+     */
+    @SafeVarargs
+    public static <T> Set<T> newSet(Collection<T> collection, T... ts) {
+        boolean has = Objects.nonNull(ts);
+        int size = size(collection) + (has ? ts.length : 0);
+        Set<T> newSet = emptySet(size);
+        if (isNotEmpty(collection)) {
+            newSet.addAll(collection);
+        }
+        if (has) {
+            newSet.addAll(Arrays.asList(ts));
+        }
+        return newSet;
+    }
+
+    /**
+     * 将传入的多个集合整合为新的 HashSet
+     *
+     * @param collections 需要整合的集合数组
+     * @return 整合后的 HashMap
+     */
+    @SafeVarargs
+    public static <T> Set<T> newSet(Collection<T>... collections) {
+        int size = 0;
+        for (Collection<T> collection : collections) {
+            if (isNotEmpty(collection)) {
+                size += collection.size();
+            }
+        }
+        Set<T> newSet = emptySet(size);
+        for (Collection<T> collection : collections) {
+            if (isNotEmpty(collection)) {
+                newSet.addAll(collection);
+            }
+        }
+        return newSet;
+    }
+
+    /**
      * 根据传入的数据创建 ArrayList
      *
      * @param ts 传入的值
@@ -207,76 +316,6 @@ public class CollectionUtils {
             }
         }
         return newList;
-    }
-
-    @SafeVarargs
-    public static <T> Set<T> asSet(T... ts) {
-        return asSet(t -> true, ts);
-    }
-
-    /**
-     * 将传入的 元素数组中满足判断表达式的元素创建为新的 HashSet
-     *
-     * @param predicate 判断表达式
-     * @param ts        元素数组
-     * @return 新的 HashMap
-     */
-    @SafeVarargs
-    public static <T> Set<T> asSet(Predicate<T> predicate, T... ts) {
-        if (Objects.isNull(ts)) {
-            return emptySet();
-        }
-        Set<T> set = emptySet(ts.length);
-        for (T t : ts) {
-            if (predicate.test(t)) {
-                set.add(t);
-            }
-        }
-        return set;
-    }
-
-    /**
-     * 将传入的集合和元素整合为新的 HashSet
-     *
-     * @param collection 传入的集合
-     * @param ts         传入的元素数组
-     * @return 整合后的 HashMap
-     */
-    @SafeVarargs
-    public static <T> Set<T> newSet(Collection<T> collection, T... ts) {
-        boolean has = Objects.nonNull(ts);
-        int size = size(collection) + (has ? ts.length : 0);
-        Set<T> newSet = emptySet(size);
-        if (isNotEmpty(collection)) {
-            newSet.addAll(collection);
-        }
-        if (has) {
-            newSet.addAll(Arrays.asList(ts));
-        }
-        return newSet;
-    }
-
-    /**
-     * 将传入的多个集合整合为新的 HashSet
-     *
-     * @param collections 需要整合的集合数组
-     * @return 整合后的 HashMap
-     */
-    @SafeVarargs
-    public static <T> Set<T> newSet(Collection<T>... collections) {
-        int size = 0;
-        for (Collection<T> collection : collections) {
-            if (isNotEmpty(collection)) {
-                size += collection.size();
-            }
-        }
-        Set<T> newSet = emptySet(size);
-        for (Collection<T> collection : collections) {
-            if (isNotEmpty(collection)) {
-                newSet.addAll(collection);
-            }
-        }
-        return newSet;
     }
 
     /**
@@ -373,17 +412,35 @@ public class CollectionUtils {
     }
 
     /**
-     * 集合是否包含
+     * 集合是否包含目标集合任意一个元素
+     * 当目标集合为空时，返回false
      *
-     * @param collection     目标集合
-     * @param tobeCollection 待检测的集合
+     * @param collection 待检测的集合
+     * @param objects    目标元素
+     * @return true：集合包含某一元素，false：集合不包含任何元素
+     */
+    public static boolean containsAny(Collection<?> collection, Object... objects) {
+        if (ArrayUtils.isEmpty(objects) || isEmpty(collection)) {
+            return false;
+        }
+        for (Object o : objects) {
+            if (collection.contains(o)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 集合是否包含目标集合任意一个辕氏
+     * 当目标集合为空时，返回false
+     *
+     * @param collection     待检测的集合
+     * @param tobeCollection 目标集合
      * @return true：集合包含某一元素，false：集合不包含任何元素
      */
     public static boolean containsAny(Collection<?> collection, Collection<?> tobeCollection) {
-        if (isEmpty(tobeCollection)) {
-            return true;
-        }
-        if (isEmpty(collection)) {
+        if (isEmpty(tobeCollection) || isEmpty(collection)) {
             return false;
         }
         for (Object o : tobeCollection) {
@@ -395,25 +452,39 @@ public class CollectionUtils {
     }
 
     /**
-     * 集合是否包含元素
+     * 集合是否包含目标集合所有元素
+     *
+     * @param collection 检查的集合
+     * @param objects    目标元素
+     * @return true：集合包含所有元素，false：集合未包含所有元素
+     */
+    public static boolean containsAll(Collection<?> collection, Objects... objects) {
+        if (ArrayUtils.isEmpty(objects) || isEmpty(collection)) {
+            return false;
+        }
+        for (Object o : objects) {
+            if (!collection.contains(o)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 集合是否包含目标集合所有元素
      *
      * @param collection     检查的集合
      * @param tobeCollection 目标元素
      * @return true：集合包含所有元素，false：集合未包含所有元素
      */
-    public static boolean containsAll(Collection<?> collection, Collection<?> tobeCollection) {
+    public static <T> boolean containsAll(Collection<T> collection, Collection<T> tobeCollection) {
         if (isEmpty(tobeCollection)) {
             return true;
         }
         if (isEmpty(collection)) {
             return false;
         }
-        for (Object o : tobeCollection) {
-            if (!collection.contains(o)) {
-                return false;
-            }
-        }
-        return true;
+        return collection.containsAll(tobeCollection);
     }
 
     /**
@@ -1046,7 +1117,7 @@ public class CollectionUtils {
     }
 
     /**
-     * 返回多个集合的并集
+     * 返回多个集合的并集，并集结果不会重复
      *
      * @param collections 集合
      * @param <T>         集合元素类型
@@ -1054,10 +1125,7 @@ public class CollectionUtils {
      */
     @SafeVarargs
     public static <T> List<T> unionList(Collection<T>... collections) {
-        if (Objects.isNull(collections) || collections.length == 0) {
-            return emptyList();
-        }
-        return flatMapList(Arrays.stream(collections), Collection::stream);
+        return toList(unionSet(collections));
     }
 
     /**
@@ -1073,6 +1141,70 @@ public class CollectionUtils {
             return emptySet();
         }
         return toSet(filter(flatMap(filter(Arrays.stream(collections), Objects::nonNull), Collection::stream), predicate));
+    }
+
+    /**
+     * 获取多个集合的交集
+     *
+     * @param collections 集合列表
+     * @param <T>         集合元素类型
+     * @return 符合匹配条件的元素
+     */
+    @SafeVarargs
+    public static <T> Set<T> intersectionSet(Collection<T>... collections) {
+        if (ArrayUtils.isEmpty(collections)) {
+            return emptySet();
+        }
+        Set<T> result = null;
+        for (Collection<T> collection : collections) {
+            if (isEmpty(collection)) {
+                return emptySet();
+            }
+            if (Objects.isNull(result)) {
+                result = toSet(collection);
+            } else {
+                result.retainAll(collection);
+            }
+            // 每一次进行相交操作后都判断是否为空
+            if (isEmpty(result)) {
+                return emptySet();
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 获取多个集合的交集
+     *
+     * @param collections 集合列表
+     * @param <T>         集合元素类型
+     * @return 符合匹配条件的元素
+     */
+    @SafeVarargs
+    public static <T> List<T> intersectionList(Collection<T>... collections) {
+        Set<T> set = intersectionSet(collections);
+        return toList(set);
+    }
+
+    /**
+     * 获取两个集合的差集
+     *
+     * @param collectionA 集合A
+     * @param collectionB 集合B
+     * @param <T>         集合元素类型
+     * @return 集合A中存在，集合B中不存在的元素
+     */
+    public static <T> Set<T> differenceSet(Collection<T> collectionA, Collection<T> collectionB) {
+        if (isEmpty(collectionA)) {
+            return emptySet();
+        }
+        Set<T> set = toSet(collectionA);
+        if (isEmpty(collectionB)) {
+            return set;
+        }
+        // 取A∖B 即{x∣x∈A 且 x∉B}
+        set.removeAll(collectionB);
+        return set;
     }
 
     /**
