@@ -1187,7 +1187,7 @@ public class CollectionUtils {
     }
 
     /**
-     * 获取两个集合的差集
+     * 获取集合B相对于集合A的相对补集，A∖B 即{x∣x∈A 且 x∉B}
      *
      * @param collectionA 集合A
      * @param collectionB 集合B
