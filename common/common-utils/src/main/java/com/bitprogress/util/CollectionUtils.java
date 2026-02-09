@@ -1188,6 +1188,9 @@ public class CollectionUtils {
 
     /**
      * 获取集合B相对于集合A的补集，A∖B 即{x∣x∈A 且 x∉B}
+     * 差集 A-B，属于 A 但不属于 B 的元素构成的集合
+     * A={1,2,3,4},B={3,4,5,6}
+     * A∖B={1,2}
      *
      * @param collectionA 集合A
      * @param collectionB 集合B
