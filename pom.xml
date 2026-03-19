@@ -16,6 +16,7 @@
         <module>common</module>
         <module>openfeign</module>
         <module>business-common</module>
+        <module>business-services</module>
         <module>common/common-feign</module>
         <module>common/common-formatter</module>
     </modules>
