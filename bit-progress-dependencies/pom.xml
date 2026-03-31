@@ -24,6 +24,8 @@
         <spring.cloud.alibaba.version>2023.0.1.0</spring.cloud.alibaba.version>
         <!-- Spring Cloud Alibaba Dubbo Version -->
         <spring.cloud.alibaba.dubbo.version>2021.1</spring.cloud.alibaba.dubbo.version>
+        <!-- Spring AI Version -->
+        <spring.ai.version>1.0.0</spring.ai.version>
         <!-- MyBatis-Plus Version -->
         <mybatisplus.version>3.5.10.1</mybatisplus.version>
         <mybatisplus.join.version>1.5.1</mybatisplus.join.version>
@@ -88,7 +90,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring.ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!-- Springdoc -->
             <dependency>
                 <groupId>org.springdoc</groupId>
