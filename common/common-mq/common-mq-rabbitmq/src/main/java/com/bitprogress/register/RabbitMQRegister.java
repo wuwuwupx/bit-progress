@@ -76,16 +76,16 @@ public class RabbitMQRegister implements BeanFactoryAware, InstantiationAwareBea
                 CachingConnectionFactory factory = new CachingConnectionFactory(connectionFactory);
                 PropertyMapper property = PropertyMapper.get();
                 property.from(connectionMessage::determineAddresses).to(factory::setAddresses);
-                property.from(connectionMessage::getAddressShuffleMode).whenNonNull().to(factory::setAddressShuffleMode);
+                property.from(connectionMessage::getAddressShuffleMode).whenHasText().to(factory::setAddressShuffleMode);
                 property.from(connectionMessage::isPublisherReturns).to(factory::setPublisherReturns);
-                property.from(connectionMessage::getPublisherConfirmType).whenNonNull().to(factory::setPublisherConfirmType);
+                property.from(connectionMessage::getPublisherConfirmType).whenHasText().to(factory::setPublisherConfirmType);
                 ConnectionMessage.Cache.Channel channel = connectionMessage.getCache().getChannel();
-                property.from(channel::getSize).whenNonNull().to(factory::setChannelCacheSize);
-                property.from(channel::getCheckoutTimeout).whenNonNull().as(Duration::toMillis)
+                property.from(channel::getSize).whenHasText().to(factory::setChannelCacheSize);
+                property.from(channel::getCheckoutTimeout).whenHasText().as(Duration::toMillis)
                         .to(factory::setChannelCheckoutTimeout);
                 ConnectionMessage.Cache.Connection connection = connectionMessage.getCache().getConnection();
-                property.from(connection::getMode).whenNonNull().to(factory::setCacheMode);
-                property.from(connection::getSize).whenNonNull().to(factory::setConnectionCacheSize);
+                property.from(connection::getMode).whenHasText().to(factory::setCacheMode);
+                property.from(connection::getSize).whenHasText().to(factory::setConnectionCacheSize);
 
                 // RabbitTemplate
                 String rabbitTemplateBeanName = name + TEMPLATE_BEAN_NAME;
@@ -201,18 +201,18 @@ public class RabbitMQRegister implements BeanFactoryAware, InstantiationAwareBea
     private RabbitConnectionFactoryBean getRabbitConnectionFactoryBean(ConnectionMessage message) {
         RabbitConnectionFactoryBean factory = new RabbitConnectionFactoryBean();
         PropertyMapper map = PropertyMapper.get();
-        map.from(message::determineHost).whenNonNull().to(factory::setHost);
+        map.from(message::determineHost).whenHasText().to(factory::setHost);
         map.from(message::determinePort).to(factory::setPort);
-        map.from(message::determineUsername).whenNonNull().to(factory::setUsername);
-        map.from(message::determinePassword).whenNonNull().to(factory::setPassword);
-        map.from(message::determineVirtualHost).whenNonNull().to(factory::setVirtualHost);
-        map.from(message::getRequestedHeartbeat).whenNonNull().asInt(Duration::getSeconds)
+        map.from(message::determineUsername).whenHasText().to(factory::setUsername);
+        map.from(message::determinePassword).whenHasText().to(factory::setPassword);
+        map.from(message::determineVirtualHost).whenHasText().to(factory::setVirtualHost);
+        map.from(message::getRequestedHeartbeat).whenHasText().asInt(Duration::getSeconds)
                 .to(factory::setRequestedHeartbeat);
         map.from(message::getRequestedChannelMax).to(factory::setRequestedChannelMax);
         ConnectionMessage.Ssl ssl = message.getSsl();
         if (ssl.determineEnabled()) {
             factory.setUseSSL(true);
-            map.from(ssl::getAlgorithm).whenNonNull().to(factory::setSslAlgorithm);
+            map.from(ssl::getAlgorithm).whenHasText().to(factory::setSslAlgorithm);
             map.from(ssl::getKeyStoreType).to(factory::setKeyStoreType);
             map.from(ssl::getKeyStore).to(factory::setKeyStore);
             map.from(ssl::getKeyStorePassword).to(factory::setKeyStorePassphrase);
@@ -223,9 +223,9 @@ public class RabbitMQRegister implements BeanFactoryAware, InstantiationAwareBea
                     .to((validate) -> factory.setSkipServerCertificateValidation(!validate));
             map.from(ssl::getVerifyHostname).to(factory::setEnableHostnameVerification);
         }
-        map.from(message::getConnectionTimeout).whenNonNull().asInt(Duration::toMillis)
+        map.from(message::getConnectionTimeout).whenHasText().asInt(Duration::toMillis)
                 .to(factory::setConnectionTimeout);
-        map.from(message::getChannelRpcTimeout).whenNonNull().asInt(Duration::toMillis)
+        map.from(message::getChannelRpcTimeout).whenHasText().asInt(Duration::toMillis)
                 .to(factory::setChannelRpcTimeout);
         factory.afterPropertiesSet();
         return factory;
@@ -253,9 +253,9 @@ public class RabbitMQRegister implements BeanFactoryAware, InstantiationAwareBea
         }
         listenerContainer.setMissingQueuesFatal(container.isMissingQueuesFatal());
         listenerContainer.setDeBatchingEnabled(container.isDeBatchingEnabled());
-        map.from(container::getConcurrency).whenNonNull().to(listenerContainer::setConcurrentConsumers);
-        map.from(container::getMaxConcurrency).whenNonNull().to(listenerContainer::setMaxConcurrentConsumers);
-        map.from(container::getBatchSize).whenNonNull().to(listenerContainer::setBatchSize);
+        map.from(container::getConcurrency).whenHasText().to(listenerContainer::setConcurrentConsumers);
+        map.from(container::getMaxConcurrency).whenHasText().to(listenerContainer::setMaxConcurrentConsumers);
+        map.from(container::getBatchSize).whenHasText().to(listenerContainer::setBatchSize);
         map.from(container::isConsumerBatchEnabled).to(listenerContainer::setConsumerBatchEnabled);
         return listenerContainer;
     }

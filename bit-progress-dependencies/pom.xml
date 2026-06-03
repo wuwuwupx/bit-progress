@@ -17,7 +17,7 @@
 
     <properties>
         <!-- Spring Boot Version -->
-        <spring-boot.version>3.5.5</spring-boot.version>
+        <spring-boot.version>4.0.6</spring-boot.version>
         <!-- Spring Cloud Version -->
         <spring.cloud.version>2025.0.0</spring.cloud.version>
         <!-- Spring Cloud Alibaba Version -->
@@ -33,7 +33,7 @@
         <!-- Mysql Connector Version -->
         <mysql.java.connector.version>8.0.33</mysql.java.connector.version>
         <!-- Lombok Version -->
-        <lombok.version>1.18.32</lombok.version>
+        <lombok.version>1.18.46</lombok.version>
         <!-- Springdoc -->
         <spring.doc.version>2.8.9</spring.doc.version>
         <!-- Swagger -->
@@ -58,7 +58,7 @@
         <!-- Apache Commons -->
         <apache.commons.lang3.version>3.18.0</apache.commons.lang3.version>
         <!-- 插件版本 -->
-        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
         <flatten-maven-plugin.version>1.3.0</flatten-maven-plugin.version>
     </properties>
 

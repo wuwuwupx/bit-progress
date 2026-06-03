@@ -1,5 +1,6 @@
 package com.bitprogress.securityspring.token;
 
+import com.bitprogress.util.CollectionUtils;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -8,7 +9,7 @@ import java.util.Collection;
 public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 
     public TicketAuthenticationToken() {
-        super(null);
+        super(CollectionUtils.emptyList());
         setAuthenticated(false);
     }
 
