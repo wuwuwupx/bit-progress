@@ -5,7 +5,6 @@ import com.bitprogress.basemodel.enums.comparable.OrderType;
 import com.bitprogress.basemodel.map.ObjectToMap;
 import com.bitprogress.exception.util.Assert;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.*;
@@ -18,7 +17,7 @@ import static java.util.stream.Collectors.*;
 /**
  * 集合工具类
  */
-public class CollectionUtils {
+public class HisCollectionUtils {
 
     /**
      * HashTable默认期望容量
@@ -340,16 +339,6 @@ public class CollectionUtils {
     }
 
     /**
-     * 判断集合是否为空
-     *
-     * @param array 需要校验的数组
-     * @return true：为空，false：不为空
-     */
-    public static boolean isEmpty(Object[] array) {
-        return array == null || array.length == 0;
-    }
-
-    /**
      * 判断集合是否不为空
      *
      * @param collection 检查的集合
@@ -367,16 +356,6 @@ public class CollectionUtils {
      */
     public static boolean isNotEmpty(Map<?, ?> map) {
         return !isEmpty(map);
-    }
-
-    /**
-     * 判断map是否不为空
-     *
-     * @param array 检查的集合
-     * @return boolean true：不为空，false：为空
-     */
-    public static boolean isNotEmpty(Object[] array) {
-        return !isEmpty(array);
     }
 
     /**
@@ -2541,7 +2520,7 @@ public class CollectionUtils {
             return emptyMap();
         }
         return collection.stream().collect(groupingBy(groupFunction, mapping(mappingFunction,
-                collectingAndThen(Collectors.toList(), CollectionUtils::sumInteger))));
+                collectingAndThen(Collectors.toList(), HisCollectionUtils::sumInteger))));
     }
 
     /**
@@ -2559,7 +2538,7 @@ public class CollectionUtils {
             return emptyMap();
         }
         return collection.stream().collect(groupingBy(groupFunction, mapping(mappingFunction,
-                collectingAndThen(Collectors.toList(), CollectionUtils::sumLong))));
+                collectingAndThen(Collectors.toList(), HisCollectionUtils::sumLong))));
     }
 
     /**
@@ -2577,7 +2556,7 @@ public class CollectionUtils {
             return emptyMap();
         }
         return collection.stream().collect(groupingBy(groupFunction, mapping(mappingFunction,
-                collectingAndThen(Collectors.toList(), CollectionUtils::sumDouble))));
+                collectingAndThen(Collectors.toList(), HisCollectionUtils::sumDouble))));
     }
 
     /**
@@ -2595,7 +2574,7 @@ public class CollectionUtils {
             return emptyMap();
         }
         return collection.stream().collect(groupingBy(groupFunction, mapping(mappingFunction,
-                collectingAndThen(Collectors.toList(), CollectionUtils::sumBigDecimal))));
+                collectingAndThen(Collectors.toList(), HisCollectionUtils::sumBigDecimal))));
     }
 
     /**

@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>common-lock</artifactId>
-    <version>${revision}</version>
 
     <packaging>pom</packaging>
     <modules>

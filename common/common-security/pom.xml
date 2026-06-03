@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>common-security</artifactId>
-    <version>${revision}</version>
     <packaging>pom</packaging>
     <modules>
         <module>common-security-route</module>

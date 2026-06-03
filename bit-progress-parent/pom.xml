@@ -11,7 +11,6 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bit-progress-parent</artifactId>
-    <version>${revision}</version>
     <name>bit-progress-parent</name>
     <description>bit-progress-parent</description>
     <packaging>pom</packaging>

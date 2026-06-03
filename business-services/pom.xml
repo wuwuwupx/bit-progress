@@ -12,6 +12,5 @@
 
     <artifactId>business-services</artifactId>
     <packaging>pom</packaging>
-    <version>${revision}</version>
 
 </project>

@@ -9,7 +9,6 @@
     <artifactId>common-mybatis-plus</artifactId>
 
     <packaging>pom</packaging>
-    <version>${revision}</version>
 
     <modules>
         <module>common-mybatis-plus-model</module>

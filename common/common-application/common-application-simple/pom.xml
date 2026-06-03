@@ -10,7 +10,6 @@
     </parent>
 
     <artifactId>common-application-simple</artifactId>
-    <version>${revision}</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

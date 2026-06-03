@@ -11,7 +11,6 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>bit-progress-dependencies</artifactId>
-    <version>${revision}</version>
     <name>bit-progress-dependencies</name>
     <description>bit-progress-dependencies</description>
 
@@ -19,7 +18,7 @@
         <!-- Spring Boot Version -->
         <spring-boot.version>4.0.6</spring-boot.version>
         <!-- Spring Cloud Version -->
-        <spring.cloud.version>2025.0.0</spring.cloud.version>
+        <spring.cloud.version>2025.1.1</spring.cloud.version>
         <!-- Spring Cloud Alibaba Version -->
         <spring.cloud.alibaba.version>2023.0.1.0</spring.cloud.alibaba.version>
         <!-- Spring Cloud Alibaba Dubbo Version -->
@@ -29,7 +28,6 @@
         <!-- MyBatis-Plus Version -->
         <mybatisplus.version>3.5.10.1</mybatisplus.version>
         <mybatisplus.join.version>1.5.1</mybatisplus.join.version>
-        <logback.core.version>1.5.19</logback.core.version>
         <!-- Mysql Connector Version -->
         <mysql.java.connector.version>8.0.33</mysql.java.connector.version>
         <!-- Lombok Version -->
@@ -51,13 +49,21 @@
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <!-- Redisson -->
         <org.redisson.version>3.22.0</org.redisson.version>
-        <easyexcel.version>3.3.2</easyexcel.version>
+        <easyexcel.version>4.0.3</easyexcel.version>
         <jakarta.validation.api.version>3.0.2</jakarta.validation.api.version>
         <easy.es.version>3.0.0</easy.es.version>
         <sharding.jdbc.version>4.1.1</sharding.jdbc.version>
         <!-- Apache Commons -->
         <apache.commons.lang3.version>3.18.0</apache.commons.lang3.version>
-        <!-- 插件版本 -->
+
+        <!-- Repair -->
+        <logback.core.version>1.5.34</logback.core.version>
+        <bcprov.jdk18on.version>1.84</bcprov.jdk18on.version>
+        <org.apache.poi.ooxml.version>5.5.1</org.apache.poi.ooxml.version>
+        <com.google.guava.version>33.6.0-jre</com.google.guava.version>
+        <commons.fileupload.version>1.6.0</commons.fileupload.version>
+
+        <!-- Plugin -->
         <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
         <flatten-maven-plugin.version>1.3.0</flatten-maven-plugin.version>
     </properties>
@@ -127,12 +133,6 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-jsqlparser</artifactId>
                 <version>${mybatisplus.version}</version>
-            </dependency>
-            <!-- 修复 -->
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-core</artifactId>
-                <version>${logback.core.version}</version>
             </dependency>
 
             <!--mybatis-plus-join 扩展包-->
@@ -215,6 +215,37 @@
                 <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>sharding-jdbc-spring-boot-starter</artifactId>
                 <version>${sharding.jdbc.version}</version>
+            </dependency>
+
+            <!-- 修复 -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bcprov.jdk18on.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${org.apache.poi.ooxml.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${com.google.guava.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons.fileupload.version}</version>
+                <scope>compile</scope>
             </dependency>
 
             <!-- 系统模块 -->
