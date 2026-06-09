@@ -251,6 +251,56 @@
             <!-- 系统模块 -->
             <dependency>
                 <groupId>com.bitprogress</groupId>
+                <artifactId>common-application-context</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-application-core-base</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-application-core-flux</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-application-core-mvc</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-application-model-base</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-application-model-flux</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-application-model-mvc</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-application-starter-mvccloud</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-application-starter-mvcfull</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-application-starter-simple</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
                 <artifactId>common-base-model</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -416,37 +466,17 @@
             </dependency>
             <dependency>
                 <groupId>com.bitprogress</groupId>
-                <artifactId>common-application-model</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bitprogress</groupId>
-                <artifactId>common-application-context</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bitprogress</groupId>
-                <artifactId>common-application-core</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bitprogress</groupId>
-                <artifactId>common-application-basic</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bitprogress</groupId>
-                <artifactId>common-application-simple</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bitprogress</groupId>
-                <artifactId>common-application-cloud</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bitprogress</groupId>
                 <artifactId>common-sharding</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-springdoc-fluxapi</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bitprogress</groupId>
+                <artifactId>common-springdoc-fluxui</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -461,7 +491,7 @@
             </dependency>
             <dependency>
                 <groupId>com.bitprogress</groupId>
-                <artifactId>common-springdoc-applicationui</artifactId>
+                <artifactId>common-springdoc-mvcui</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
